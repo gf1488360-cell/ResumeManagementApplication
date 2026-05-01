@@ -152,12 +152,12 @@
             opacity: 0.7;
         }
         .skill-tag i:hover { opacity: 1; color: #c23b22; }
-        /* PDF-specific styles: ensure no extra spacing at top */
+        /* Preview styles - ensure clean rendering for PDF */
         .resume-preview {
             font-family: 'Inter', sans-serif;
             color: #1c2e3a;
-            margin: 0;
-            padding: 0;
+            max-width: 100%;
+            word-wrap: break-word;
         }
         .preview-name {
             font-size: 2.1rem;
@@ -165,7 +165,6 @@
             letter-spacing: -0.5px;
             margin-bottom: 8px;
             color: #143b4b;
-            margin-top: 0;
         }
         .preview-contact {
             background: #f8fafc;
@@ -249,16 +248,12 @@
             .preview-panel { position: relative; top: 0; }
             body { padding: 16px; }
         }
-        /* Additional PDF fix: Remove any extra padding from the preview container when printing */
+        /* Ensure PDF prints without extra margins */
         @media print {
-            .preview-panel {
-                padding: 0;
-                margin: 0;
-            }
-            .resume-preview {
-                margin-top: 0;
-                padding-top: 0;
-            }
+            body { background: white; padding: 0; margin: 0; }
+            .editor-panel { display: none; }
+            .preview-panel { display: block; position: static; box-shadow: none; padding: 0; margin: 0; }
+            .resume-preview { margin: 0; padding: 0; }
         }
     </style>
 </head>
@@ -364,7 +359,7 @@
 </div>
 
 <script>
-    // ---------- DEFAULT STATE (Ghulam Farid's exact data) ----------
+    // ---------- DEFAULT STATE (with FULL experience description) ----------
     const defaultState = {
         name: "Ghulam Farid",
         contact: {
@@ -394,27 +389,31 @@
             "Product Lifecycle Management"
         ],
         supportiveSkills: [
-            "Stakeholder Alignment",
-            "Cross-functional Collaboration",
             "Agile Leadership",
-            "Storytelling & Presentation",
-            "Conflict Resolution"
+            "Cross-functional Collaboration",
+            "Storytelling",
+            "Risk Mitigation",
+            "Python (Pandas, NumPy, Matplotlib)",
+            "SQL",
+            "Strong PRD, BRD Development",
+            "Data Synthesis & Insight Communication"
         ],
         toolsExpertise: [
             "Jira",
             "Figma",
-            "SQL",
-            "Python (Pandas, NumPy)",
-            "Amplitude",
-            "Notion"
+            "Notion",
+            "Google Analytics",
+            "Miro",
+            "PowerBI"
         ],
         projects: [
-            { title: "Pakistani SaaS Export Growth Strategy", description: "Built roadmap to scale SaaS exports from $500M to $2B using market intelligence and phased execution." },
-            { title: "Strategic Market Entry Framework (TechGlobal)", description: "Designed joint-venture entry framework targeting $60M ARR while navigating local regulations." },
-            { title: "Daraz vs Amazon: E-commerce Battle for Pakistan", description: "Data-driven comparative analysis delivering strategic positioning insights for local vs global players." }
+            { title: "Daraz vs Amazon: E-commerce Battle for Pakistan", description: "Conducted a data-driven comparative analysis of Daraz's local dominance vs Amazon's global reach in Pakistan's growing e-commerce market. Delivered strategic insights on consumer behavior, platform positioning, and competitive dynamics for businesses and investors." },
+            { title: "Pakistan SaaS Export Growth Strategy: $500M to $2B Roadmap", description: "Built a strategic roadmap to scale SaaS exports from $500M to $2B using market intelligence and phased execution. Identified high-value export segments and defined measurable KPIs for continuous performance tracking." },
+            { title: "Strategic Market Entry Framework for Emerging Economies (TechGlobal)", description: "Designed a joint-venture entry framework to navigate local regulations and data localization, targeting $60M ARR. Aligned cross-functional stakeholders on risk assessment and operational roadmap for emerging markets." },
+            { title: "Scaling a Startup from Regional to National Presence (Bykea)", description: "Led multi-city expansion strategy to transform a Karachi-focused startup into a national leader. Applied evidence-based prioritization and competitive analysis to sequence market entry and maximize growth." }
         ],
         experiences: [
-            { title: "Self-Employed Product Strategy Consultant", company: "Self-employed", period: "2025 – Present", description: "Analyze digital products, marketplaces and platforms to identify strategic gaps. Deliver feature-rich solution blueprints, market entry strategies, and product optimization roadmaps for clients across e‑commerce and SaaS sectors." }
+            { title: "Business Strategy & Product Analyst", company: "Self-Employed", period: "2025 – Present", description: "Analyze digital products, marketplaces and platforms to identify strategic gaps. Deliver feature-rich solution blueprints, market entry strategies, and product optimization roadmaps for clients across e‑commerce and SaaS sectors. Lead end-to-end product strategy, competitive benchmarking, and data-driven decision frameworks." }
         ]
     };
 
@@ -547,7 +546,7 @@
             div.className = "dynamic-item";
             div.innerHTML = `<div class="dynamic-header"><strong>📌 ${escapeHtml(proj.title)}</strong><button class="remove-btn" data-action="removeProject" data-idx="${idx}"><i class="fas fa-trash-alt"></i> Remove</button></div>
                 <div class="field-group"><label>Title</label><input type="text" class="project-title-field" data-idx="${idx}" value="${escapeHtml(proj.title)}"></div>
-                <div class="field-group"><label>Description</label><textarea class="project-desc-field" data-idx="${idx}" rows="2">${escapeHtml(proj.description)}</textarea></div>`;
+                <div class="field-group"><label>Description</label><textarea class="project-desc-field" data-idx="${idx}" rows="3">${escapeHtml(proj.description)}</textarea></div>`;
             container.appendChild(div);
         });
         document.querySelectorAll(".project-title-field").forEach(inp => inp.addEventListener("input", e => { let i = parseInt(e.target.dataset.idx); if(state.projects[i]) state.projects[i].title = e.target.value; renderPreview(); saveStateToLocalStorage(); }));
@@ -565,7 +564,7 @@
                 <div class="field-group"><label>Job Title</label><input class="exp-title-field" data-idx="${idx}" value="${escapeHtml(exp.title)}"></div>
                 <div class="field-group"><label>Company</label><input class="exp-company-field" data-idx="${idx}" value="${escapeHtml(exp.company)}"></div>
                 <div class="field-group"><label>Period</label><input class="exp-period-field" data-idx="${idx}" value="${escapeHtml(exp.period)}"></div>
-                <div class="field-group"><label>Description</label><textarea class="exp-desc-field" rows="2" data-idx="${idx}">${escapeHtml(exp.description)}</textarea></div>`;
+                <div class="field-group"><label>Description</label><textarea class="exp-desc-field" rows="3" data-idx="${idx}">${escapeHtml(exp.description)}</textarea></div>`;
             container.appendChild(div);
         });
         document.querySelectorAll(".exp-title-field").forEach(inp => inp.addEventListener("input", e => { let i = parseInt(e.target.dataset.idx); if(state.experiences[i]) state.experiences[i].title = e.target.value; renderPreview(); saveStateToLocalStorage(); }));
@@ -621,7 +620,7 @@
         document.getElementById("addSupportiveSkillBtn").onclick = () => { const val = document.getElementById("newSupportiveSkillInput").value.trim(); if(val){ state.supportiveSkills.push(val); document.getElementById("newSupportiveSkillInput").value = ""; renderAll(); } };
         document.getElementById("addToolBtn").onclick = () => { const val = document.getElementById("newToolInput").value.trim(); if(val){ state.toolsExpertise.push(val); document.getElementById("newToolInput").value = ""; renderAll(); } };
         document.getElementById("addProjectBtn").onclick = () => { state.projects.push({ title: "New Case Study", description: "Describe problem, analysis, solution." }); renderAll(); };
-        document.getElementById("addExperienceBtn").onclick = () => { state.experiences.push({ title: "Product Manager", company: "Company", period: "2025–Present", description: "Key achievements." }); renderAll(); };
+        document.getElementById("addExperienceBtn").onclick = () => { state.experiences.push({ title: "Product Manager", company: "Company", period: "2025–Present", description: "Key achievements and responsibilities." }); renderAll(); };
         
         document.getElementById("resetDemoBtn").onclick = () => {
             const code = prompt("Enter code 5578 to load demo data (this will overwrite your current data):", "");
@@ -634,19 +633,28 @@
             }
         };
         
-        // FIXED PDF GENERATION WITH MINIMAL TOP MARGIN
+        // IMPROVED PDF: capture full content, auto multi-page, no truncation
         document.getElementById("downloadPDFBtn").onclick = () => {
             const element = document.getElementById("resumePreview");
-            // Optimized to remove blank top space: top margin 0.2 inches (approx 5mm)
+            // Clone to avoid any interference
+            const clone = element.cloneNode(true);
+            // Ensure clone has proper styles
+            const style = document.createElement('style');
+            style.textContent = `
+                .resume-preview { font-family: 'Inter', sans-serif; width: 100%; padding: 0.2in; }
+                .preview-contact, .preview-profile, .degree-card, .cert-card, .project-item, .exp-item { break-inside: avoid; page-break-inside: avoid; }
+                .preview-section { break-inside: avoid; }
+            `;
+            clone.prepend(style);
             const opt = {
-                margin:        [0.2, 0.5, 0.5, 0.5], // top, right, bottom, left (in)
+                margin:        [0.3, 0.5, 0.5, 0.5], // top, right, bottom, left (inches)
                 filename:     'Ghulam_Farid_Resume.pdf',
                 image:        { type: 'jpeg', quality: 0.98 },
-                html2canvas:  { scale: 2, letterRendering: true, useCORS: true, logging: false },
+                html2canvas:  { scale: 2, letterRendering: true, useCORS: true, logging: false, windowWidth: 800 },
                 jsPDF:        { unit: 'in', format: 'a4', orientation: 'portrait' },
-                pagebreak:    { mode: ['css', 'legacy'] }
+                pagebreak:    { mode: 'avoid-all' }  // avoid breaking mid-element
             };
-            html2pdf().set(opt).from(element).save();
+            html2pdf().set(opt).from(clone).save();
         };
         
         document.getElementById("nameInput").addEventListener("input", syncNameProfile);
