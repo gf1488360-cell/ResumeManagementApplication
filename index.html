@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>ResumeForge Pro | Persistent Resume Manager</title>
+    <title>ResumeForge Pro | Persistent Resume Builder</title>
     <!-- html2pdf bundle -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
@@ -152,9 +152,12 @@
             opacity: 0.7;
         }
         .skill-tag i:hover { opacity: 1; color: #c23b22; }
+        /* PDF-specific styles: ensure no extra spacing at top */
         .resume-preview {
             font-family: 'Inter', sans-serif;
             color: #1c2e3a;
+            margin: 0;
+            padding: 0;
         }
         .preview-name {
             font-size: 2.1rem;
@@ -162,6 +165,7 @@
             letter-spacing: -0.5px;
             margin-bottom: 8px;
             color: #143b4b;
+            margin-top: 0;
         }
         .preview-contact {
             background: #f8fafc;
@@ -245,6 +249,17 @@
             .preview-panel { position: relative; top: 0; }
             body { padding: 16px; }
         }
+        /* Additional PDF fix: Remove any extra padding from the preview container when printing */
+        @media print {
+            .preview-panel {
+                padding: 0;
+                margin: 0;
+            }
+            .resume-preview {
+                margin-top: 0;
+                padding-top: 0;
+            }
+        }
     </style>
 </head>
 <body>
@@ -275,7 +290,7 @@
         <!-- Profile -->
         <div class="section-card">
             <div class="section-title"><i class="fas fa-address-card"></i> Professional Profile</div>
-            <textarea id="profileInput" rows="3" placeholder="Short bio / summary"></textarea>
+            <textarea id="profileInput" rows="4" placeholder="Short bio / summary"></textarea>
         </div>
 
         <!-- Degrees -->
@@ -349,7 +364,7 @@
 </div>
 
 <script>
-    // ---------- DEFAULT STATE (tailored to user's resume - Ghulam Farid) ----------
+    // ---------- DEFAULT STATE (Ghulam Farid's exact data) ----------
     const defaultState = {
         name: "Ghulam Farid",
         contact: {
@@ -405,7 +420,6 @@
 
     let state = JSON.parse(JSON.stringify(defaultState));
 
-    // localStorage persistence
     function saveStateToLocalStorage() {
         localStorage.setItem("resumeBuilderState", JSON.stringify(state));
     }
@@ -457,7 +471,6 @@
         saveStateToLocalStorage();
     }
 
-    // Degrees editor
     function renderDegreesEditor() {
         const container = document.getElementById("degreesListEditor");
         if (!container) return;
@@ -621,17 +634,17 @@
             }
         };
         
-        // ---------- FIXED PDF GENERATION ----------
+        // FIXED PDF GENERATION WITH MINIMAL TOP MARGIN
         document.getElementById("downloadPDFBtn").onclick = () => {
             const element = document.getElementById("resumePreview");
-            // Configure for better page breaking and avoid blank pages
+            // Optimized to remove blank top space: top margin 0.2 inches (approx 5mm)
             const opt = {
-                margin:        [0.5, 0.5, 0.5, 0.5], // top, right, bottom, left (in)
+                margin:        [0.2, 0.5, 0.5, 0.5], // top, right, bottom, left (in)
                 filename:     'Ghulam_Farid_Resume.pdf',
                 image:        { type: 'jpeg', quality: 0.98 },
                 html2canvas:  { scale: 2, letterRendering: true, useCORS: true, logging: false },
                 jsPDF:        { unit: 'in', format: 'a4', orientation: 'portrait' },
-                pagebreak:    { mode: ['css', 'legacy'], before: '.preview-section', after: '.preview-section' }
+                pagebreak:    { mode: ['css', 'legacy'] }
             };
             html2pdf().set(opt).from(element).save();
         };
