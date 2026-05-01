@@ -221,38 +221,105 @@
 
     // FIXED PDF GENERATION: clone the live preview and apply proper margins
     function generatePDF() {
-        const element = document.getElementById("resumePreview");
-        const clone = element.cloneNode(true);
-        clone.style.width = "100%";
-        clone.style.padding = "0.2in 0.4in 0.2in 0.4in";
-        clone.style.backgroundColor = "white";
-        clone.style.fontFamily = "Inter, sans-serif";
-        clone.style.color = "#1c2e3a";
-        clone.style.boxSizing = "border-box";
-        // Temporarily add to body to measure
-        clone.style.position = "absolute";
-        clone.style.top = "-9999px";
-        clone.style.left = "-9999px";
-        document.body.appendChild(clone);
+    // Build a complete HTML document as a string
+    const c = state.contact;
+    const contactHtml = `<div style="background:#f8fafc; padding:12px 16px; border-radius:20px; margin:12px 0 20px; display:flex; flex-wrap:wrap; gap:12px 20px; border:1px solid #e2edf2;">
+        ${c.email ? `<div><i class="fas fa-envelope"></i> ${escapeHtml(c.email)}</div>` : ''}
+        ${c.mobile ? `<div><i class="fas fa-phone-alt"></i> ${escapeHtml(c.mobile)}</div>` : ''}
+        ${c.address ? `<div><i class="fas fa-map-marker-alt"></i> ${escapeHtml(c.address)}</div>` : ''}
+        ${c.website ? `<div><i class="fas fa-globe"></i> ${escapeHtml(c.website)}</div>` : ''}
+        ${c.linkedin ? `<div><i class="fab fa-linkedin"></i> ${escapeHtml(c.linkedin)}</div>` : ''}
+    </div>`;
+    
+    const degreesHtml = state.degrees.map(d => `<div style="background:#f9fdfe; padding:12px 14px; border-radius:16px; margin-bottom:12px; border-left:3px solid #2b7a62;">
+        <div><strong>${escapeHtml(d.degreeName)}</strong></div>
+        <div style="font-size:0.75rem; color:#4f6f8a;">${escapeHtml(d.institute)} | ${escapeHtml(d.startYear)}–${escapeHtml(d.endYear)} | CGPA: ${escapeHtml(d.cgpa)}</div>
+    </div>`).join('');
+    
+    const certsHtml = state.certifications.map(cert => `<div style="background:#f9fdfe; padding:12px 14px; border-radius:16px; margin-bottom:12px; border-left:3px solid #2b7a62;">
+        <div><strong>${escapeHtml(cert.name)}</strong></div>
+        <div style="font-size:0.75rem; color:#4f6f8a;">${escapeHtml(cert.issuer)}${cert.year ? ` · ${cert.year}` : ''}</div>
+    </div>`).join('');
+    
+    const coreHtml = state.coreSkills.map(s => `<span style="background:#eef2f5; display:inline-block; padding:5px 12px; border-radius:30px; font-size:0.75rem; margin:0 6px 8px 0;">${escapeHtml(s)}</span>`).join('');
+    const supportiveHtml = state.supportiveSkills.map(s => `<span style="background:#eef2f5; display:inline-block; padding:5px 12px; border-radius:30px; font-size:0.75rem; margin:0 6px 8px 0;">${escapeHtml(s)}</span>`).join('');
+    const toolsHtml = state.toolsExpertise.map(t => `<span style="background:#eef2f5; display:inline-block; padding:5px 12px; border-radius:30px; font-size:0.75rem; margin:0 6px 8px 0;">${escapeHtml(t)}</span>`).join('');
+    
+    const projectsHtml = state.projects.map(p => `<div style="margin-bottom:20px;">
+        <div style="font-weight:700; color:#0f4b5c; font-size:0.95rem;">📌 ${escapeHtml(p.title)}</div>
+        <div style="font-size:0.85rem; margin-top:4px; line-height:1.4;">${escapeHtml(p.description)}</div>
+    </div>`).join('');
+    
+    const expHtml = state.experiences.map(e => `<div style="margin-bottom:20px;">
+        <div style="font-weight:700; color:#0f4b5c; font-size:0.95rem;">💼 ${escapeHtml(e.title)} · ${escapeHtml(e.company)}</div>
+        <div style="font-size:0.75rem; color:#5f7f95;">${escapeHtml(e.period)}</div>
+        <div style="font-size:0.85rem; margin-top:4px; line-height:1.4;">${escapeHtml(e.description)}</div>
+    </div>`).join('');
+    
+    const fullHtml = `<!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Resume - ${escapeHtml(state.name)}</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+        <style>
+            * { margin: 0; padding: 0; box-sizing: border-box; }
+            body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: white; padding: 0.4in 0.5in 0.4in 0.5in; color: #1c2e3a; line-height: 1.4; }
+            .name { font-size: 2rem; font-weight: 700; margin-bottom: 8px; color: #143b4b; }
+            .profile { background: #f0f6fa; padding: 14px 18px; border-radius: 18px; margin: 20px 0; border-left: 4px solid #2b7a62; font-size: 0.9rem; }
+            h3 { font-size: 1.2rem; font-weight: 700; border-bottom: 3px solid #dce9f0; display: inline-block; margin: 20px 0 12px 0; padding-bottom: 4px; color: #1c5a6e; }
+            .section { margin-top: 8px; }
+            .contact { background: #f8fafc; padding: 12px 16px; border-radius: 20px; margin: 12px 0 20px; display: flex; flex-wrap: wrap; gap: 12px 24px; border: 1px solid #e2edf2; font-size: 0.8rem; }
+            .contact i { width: 18px; color: #2b7a62; }
+            .skill-tag { background: #eef2f5; display: inline-block; padding: 4px 12px; border-radius: 30px; font-size: 0.7rem; margin: 0 4px 6px 0; }
+        </style>
+    </head>
+    <body>
+        <div class="name">${escapeHtml(state.name)}</div>
+        <div class="contact">${contactHtml.replace(/<div>/g, '<div class="contact-item">')}</div>
+        <div class="profile">${escapeHtml(state.profile)}</div>
         
-        // Need a small delay to ensure rendering
-        setTimeout(() => {
-            const opt = {
-                margin: [0.4, 0.4, 0.4, 0.4], // top, right, bottom, left (inches)
-                filename: "Ghulam_Farid_Resume.pdf",
-                image: { type: "jpeg", quality: 0.98 },
-                html2canvas: { scale: 2, logging: false, useCORS: false, letterRendering: true },
-                jsPDF: { unit: "in", format: "a4", orientation: "portrait" }
-            };
-            html2pdf().set(opt).from(clone).save().then(() => {
-                document.body.removeChild(clone);
-            }).catch(err => {
-                console.error("PDF error:", err);
-                document.body.removeChild(clone);
-                alert("PDF generation failed. Please try again.");
-            });
-        }, 100);
-    }
+        <div class="section"><h3> Education</h3>${degreesHtml}</div>
+        <div class="section"><h3> Certifications</h3>${certsHtml}</div>
+        <div class="section"><h3> Core Skills</h3><div>${coreHtml}</div></div>
+        <div class="section"><h3> Supportive Skills</h3><div>${supportiveHtml}</div></div>
+        <div class="section"><h3> Tools Expertise</h3><div>${toolsHtml}</div></div>
+        <div class="section"><h3> Product & Case Studies</h3>${projectsHtml}</div>
+        <div class="section"><h3> Professional Experience</h3>${expHtml}</div>
+    </body>
+    </html>`;
+    
+    // Create an iframe to render the HTML and generate PDF
+    const iframe = document.createElement('iframe');
+    iframe.style.position = 'absolute';
+    iframe.style.top = '-9999px';
+    iframe.style.left = '-9999px';
+    iframe.width = '800';
+    iframe.height = '1100';
+    document.body.appendChild(iframe);
+    
+    iframe.contentWindow.document.open();
+    iframe.contentWindow.document.write(fullHtml);
+    iframe.contentWindow.document.close();
+    
+    // Wait for fonts and rendering
+    setTimeout(() => {
+        const opt = {
+            margin: [0.4, 0.4, 0.4, 0.4],
+            filename: 'Ghulam_Farid_Resume.pdf',
+            image: { type: 'jpeg', quality: 0.98 },
+            html2canvas: { scale: 2, logging: false, useCORS: false },
+            jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
+        };
+        html2pdf().set(opt).from(iframe.contentWindow.document.body).save().then(() => {
+            document.body.removeChild(iframe);
+        }).catch(err => {
+            console.error('PDF error:', err);
+            document.body.removeChild(iframe);
+            alert('PDF generation failed. Try again.');
+        });
+    }, 300);
+}
 
     // Setup event delegation and add buttons
     function setupEvents() {
