@@ -4,413 +4,106 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title>ResumeForge Pro | Persistent Resume Builder</title>
-    <!-- html2pdf bundle -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        body {
-            background: #eef2f5;
-            font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, sans-serif;
-            padding: 30px 24px;
-            color: #1a2c3e;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: #eef2f5; font-family: 'Inter', sans-serif; padding: 30px 24px; color: #1a2c3e; }
         @import url('https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700&display=swap');
-        .app-container {
-            max-width: 1500px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: 1fr 1.1fr;
-            gap: 28px;
-        }
-        .editor-panel, .preview-panel {
-            background: white;
-            border-radius: 28px;
-            box-shadow: 0 20px 35px -12px rgba(0,0,0,0.08);
-            overflow-y: auto;
-            max-height: 90vh;
-            padding: 24px 28px;
-        }
-        .preview-panel {
-            position: sticky;
-            top: 20px;
-            box-shadow: 0 20px 35px -10px rgba(0,0,0,0.1);
-        }
-        .section-card {
-            background: #f9fafc;
-            border-radius: 20px;
-            padding: 18px 20px;
-            margin-bottom: 24px;
-            border: 1px solid #e6edf2;
-        }
-        .section-title {
-            font-size: 1.2rem;
-            font-weight: 700;
-            margin-bottom: 16px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            color: #0f3b5c;
-            border-left: 4px solid #2b7a62;
-            padding-left: 12px;
-        }
-        .field-group {
-            margin-bottom: 14px;
-        }
-        label {
-            font-weight: 600;
-            font-size: 0.8rem;
-            display: block;
-            margin-bottom: 5px;
-            color: #2c4e6e;
-        }
-        input, textarea {
-            width: 100%;
-            padding: 10px 14px;
-            border-radius: 14px;
-            border: 1px solid #cfdfe8;
-            background: white;
-            font-family: inherit;
-            font-size: 0.9rem;
-        }
-        input:focus, textarea:focus {
-            outline: none;
-            border-color: #2b7a62;
-            box-shadow: 0 0 0 3px rgba(43,122,98,0.2);
-        }
-        .dynamic-item {
-            background: white;
-            border-radius: 18px;
-            padding: 16px;
-            margin-bottom: 18px;
-            border: 1px solid #e2eaf0;
-        }
-        .dynamic-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 14px;
-            flex-wrap: wrap;
-        }
-        .remove-btn {
-            background: none;
-            border: none;
-            color: #bc6f5c;
-            cursor: pointer;
-            font-size: 0.9rem;
-            font-weight: 500;
-        }
-        .remove-btn:hover { color: #b23c1c; }
-        .btn-primary {
-            background: #2b7a62;
-            color: white;
-            border: none;
-            border-radius: 40px;
-            padding: 8px 18px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: 0.2s;
-            margin-top: 8px;
-        }
-        .btn-primary:hover { background: #1f5e4b; }
-        .btn-download {
-            background: #1f4e6e;
-            width: 100%;
-            padding: 12px;
-            font-size: 1rem;
-        }
-        .small-btn {
-            background: #eef3f7;
-            border: 1px solid #cbdde6;
-            border-radius: 40px;
-            padding: 8px 16px;
-            font-weight: 500;
-            cursor: pointer;
-        }
-        .add-input-group {
-            display: flex;
-            gap: 10px;
-            margin-top: 12px;
-        }
-        .skill-tag {
-            background: #eef2f5;
-            display: inline-block;
-            padding: 5px 14px;
-            border-radius: 30px;
-            font-size: 0.75rem;
-            font-weight: 500;
-            margin-right: 8px;
-            margin-bottom: 10px;
-        }
-        .skill-tag i {
-            margin-left: 8px;
-            cursor: pointer;
-            opacity: 0.7;
-        }
-        .skill-tag i:hover { opacity: 1; color: #c23b22; }
-        /* Preview styles - ensure clean rendering for PDF */
-        .resume-preview {
-            font-family: 'Inter', sans-serif;
-            color: #1c2e3a;
-            max-width: 100%;
-            word-wrap: break-word;
-        }
-        .preview-name {
-            font-size: 2.1rem;
-            font-weight: 700;
-            letter-spacing: -0.5px;
-            margin-bottom: 8px;
-            color: #143b4b;
-        }
-        .preview-contact {
-            background: #f8fafc;
-            padding: 12px 16px;
-            border-radius: 20px;
-            margin: 12px 0 16px 0;
-            font-size: 0.8rem;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 12px 20px;
-            border: 1px solid #e2edf2;
-        }
-        .preview-contact-item {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            color: #2c5a74;
-        }
-        .preview-contact-item i {
-            width: 18px;
-            color: #2b7a62;
-        }
-        .preview-contact-item a {
-            color: #2b7a62;
-            text-decoration: none;
-        }
-        .preview-profile {
-            background: #f0f6fa;
-            padding: 14px 18px;
-            border-radius: 18px;
-            margin: 16px 0;
-            font-size: 0.9rem;
-            line-height: 1.45;
-            border-left: 4px solid #2b7a62;
-        }
-        .preview-section {
-            margin-top: 26px;
-        }
-        .preview-section h3 {
-            font-size: 1.2rem;
-            font-weight: 700;
-            border-bottom: 3px solid #dce9f0;
-            padding-bottom: 6px;
-            margin-bottom: 14px;
-            display: inline-block;
-            color: #1c5a6e;
-        }
-        .degree-card, .cert-card {
-            background: #f9fdfe;
-            padding: 12px 14px;
-            border-radius: 16px;
-            margin-bottom: 12px;
-            border-left: 3px solid #2b7a62;
-        }
+        .app-container { max-width: 1500px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1.1fr; gap: 28px; }
+        .editor-panel, .preview-panel { background: white; border-radius: 28px; overflow-y: auto; max-height: 90vh; padding: 24px 28px; }
+        .preview-panel { position: sticky; top: 20px; box-shadow: 0 20px 35px -10px rgba(0,0,0,0.1); }
+        .section-card { background: #f9fafc; border-radius: 20px; padding: 18px 20px; margin-bottom: 24px; border: 1px solid #e6edf2; }
+        .section-title { font-size: 1.2rem; font-weight: 700; margin-bottom: 16px; display: flex; align-items: center; gap: 10px; color: #0f3b5c; border-left: 4px solid #2b7a62; padding-left: 12px; }
+        .field-group { margin-bottom: 14px; }
+        label { font-weight: 600; font-size: 0.8rem; display: block; margin-bottom: 5px; color: #2c4e6e; }
+        input, textarea { width: 100%; padding: 10px 14px; border-radius: 14px; border: 1px solid #cfdfe8; background: white; font-family: inherit; font-size: 0.9rem; }
+        .dynamic-item { background: white; border-radius: 18px; padding: 16px; margin-bottom: 18px; border: 1px solid #e2eaf0; }
+        .dynamic-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+        .remove-btn { background: none; border: none; color: #bc6f5c; cursor: pointer; }
+        .btn-primary { background: #2b7a62; color: white; border: none; border-radius: 40px; padding: 8px 18px; font-weight: 600; cursor: pointer; margin-top: 8px; }
+        .btn-download { background: #1f4e6e; width: 100%; padding: 12px; }
+        .small-btn { background: #eef3f7; border: 1px solid #cbdde6; border-radius: 40px; padding: 8px 16px; cursor: pointer; }
+        .add-input-group { display: flex; gap: 10px; margin-top: 12px; }
+        .skill-tag { background: #eef2f5; display: inline-block; padding: 5px 14px; border-radius: 30px; font-size: 0.75rem; font-weight: 500; margin-right: 8px; margin-bottom: 10px; }
+        .skill-tag i { margin-left: 8px; cursor: pointer; }
+        /* Preview styles */
+        .resume-preview { font-family: 'Inter', sans-serif; color: #1c2e3a; }
+        .preview-name { font-size: 2.1rem; font-weight: 700; margin-bottom: 8px; color: #143b4b; }
+        .preview-contact { background: #f8fafc; padding: 12px 16px; border-radius: 20px; margin: 12px 0 16px; display: flex; flex-wrap: wrap; gap: 12px 20px; border: 1px solid #e2edf2; }
+        .preview-contact-item { display: inline-flex; align-items: center; gap: 8px; font-size: 0.8rem; color: #2c5a74; }
+        .preview-contact-item i { width: 18px; color: #2b7a62; }
+        .preview-profile { background: #f0f6fa; padding: 14px 18px; border-radius: 18px; margin: 16px 0; border-left: 4px solid #2b7a62; }
+        .preview-section { margin-top: 26px; }
+        .preview-section h3 { font-size: 1.2rem; font-weight: 700; border-bottom: 3px solid #dce9f0; padding-bottom: 6px; margin-bottom: 14px; display: inline-block; color: #1c5a6e; }
+        .degree-card, .cert-card { background: #f9fdfe; padding: 12px 14px; border-radius: 16px; margin-bottom: 12px; border-left: 3px solid #2b7a62; }
         .degree-title, .cert-title { font-weight: 700; font-size: 0.95rem; }
         .degree-meta, .cert-meta { font-size: 0.75rem; color: #4f6f8a; margin-top: 5px; }
-        .project-item, .exp-item {
-            margin-bottom: 20px;
-        }
-        .project-title, .exp-title {
-            font-weight: 700;
-            font-size: 1rem;
-            color: #0f4b5c;
-            margin-bottom: 5px;
-        }
-        .project-desc, .exp-desc {
-            font-size: 0.85rem;
-            line-height: 1.4;
-            margin-top: 4px;
-            color: #2c485e;
-        }
-        .exp-meta {
-            font-size: 0.75rem;
-            font-weight: 500;
-            color: #5f7f95;
-            margin-top: 2px;
-            margin-bottom: 6px;
-        }
-        @media (max-width: 900px) {
-            .app-container { grid-template-columns: 1fr; gap: 24px; }
-            .preview-panel { position: relative; top: 0; }
-            body { padding: 16px; }
-        }
-        /* Ensure PDF prints without extra margins */
-        @media print {
-            body { background: white; padding: 0; margin: 0; }
-            .editor-panel { display: none; }
-            .preview-panel { display: block; position: static; box-shadow: none; padding: 0; margin: 0; }
-            .resume-preview { margin: 0; padding: 0; }
-        }
+        .project-item, .exp-item { margin-bottom: 20px; }
+        .project-title, .exp-title { font-weight: 700; font-size: 1rem; color: #0f4b5c; margin-bottom: 5px; }
+        .project-desc, .exp-desc { font-size: 0.85rem; line-height: 1.4; margin-top: 4px; color: #2c485e; }
+        .exp-meta { font-size: 0.75rem; font-weight: 500; color: #5f7f95; margin-top: 2px; margin-bottom: 6px; }
+        @media (max-width: 900px) { .app-container { grid-template-columns: 1fr; } .preview-panel { position: relative; top: 0; } body { padding: 16px; } }
+        /* Print styles for PDF */
+        .pdf-export { padding: 0.4in; font-family: 'Inter', sans-serif; max-width: 100%; }
+        .pdf-export .skill-tag { background: #eef2f5; display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 0.7rem; margin: 0 4px 6px 0; }
+        .pdf-export .preview-contact, .pdf-export .preview-profile, .pdf-export .degree-card, .pdf-export .cert-card { break-inside: avoid; }
     </style>
 </head>
 <body>
 <div class="app-container">
     <div class="editor-panel">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-            <h2 style="font-weight: 700; color: #1c5a6e;"><i class="fas fa-save"></i> Resume Manager (Auto‑Save)</h2>
+            <h2><i class="fas fa-save"></i> Resume Manager (Auto‑Save)</h2>
             <button id="resetDemoBtn" class="small-btn"><i class="fas fa-undo-alt"></i> Load Demo (code 5578)</button>
         </div>
-        <p style="font-size: 0.8rem; margin-bottom: 20px;">All changes save automatically. Reopen the app → your data remains.</p>
+        <p style="font-size: 0.8rem;">All changes auto‑save. Reopen → your data remains.</p>
 
-        <!-- Name -->
-        <div class="section-card">
-            <div class="section-title"><i class="fas fa-user"></i> Full Name</div>
-            <input type="text" id="nameInput" placeholder="Full name">
+        <div class="section-card"><div class="section-title"><i class="fas fa-user"></i> Full Name</div><input type="text" id="nameInput"></div>
+        <div class="section-card"><div class="section-title"><i class="fas fa-address-book"></i> Contact</div>
+            <div class="field-group"><label>Email</label><input type="email" id="contactEmail"></div>
+            <div class="field-group"><label>Mobile</label><input type="text" id="contactMobile"></div>
+            <div class="field-group"><label>Address</label><input type="text" id="contactAddress"></div>
+            <div class="field-group"><label>Website</label><input type="text" id="contactWebsite"></div>
+            <div class="field-group"><label>LinkedIn</label><input type="text" id="contactLinkedin"></div>
         </div>
-
-        <!-- Contact -->
-        <div class="section-card">
-            <div class="section-title"><i class="fas fa-address-book"></i> Contact Information</div>
-            <div class="field-group"><label>Email</label><input type="email" id="contactEmail" placeholder="your@email.com"></div>
-            <div class="field-group"><label>Mobile</label><input type="text" id="contactMobile" placeholder="+1 234 567 8900"></div>
-            <div class="field-group"><label>Address</label><input type="text" id="contactAddress" placeholder="City, Country"></div>
-            <div class="field-group"><label>Website</label><input type="text" id="contactWebsite" placeholder="https://portfolio.com"></div>
-            <div class="field-group"><label>LinkedIn</label><input type="text" id="contactLinkedin" placeholder="https://linkedin.com/in/username"></div>
-        </div>
-
-        <!-- Profile -->
-        <div class="section-card">
-            <div class="section-title"><i class="fas fa-address-card"></i> Professional Profile</div>
-            <textarea id="profileInput" rows="4" placeholder="Short bio / summary"></textarea>
-        </div>
-
-        <!-- Degrees -->
-        <div class="section-card">
-            <div class="section-title"><i class="fas fa-graduation-cap"></i> Degrees</div>
-            <div id="degreesListEditor"></div>
-            <button id="addDegreeBtn" class="btn-primary" style="width:100%;"><i class="fas fa-plus-circle"></i> Add Degree</button>
-        </div>
-
-        <!-- Certifications -->
-        <div class="section-card">
-            <div class="section-title"><i class="fas fa-certificate"></i> Certifications</div>
-            <div id="certsListEditor"></div>
-            <button id="addCertBtn" class="btn-primary" style="width:100%;"><i class="fas fa-plus-circle"></i> Add Certification</button>
-        </div>
-
-        <!-- Core Skills -->
-        <div class="section-card">
-            <div class="section-title"><i class="fas fa-code-branch"></i> Core Skills</div>
-            <div id="coreSkillsContainer" style="margin-bottom: 10px;"></div>
-            <div class="add-input-group">
-                <input type="text" id="newCoreSkillInput" placeholder="e.g., Product Strategy">
-                <button id="addCoreSkillBtn" class="small-btn">+ Add</button>
-            </div>
-        </div>
-
-        <!-- Supportive Skills -->
-        <div class="section-card">
-            <div class="section-title"><i class="fas fa-hand-sparkles"></i> Supportive Skills</div>
-            <div id="supportiveSkillsContainer" style="margin-bottom: 10px;"></div>
-            <div class="add-input-group">
-                <input type="text" id="newSupportiveSkillInput" placeholder="e.g., Stakeholder alignment">
-                <button id="addSupportiveSkillBtn" class="small-btn">+ Add</button>
-            </div>
-        </div>
-
-        <!-- Tools Expertise -->
-        <div class="section-card">
-            <div class="section-title"><i class="fas fa-tools"></i> Tools Expertise</div>
-            <div id="toolsContainer" style="margin-bottom: 10px;"></div>
-            <div class="add-input-group">
-                <input type="text" id="newToolInput" placeholder="e.g., Jira, SQL, Python">
-                <button id="addToolBtn" class="small-btn">+ Add</button>
-            </div>
-        </div>
-
-        <!-- Projects / Case Studies -->
-        <div class="section-card">
-            <div class="section-title"><i class="fas fa-project-diagram"></i> Product & Case Studies</div>
-            <div id="projectsListEditor"></div>
-            <button id="addProjectBtn" class="btn-primary" style="width:100%;"><i class="fas fa-plus-circle"></i> Add Project / Case Study</button>
-        </div>
-
-        <!-- Experience -->
-        <div class="section-card">
-            <div class="section-title"><i class="fas fa-briefcase"></i> Professional Experience</div>
-            <div id="experienceListEditor"></div>
-            <button id="addExperienceBtn" class="btn-primary" style="width:100%;"><i class="fas fa-plus-circle"></i> Add Experience</button>
-        </div>
-
-        <button id="downloadPDFBtn" class="btn-primary btn-download"><i class="fas fa-file-pdf"></i> Download as Professional PDF</button>
+        <div class="section-card"><div class="section-title"><i class="fas fa-address-card"></i> Professional Profile</div><textarea id="profileInput" rows="4"></textarea></div>
+        <div class="section-card"><div class="section-title"><i class="fas fa-graduation-cap"></i> Degrees</div><div id="degreesListEditor"></div><button id="addDegreeBtn" class="btn-primary">+ Add Degree</button></div>
+        <div class="section-card"><div class="section-title"><i class="fas fa-certificate"></i> Certifications</div><div id="certsListEditor"></div><button id="addCertBtn" class="btn-primary">+ Add Certification</button></div>
+        <div class="section-card"><div class="section-title"><i class="fas fa-code-branch"></i> Core Skills</div><div id="coreSkillsContainer"></div><div class="add-input-group"><input type="text" id="newCoreSkillInput"><button id="addCoreSkillBtn" class="small-btn">+ Add</button></div></div>
+        <div class="section-card"><div class="section-title"><i class="fas fa-hand-sparkles"></i> Supportive Skills</div><div id="supportiveSkillsContainer"></div><div class="add-input-group"><input type="text" id="newSupportiveSkillInput"><button id="addSupportiveSkillBtn" class="small-btn">+ Add</button></div></div>
+        <div class="section-card"><div class="section-title"><i class="fas fa-tools"></i> Tools Expertise</div><div id="toolsContainer"></div><div class="add-input-group"><input type="text" id="newToolInput"><button id="addToolBtn" class="small-btn">+ Add</button></div></div>
+        <div class="section-card"><div class="section-title"><i class="fas fa-project-diagram"></i> Product & Case Studies</div><div id="projectsListEditor"></div><button id="addProjectBtn" class="btn-primary">+ Add Project</button></div>
+        <div class="section-card"><div class="section-title"><i class="fas fa-briefcase"></i> Professional Experience</div><div id="experienceListEditor"></div><button id="addExperienceBtn" class="btn-primary">+ Add Experience</button></div>
+        <button id="downloadPDFBtn" class="btn-primary btn-download"><i class="fas fa-file-pdf"></i> Download PDF (Full Content)</button>
     </div>
-
     <div class="preview-panel">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-            <h3><i class="fas fa-eye"></i> Live Resume Preview</h3>
-            <span style="font-size: 0.7rem; background:#eef2f5; padding: 4px 10px; border-radius: 20px;">auto‑saved</span>
-        </div>
+        <h3><i class="fas fa-eye"></i> Live Preview</h3>
         <div id="resumePreview" class="resume-preview"></div>
     </div>
 </div>
 
 <script>
-    // ---------- DEFAULT STATE (with FULL experience description) ----------
+    // ------------- DEFAULT STATE (includes new case study) -------------
     const defaultState = {
         name: "Ghulam Farid",
-        contact: {
-            email: "gf1488360@gmail.com",
-            mobile: "+923086007904",
-            address: "Lahore, Pakistan",
-            website: "https://faridsview.netlify.app",
-            linkedin: "https://www.linkedin.com/in/ghulam-farid-29514a336"
-        },
-        profile: "Business Strategy & Product Analyst operating at the intersection of business strategy and technology. Passionate about product management, I drive value through Vision, Logic, and Implementation — my three-pillar learning strategy as an active learner. Data Science × Business Knowledge = Intelligent Growth — this is the equation I live by to build products that scale. Data science knowledge allows me to see patterns in data and interpret them to make effective, data-backed decisions.",
-        degrees: [
-            { institute: "University of Central Punjab, Lahore", degreeName: "BS Data Science", startYear: "2024", endYear: "Present", cgpa: "3.8/4.0" }
-        ],
+        contact: { email: "gf1488360@gmail.com", mobile: "+923086007904", address: "Lahore, Pakistan", website: "https://gf1488360-cell.github.io/FaridStrategy/", linkedin: "https://www.linkedin.com/in/ghulam-farid-29514a336" },
+        profile: "Business Strategy & Product Analyst operating at the intersection of business strategy and technology. Passionate about product management, I drive value through Vision, Logic, and Implementation, my three pillar learning strategy as an active learner. Data Science × Business Knowledge = Intelligent Growth. This is the equation I live by to build products that scale. Data science knowledge allows me to see patterns in data and interpret them to make effective, data-backed decisions.",
+        degrees: [{ institute: "University of Central Punjab, Lahore", degreeName: "BS Data Science", startYear: "2024", endYear: "Present", cgpa: "3.8/4.0" }],
         certifications: [
             { name: "Product Prioritization Certificate", issuer: "Product School", year: "2025" },
             { name: "Data for Decision Making Job Simulation", issuer: "Forage under BCG", year: "2025" },
             { name: "Business Strategy Consulting Job Simulation", issuer: "Forage under BCG", year: "2025" }
         ],
-        coreSkills: [
-            "Product Roadmapping",
-            "Data Analytics",
-            "Go-to-Market Strategy",
-            "Feature Prioritization (RICE)",
-            "Business Strategy & Competitive Analysis",
-            "A/B Testing & Experimentation Design",
-            "OKRs Definition & KPI Tracking",
-            "Product Lifecycle Management"
-        ],
-        supportiveSkills: [
-            "Agile Leadership",
-            "Cross-functional Collaboration",
-            "Storytelling",
-            "Risk Mitigation",
-            "Python (Pandas, NumPy, Matplotlib)",
-            "SQL",
-            "Strong PRD, BRD Development",
-            "Data Synthesis & Insight Communication"
-        ],
-        toolsExpertise: [
-            "Jira",
-            "Figma",
-            "Notion",
-            "Google Analytics",
-            "Miro",
-            "PowerBI"
-        ],
+        coreSkills: ["Product Roadmapping", "Data Analytics", "Go-to-Market Strategy", "Feature Prioritization (RICE)", "Business Strategy & Competitive Analysis", "A/B Testing & Experimentation Design", "OKRs Definition & KPI Tracking", "Product Lifecycle Management"],
+        supportiveSkills: ["Agile Leadership", "Cross-functional Collaboration", "Storytelling", "Risk Mitigation", "Python (Pandas, NumPy, Matplotlib)", "SQL", "Strong PRD, BRD Development", "Data Synthesis & Insight Communication"],
+        toolsExpertise: ["Jira", "Figma", "Notion", "Google Analytics", "Miro", "PowerBI"],
         projects: [
             { title: "Daraz vs Amazon: E-commerce Battle for Pakistan", description: "Conducted a data-driven comparative analysis of Daraz's local dominance vs Amazon's global reach in Pakistan's growing e-commerce market. Delivered strategic insights on consumer behavior, platform positioning, and competitive dynamics for businesses and investors." },
-            { title: "Pakistan SaaS Export Growth Strategy: $500M to $2B Roadmap", description: "Built a strategic roadmap to scale SaaS exports from $500M to $2B using market intelligence and phased execution. Identified high-value export segments and defined measurable KPIs for continuous performance tracking." },
+            { title: "Pakistani SaaS Export Growth Strategy: $500M to $2B Roadmap", description: "Built a strategic roadmap to scale SaaS exports from $500M to $2B using market intelligence and phased execution. Identified high-value export segments and defined measurable KPIs for continuous performance tracking." },
             { title: "Strategic Market Entry Framework for Emerging Economies (TechGlobal)", description: "Designed a joint-venture entry framework to navigate local regulations and data localization, targeting $60M ARR. Aligned cross-functional stakeholders on risk assessment and operational roadmap for emerging markets." },
-            { title: "Scaling a Startup from Regional to National Presence (Bykea)", description: "Led multi-city expansion strategy to transform a Karachi-focused startup into a national leader. Applied evidence-based prioritization and competitive analysis to sequence market entry and maximize growth." }
+            { title: "Scaling a Startup from Regional to National Presence (Bykea)", description: "Led multi-city expansion strategy to transform a Karachi-focused startup into a national leader. Applied evidence-based prioritization and competitive analysis to sequence market entry and maximize growth." },
+            { title: "Pakistan's Hyperlocal Information Gap: A Structured Utility Platform", description: "Diagnosed the systemic lack of real‑time urban intelligence (water, gas, fuel, medicine) affecting millions. Designed a geofenced, crowd‑verified community platform with a three‑layer revenue model (ads, subscriptions, B2B APIs). Projected household time savings of 15‑25 minutes per day via daily verified answers. Built a phased go‑to‑market strategy targeting the root cause: incentive misalignment." }
         ],
         experiences: [
             { title: "Business Strategy & Product Analyst", company: "Self-Employed", period: "2025 – Present", description: "Analyze digital products, marketplaces and platforms to identify strategic gaps. Deliver feature-rich solution blueprints, market entry strategies, and product optimization roadmaps for clients across e‑commerce and SaaS sectors. Lead end-to-end product strategy, competitive benchmarking, and data-driven decision frameworks." }
@@ -419,44 +112,20 @@
 
     let state = JSON.parse(JSON.stringify(defaultState));
 
-    function saveStateToLocalStorage() {
-        localStorage.setItem("resumeBuilderState", JSON.stringify(state));
-    }
-
-    function loadStateFromLocalStorage() {
+    function saveToLocal() { localStorage.setItem("resumeBuilderState", JSON.stringify(state)); }
+    function loadFromLocal() {
         const saved = localStorage.getItem("resumeBuilderState");
-        if (saved) {
-            try {
-                state = JSON.parse(saved);
-            } catch(e) { console.warn("Failed to parse saved state"); }
-        } else {
-            state = JSON.parse(JSON.stringify(defaultState));
-        }
+        if (saved) { try { state = JSON.parse(saved); } catch(e) {} }
+        else { state = JSON.parse(JSON.stringify(defaultState)); }
         renderAll();
     }
+    function escapeHtml(str) { if(!str) return ''; return str.replace(/[&<>]/g, m => m==='&'?'&amp;': m==='<'?'&lt;':'&gt;'); }
 
-    function escapeHtml(str) { if(!str) return ''; return str.replace(/[&<>]/g, function(m){if(m==='&') return '&amp;'; if(m==='<') return '&lt;'; if(m==='>') return '&gt;'; return m;}); }
-
-    function syncContactFromInputs() {
-        state.contact.email = document.getElementById("contactEmail").value;
-        state.contact.mobile = document.getElementById("contactMobile").value;
-        state.contact.address = document.getElementById("contactAddress").value;
-        state.contact.website = document.getElementById("contactWebsite").value;
-        state.contact.linkedin = document.getElementById("contactLinkedin").value;
-        renderPreview();
-        saveStateToLocalStorage();
-    }
-    function syncNameProfile() {
-        state.name = document.getElementById("nameInput").value;
-        state.profile = document.getElementById("profileInput").value;
-        renderPreview();
-        saveStateToLocalStorage();
-    }
-
+    // ---------- RENDER ALL ----------
     function renderAll() {
         renderDegreesEditor();
         renderCertsEditor();
-        renderSkillsAndTools();
+        renderSkills();
         renderProjectsEditor();
         renderExperienceEditor();
         document.getElementById("contactEmail").value = state.contact.email || "";
@@ -467,211 +136,175 @@
         document.getElementById("nameInput").value = state.name;
         document.getElementById("profileInput").value = state.profile;
         renderPreview();
-        saveStateToLocalStorage();
+        saveToLocal();
     }
 
     function renderDegreesEditor() {
         const container = document.getElementById("degreesListEditor");
-        if (!container) return;
+        if(!container) return;
         container.innerHTML = "";
         state.degrees.forEach((deg, idx) => {
-            const div = document.createElement("div");
-            div.className = "dynamic-item";
-            div.innerHTML = `
-                <div class="dynamic-header"><strong>🎓 ${escapeHtml(deg.degreeName || 'Degree')}</strong><button class="remove-btn" data-action="removeDegree" data-idx="${idx}"><i class="fas fa-trash-alt"></i> Remove</button></div>
-                <div class="field-group"><label>Degree Name</label><input type="text" class="deg-name-field" data-idx="${idx}" value="${escapeHtml(deg.degreeName)}"></div>
-                <div class="field-group"><label>Institute</label><input type="text" class="deg-institute-field" data-idx="${idx}" value="${escapeHtml(deg.institute)}"></div>
-                <div style="display:flex; gap:10px; flex-wrap:wrap;"><div style="flex:1"><label>Start Year</label><input type="text" class="deg-start-field" data-idx="${idx}" value="${escapeHtml(deg.startYear)}"></div><div style="flex:1"><label>End Year</label><input type="text" class="deg-end-field" data-idx="${idx}" value="${escapeHtml(deg.endYear)}"></div><div style="flex:1"><label>CGPA</label><input type="text" class="deg-cgpa-field" data-idx="${idx}" value="${escapeHtml(deg.cgpa)}"></div></div>
-            `;
+            const div = document.createElement("div"); div.className = "dynamic-item";
+            div.innerHTML = `<div class="dynamic-header"><strong>${escapeHtml(deg.degreeName)}</strong><button class="remove-btn" data-action="removeDegree" data-idx="${idx}"><i class="fas fa-trash-alt"></i> Remove</button></div>
+                <div class="field-group"><label>Degree</label><input class="deg-name-field" data-idx="${idx}" value="${escapeHtml(deg.degreeName)}"></div>
+                <div class="field-group"><label>Institute</label><input class="deg-institute-field" data-idx="${idx}" value="${escapeHtml(deg.institute)}"></div>
+                <div style="display:flex; gap:10px;"><div style="flex:1"><label>Start</label><input class="deg-start-field" data-idx="${idx}" value="${escapeHtml(deg.startYear)}"></div><div style="flex:1"><label>End</label><input class="deg-end-field" data-idx="${idx}" value="${escapeHtml(deg.endYear)}"></div><div style="flex:1"><label>CGPA</label><input class="deg-cgpa-field" data-idx="${idx}" value="${escapeHtml(deg.cgpa)}"></div></div>`;
             container.appendChild(div);
         });
-        document.querySelectorAll(".deg-name-field, .deg-institute-field, .deg-start-field, .deg-end-field, .deg-cgpa-field").forEach(inp => {
-            inp.removeEventListener("input", handleDegreeInput);
-            inp.addEventListener("input", handleDegreeInput);
-        });
-    }
-    function handleDegreeInput(e) {
-        const idx = parseInt(e.target.dataset.idx);
-        if (isNaN(idx)) return;
-        const map = { "deg-name-field":"degreeName","deg-institute-field":"institute","deg-start-field":"startYear","deg-end-field":"endYear","deg-cgpa-field":"cgpa"};
-        const field = map[e.target.className];
-        if (field && state.degrees[idx]) { state.degrees[idx][field] = e.target.value; renderPreview(); saveStateToLocalStorage(); }
+        document.querySelectorAll(".deg-name-field, .deg-institute-field, .deg-start-field, .deg-end-field, .deg-cgpa-field").forEach(inp => inp.addEventListener("input", e => { let i = parseInt(e.target.dataset.idx); const map = {"deg-name-field":"degreeName","deg-institute-field":"institute","deg-start-field":"startYear","deg-end-field":"endYear","deg-cgpa-field":"cgpa"}; if(state.degrees[i]) state.degrees[i][map[e.target.className]] = e.target.value; renderPreview(); saveToLocal(); }));
     }
 
     function renderCertsEditor() {
         const container = document.getElementById("certsListEditor");
-        if (!container) return;
+        if(!container) return;
         container.innerHTML = "";
         state.certifications.forEach((cert, idx) => {
-            const div = document.createElement("div");
-            div.className = "dynamic-item";
-            div.innerHTML = `
-                <div class="dynamic-header"><strong>📜 ${escapeHtml(cert.name || 'Cert')}</strong><button class="remove-btn" data-action="removeCert" data-idx="${idx}"><i class="fas fa-trash-alt"></i> Remove</button></div>
-                <div class="field-group"><label>Certification Name</label><input type="text" class="cert-name-field" data-idx="${idx}" value="${escapeHtml(cert.name)}"></div>
-                <div class="field-group"><label>Issuer</label><input type="text" class="cert-issuer-field" data-idx="${idx}" value="${escapeHtml(cert.issuer)}"></div>
-                <div class="field-group"><label>Year</label><input type="text" class="cert-year-field" data-idx="${idx}" value="${escapeHtml(cert.year)}"></div>
-            `;
+            const div = document.createElement("div"); div.className = "dynamic-item";
+            div.innerHTML = `<div class="dynamic-header"><strong>${escapeHtml(cert.name)}</strong><button class="remove-btn" data-action="removeCert" data-idx="${idx}"><i class="fas fa-trash-alt"></i> Remove</button></div>
+                <div class="field-group"><label>Name</label><input class="cert-name-field" data-idx="${idx}" value="${escapeHtml(cert.name)}"></div>
+                <div class="field-group"><label>Issuer</label><input class="cert-issuer-field" data-idx="${idx}" value="${escapeHtml(cert.issuer)}"></div>
+                <div class="field-group"><label>Year</label><input class="cert-year-field" data-idx="${idx}" value="${escapeHtml(cert.year)}"></div>`;
             container.appendChild(div);
         });
-        document.querySelectorAll(".cert-name-field, .cert-issuer-field, .cert-year-field").forEach(inp => {
-            inp.removeEventListener("input", handleCertInput);
-            inp.addEventListener("input", handleCertInput);
-        });
-    }
-    function handleCertInput(e) {
-        const idx = parseInt(e.target.dataset.idx);
-        if (isNaN(idx)) return;
-        const map = { "cert-name-field":"name","cert-issuer-field":"issuer","cert-year-field":"year"};
-        const field = map[e.target.className];
-        if (field && state.certifications[idx]) { state.certifications[idx][field] = e.target.value; renderPreview(); saveStateToLocalStorage(); }
+        document.querySelectorAll(".cert-name-field, .cert-issuer-field, .cert-year-field").forEach(inp => inp.addEventListener("input", e => { let i = parseInt(e.target.dataset.idx); const map = {"cert-name-field":"name","cert-issuer-field":"issuer","cert-year-field":"year"}; if(state.certifications[i]) state.certifications[i][map[e.target.className]] = e.target.value; renderPreview(); saveToLocal(); }));
     }
 
-    function renderSkillsAndTools() {
-        renderChipList("coreSkillsContainer", state.coreSkills, "coreSkill");
-        renderChipList("supportiveSkillsContainer", state.supportiveSkills, "supportiveSkill");
-        renderChipList("toolsContainer", state.toolsExpertise, "tool");
-    }
-    function renderChipList(containerId, arr, type) {
-        const container = document.getElementById(containerId);
-        if (!container) return;
-        container.innerHTML = arr.map((item, idx) => `<span class="skill-tag">${escapeHtml(item)} <i class="fas fa-times-circle" data-type="${type}" data-index="${idx}"></i></span>`).join('');
+    function renderSkills() {
+        const coreContainer = document.getElementById("coreSkillsContainer");
+        const supportiveContainer = document.getElementById("supportiveSkillsContainer");
+        const toolsContainer = document.getElementById("toolsContainer");
+        coreContainer.innerHTML = state.coreSkills.map((s,i) => `<span class="skill-tag">${escapeHtml(s)} <i class="fas fa-times-circle" data-type="coreSkill" data-index="${i}"></i></span>`).join('');
+        supportiveContainer.innerHTML = state.supportiveSkills.map((s,i) => `<span class="skill-tag">${escapeHtml(s)} <i class="fas fa-times-circle" data-type="supportiveSkill" data-index="${i}"></i></span>`).join('');
+        toolsContainer.innerHTML = state.toolsExpertise.map((t,i) => `<span class="skill-tag">${escapeHtml(t)} <i class="fas fa-times-circle" data-type="tool" data-index="${i}"></i></span>`).join('');
     }
 
     function renderProjectsEditor() {
         const container = document.getElementById("projectsListEditor");
-        if (!container) return;
+        if(!container) return;
         container.innerHTML = "";
         state.projects.forEach((proj, idx) => {
-            const div = document.createElement("div");
-            div.className = "dynamic-item";
-            div.innerHTML = `<div class="dynamic-header"><strong>📌 ${escapeHtml(proj.title)}</strong><button class="remove-btn" data-action="removeProject" data-idx="${idx}"><i class="fas fa-trash-alt"></i> Remove</button></div>
-                <div class="field-group"><label>Title</label><input type="text" class="project-title-field" data-idx="${idx}" value="${escapeHtml(proj.title)}"></div>
+            const div = document.createElement("div"); div.className = "dynamic-item";
+            div.innerHTML = `<div class="dynamic-header"><strong>${escapeHtml(proj.title)}</strong><button class="remove-btn" data-action="removeProject" data-idx="${idx}"><i class="fas fa-trash-alt"></i> Remove</button></div>
+                <div class="field-group"><label>Title</label><input class="project-title-field" data-idx="${idx}" value="${escapeHtml(proj.title)}"></div>
                 <div class="field-group"><label>Description</label><textarea class="project-desc-field" data-idx="${idx}" rows="3">${escapeHtml(proj.description)}</textarea></div>`;
             container.appendChild(div);
         });
-        document.querySelectorAll(".project-title-field").forEach(inp => inp.addEventListener("input", e => { let i = parseInt(e.target.dataset.idx); if(state.projects[i]) state.projects[i].title = e.target.value; renderPreview(); saveStateToLocalStorage(); }));
-        document.querySelectorAll(".project-desc-field").forEach(ta => ta.addEventListener("input", e => { let i = parseInt(e.target.dataset.idx); if(state.projects[i]) state.projects[i].description = e.target.value; renderPreview(); saveStateToLocalStorage(); }));
+        document.querySelectorAll(".project-title-field").forEach(inp => inp.addEventListener("input", e => { let i = parseInt(e.target.dataset.idx); if(state.projects[i]) state.projects[i].title = e.target.value; renderPreview(); saveToLocal(); }));
+        document.querySelectorAll(".project-desc-field").forEach(ta => ta.addEventListener("input", e => { let i = parseInt(e.target.dataset.idx); if(state.projects[i]) state.projects[i].description = e.target.value; renderPreview(); saveToLocal(); }));
     }
 
     function renderExperienceEditor() {
         const container = document.getElementById("experienceListEditor");
-        if (!container) return;
+        if(!container) return;
         container.innerHTML = "";
         state.experiences.forEach((exp, idx) => {
-            const div = document.createElement("div");
-            div.className = "dynamic-item";
-            div.innerHTML = `<div class="dynamic-header"><strong>💼 ${escapeHtml(exp.title)}</strong><button class="remove-btn" data-action="removeExp" data-idx="${idx}"><i class="fas fa-trash-alt"></i> Remove</button></div>
-                <div class="field-group"><label>Job Title</label><input class="exp-title-field" data-idx="${idx}" value="${escapeHtml(exp.title)}"></div>
+            const div = document.createElement("div"); div.className = "dynamic-item";
+            div.innerHTML = `<div class="dynamic-header"><strong>${escapeHtml(exp.title)}</strong><button class="remove-btn" data-action="removeExp" data-idx="${idx}"><i class="fas fa-trash-alt"></i> Remove</button></div>
+                <div class="field-group"><label>Title</label><input class="exp-title-field" data-idx="${idx}" value="${escapeHtml(exp.title)}"></div>
                 <div class="field-group"><label>Company</label><input class="exp-company-field" data-idx="${idx}" value="${escapeHtml(exp.company)}"></div>
                 <div class="field-group"><label>Period</label><input class="exp-period-field" data-idx="${idx}" value="${escapeHtml(exp.period)}"></div>
-                <div class="field-group"><label>Description</label><textarea class="exp-desc-field" rows="3" data-idx="${idx}">${escapeHtml(exp.description)}</textarea></div>`;
+                <div class="field-group"><label>Description</label><textarea class="exp-desc-field" data-idx="${idx}" rows="3">${escapeHtml(exp.description)}</textarea></div>`;
             container.appendChild(div);
         });
-        document.querySelectorAll(".exp-title-field").forEach(inp => inp.addEventListener("input", e => { let i = parseInt(e.target.dataset.idx); if(state.experiences[i]) state.experiences[i].title = e.target.value; renderPreview(); saveStateToLocalStorage(); }));
-        document.querySelectorAll(".exp-company-field").forEach(inp => inp.addEventListener("input", e => { let i = parseInt(e.target.dataset.idx); if(state.experiences[i]) state.experiences[i].company = e.target.value; renderPreview(); saveStateToLocalStorage(); }));
-        document.querySelectorAll(".exp-period-field").forEach(inp => inp.addEventListener("input", e => { let i = parseInt(e.target.dataset.idx); if(state.experiences[i]) state.experiences[i].period = e.target.value; renderPreview(); saveStateToLocalStorage(); }));
-        document.querySelectorAll(".exp-desc-field").forEach(ta => ta.addEventListener("input", e => { let i = parseInt(e.target.dataset.idx); if(state.experiences[i]) state.experiences[i].description = e.target.value; renderPreview(); saveStateToLocalStorage(); }));
+        document.querySelectorAll(".exp-title-field, .exp-company-field, .exp-period-field, .exp-desc-field").forEach(inp => inp.addEventListener("input", e => { let i = parseInt(e.target.dataset.idx); const map = {"exp-title-field":"title","exp-company-field":"company","exp-period-field":"period","exp-desc-field":"description"}; if(state.experiences[i]) state.experiences[i][map[e.target.className]] = e.target.value; renderPreview(); saveToLocal(); }));
     }
 
     function renderPreview() {
-        const previewDiv = document.getElementById("resumePreview");
+        const preview = document.getElementById("resumePreview");
         const c = state.contact;
         const contactHtml = `<div class="preview-contact">${c.email?`<div class="preview-contact-item"><i class="fas fa-envelope"></i> ${escapeHtml(c.email)}</div>`:''}${c.mobile?`<div class="preview-contact-item"><i class="fas fa-phone-alt"></i> ${escapeHtml(c.mobile)}</div>`:''}${c.address?`<div class="preview-contact-item"><i class="fas fa-map-marker-alt"></i> ${escapeHtml(c.address)}</div>`:''}${c.website?`<div class="preview-contact-item"><i class="fas fa-globe"></i> <a href="${escapeHtml(c.website)}" target="_blank">${escapeHtml(c.website)}</a></div>`:''}${c.linkedin?`<div class="preview-contact-item"><i class="fab fa-linkedin"></i> <a href="${escapeHtml(c.linkedin)}" target="_blank">${escapeHtml(c.linkedin)}</a></div>`:''}</div>`;
-        const degreesHtml = state.degrees.map(d => `<div class="degree-card"><div class="degree-title">${escapeHtml(d.degreeName)}</div><div class="degree-meta">${escapeHtml(d.institute)} | ${escapeHtml(d.startYear)} – ${escapeHtml(d.endYear)} | CGPA: ${escapeHtml(d.cgpa)}</div></div>`).join('');
+        const degreesHtml = state.degrees.map(d => `<div class="degree-card"><div class="degree-title">${escapeHtml(d.degreeName)}</div><div class="degree-meta">${escapeHtml(d.institute)} | ${escapeHtml(d.startYear)}–${escapeHtml(d.endYear)} | CGPA: ${escapeHtml(d.cgpa)}</div></div>`).join('');
         const certsHtml = state.certifications.map(cert => `<div class="cert-card"><div class="cert-title">${escapeHtml(cert.name)}</div><div class="cert-meta">${escapeHtml(cert.issuer)}${cert.year?` · ${cert.year}`:''}</div></div>`).join('');
         const coreHtml = state.coreSkills.map(s => `<span class="skill-tag">${escapeHtml(s)}</span>`).join('');
         const supportiveHtml = state.supportiveSkills.map(s => `<span class="skill-tag">${escapeHtml(s)}</span>`).join('');
         const toolsHtml = state.toolsExpertise.map(t => `<span class="skill-tag">${escapeHtml(t)}</span>`).join('');
         const projectsHtml = state.projects.map(p => `<div class="project-item"><div class="project-title">📌 ${escapeHtml(p.title)}</div><div class="project-desc">${escapeHtml(p.description)}</div></div>`).join('');
         const expHtml = state.experiences.map(e => `<div class="exp-item"><div class="exp-title">💼 ${escapeHtml(e.title)} · ${escapeHtml(e.company)}</div><div class="exp-meta">${escapeHtml(e.period)}</div><div class="exp-desc">${escapeHtml(e.description)}</div></div>`).join('');
-        previewDiv.innerHTML = `<div class="preview-name">${escapeHtml(state.name)}</div>${contactHtml}<div class="preview-profile">${escapeHtml(state.profile)}</div><div class="preview-section"><h3> Education</h3>${degreesHtml}</div><div class="preview-section"><h3> Certifications</h3>${certsHtml}</div><div class="preview-section"><h3> Core Skills</h3><div>${coreHtml}</div></div><div class="preview-section"><h3> Supportive Skills</h3><div>${supportiveHtml}</div></div><div class="preview-section"><h3> Tools Expertise</h3><div>${toolsHtml}</div></div><div class="preview-section"><h3> Product & Case Studies</h3>${projectsHtml}</div><div class="preview-section"><h3> Professional Experience</h3>${expHtml}</div>`;
+        preview.innerHTML = `<div class="preview-name">${escapeHtml(state.name)}</div>${contactHtml}<div class="preview-profile">${escapeHtml(state.profile)}</div><div class="preview-section"><h3>🎓 Education</h3>${degreesHtml}</div><div class="preview-section"><h3>📜 Certifications</h3>${certsHtml}</div><div class="preview-section"><h3>⚙️ Core Skills</h3><div>${coreHtml}</div></div><div class="preview-section"><h3>🤝 Supportive Skills</h3><div>${supportiveHtml}</div></div><div class="preview-section"><h3>🛠️ Tools Expertise</h3><div>${toolsHtml}</div></div><div class="preview-section"><h3>📘 Product & Case Studies</h3>${projectsHtml}</div><div class="preview-section"><h3>💼 Professional Experience</h3>${expHtml}</div>`;
     }
 
-    function setupGlobalDelegation() {
-        document.querySelector(".editor-panel").addEventListener("click", (e) => {
-            const btn = e.target.closest(".remove-btn");
-            if (btn) {
-                const action = btn.getAttribute("data-action");
-                const idx = parseInt(btn.getAttribute("data-idx"));
-                if (isNaN(idx)) return;
-                if (action === "removeDegree") { state.degrees.splice(idx,1); renderAll(); }
-                else if (action === "removeCert") { state.certifications.splice(idx,1); renderAll(); }
-                else if (action === "removeProject") { state.projects.splice(idx,1); renderAll(); }
-                else if (action === "removeExp") { state.experiences.splice(idx,1); renderAll(); }
-                return;
-            }
-            const icon = e.target.closest(".fa-times-circle");
-            if (icon && icon.parentElement?.classList?.contains("skill-tag")) {
-                const type = icon.getAttribute("data-type");
-                const index = parseInt(icon.getAttribute("data-index"));
-                if (isNaN(index)) return;
-                if (type === "coreSkill") state.coreSkills.splice(index,1);
-                else if (type === "supportiveSkill") state.supportiveSkills.splice(index,1);
-                else if (type === "tool") state.toolsExpertise.splice(index,1);
-                renderAll();
-            }
-        });
+    // ---------- PDF GENERATION (clean, full content) ----------
+    function generatePDF() {
+        // Create a temporary hidden div for PDF
+        const pdfDiv = document.createElement('div');
+        pdfDiv.className = 'pdf-export';
+        pdfDiv.style.position = 'absolute';
+        pdfDiv.style.top = '-9999px';
+        pdfDiv.style.left = '-9999px';
+        pdfDiv.style.width = '800px';
+        pdfDiv.style.background = 'white';
+        pdfDiv.style.padding = '0.4in';
+        pdfDiv.style.fontFamily = 'Inter, sans-serif';
+        document.body.appendChild(pdfDiv);
+        
+        // Build clean HTML from current state
+        const c = state.contact;
+        const contactHtml = `<div style="background:#f8fafc; padding:12px 16px; border-radius:20px; margin:12px 0 16px; display:flex; flex-wrap:wrap; gap:12px 20px;">${c.email?`<div><i class="fas fa-envelope"></i> ${escapeHtml(c.email)}</div>`:''}${c.mobile?`<div><i class="fas fa-phone-alt"></i> ${escapeHtml(c.mobile)}</div>`:''}${c.address?`<div><i class="fas fa-map-marker-alt"></i> ${escapeHtml(c.address)}</div>`:''}${c.website?`<div><i class="fas fa-globe"></i> ${escapeHtml(c.website)}</div>`:''}${c.linkedin?`<div><i class="fab fa-linkedin"></i> ${escapeHtml(c.linkedin)}</div>`:''}</div>`;
+        const degreesHtml = state.degrees.map(d => `<div style="background:#f9fdfe; padding:12px 14px; border-radius:16px; margin-bottom:12px; border-left:3px solid #2b7a62;"><div><strong>${escapeHtml(d.degreeName)}</strong></div><div style="font-size:0.75rem; color:#4f6f8a;">${escapeHtml(d.institute)} | ${escapeHtml(d.startYear)}–${escapeHtml(d.endYear)} | CGPA: ${escapeHtml(d.cgpa)}</div></div>`).join('');
+        const certsHtml = state.certifications.map(cert => `<div style="background:#f9fdfe; padding:12px 14px; border-radius:16px; margin-bottom:12px; border-left:3px solid #2b7a62;"><div><strong>${escapeHtml(cert.name)}</strong></div><div style="font-size:0.75rem; color:#4f6f8a;">${escapeHtml(cert.issuer)}${cert.year?` · ${cert.year}`:''}</div></div>`).join('');
+        const coreHtml = state.coreSkills.map(s => `<span style="background:#eef2f5; display:inline-block; padding:4px 12px; border-radius:20px; font-size:0.7rem; margin:0 4px 6px 0;">${escapeHtml(s)}</span>`).join('');
+        const supportiveHtml = state.supportiveSkills.map(s => `<span style="background:#eef2f5; display:inline-block; padding:4px 12px; border-radius:20px; font-size:0.7rem; margin:0 4px 6px 0;">${escapeHtml(s)}</span>`).join('');
+        const toolsHtml = state.toolsExpertise.map(t => `<span style="background:#eef2f5; display:inline-block; padding:4px 12px; border-radius:20px; font-size:0.7rem; margin:0 4px 6px 0;">${escapeHtml(t)}</span>`).join('');
+        const projectsHtml = state.projects.map(p => `<div style="margin-bottom:20px;"><div style="font-weight:700; color:#0f4b5c;">📌 ${escapeHtml(p.title)}</div><div style="font-size:0.85rem; margin-top:4px;">${escapeHtml(p.description)}</div></div>`).join('');
+        const expHtml = state.experiences.map(e => `<div style="margin-bottom:20px;"><div style="font-weight:700; color:#0f4b5c;">💼 ${escapeHtml(e.title)} · ${escapeHtml(e.company)}</div><div style="font-size:0.75rem; color:#5f7f95;">${escapeHtml(e.period)}</div><div style="font-size:0.85rem; margin-top:4px;">${escapeHtml(e.description)}</div></div>`).join('');
+        
+        pdfDiv.innerHTML = `
+            <div style="font-size:2rem; font-weight:700; margin-bottom:8px;">${escapeHtml(state.name)}</div>
+            ${contactHtml}
+            <div style="background:#f0f6fa; padding:14px 18px; border-radius:18px; margin:16px 0; border-left:4px solid #2b7a62;">${escapeHtml(state.profile)}</div>
+            <div style="margin-top:26px;"><h3 style="font-size:1.2rem; border-bottom:3px solid #dce9f0; display:inline-block;"> Education</h3>${degreesHtml}</div>
+            <div style="margin-top:26px;"><h3 style="font-size:1.2rem; border-bottom:3px solid #dce9f0; display:inline-block;"> Certifications</h3>${certsHtml}</div>
+            <div style="margin-top:26px;"><h3 style="font-size:1.2rem; border-bottom:3px solid #dce9f0; display:inline-block;"> Core Skills</h3><div>${coreHtml}</div></div>
+            <div style="margin-top:26px;"><h3 style="font-size:1.2rem; border-bottom:3px solid #dce9f0; display:inline-block;"> Supportive Skills</h3><div>${supportiveHtml}</div></div>
+            <div style="margin-top:26px;"><h3 style="font-size:1.2rem; border-bottom:3px solid #dce9f0; display:inline-block;"> Tools Expertise</h3><div>${toolsHtml}</div></div>
+            <div style="margin-top:26px;"><h3 style="font-size:1.2rem; border-bottom:3px solid #dce9f0; display:inline-block;"> Product & Case Studies</h3>${projectsHtml}</div>
+            <div style="margin-top:26px;"><h3 style="font-size:1.2rem; border-bottom:3px solid #dce9f0; display:inline-block;"> Professional Experience</h3>${expHtml}</div>
+        `;
+        
+        const opt = { margin: [0.3, 0.5, 0.5, 0.5], filename: 'Ghulam_Farid_Resume.pdf', image: { type: 'jpeg', quality: 0.98 }, html2canvas: { scale: 2, logging: false }, jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' } };
+        html2pdf().set(opt).from(pdfDiv).save().then(() => { document.body.removeChild(pdfDiv); });
     }
 
-    function bindAddButtons() {
+    // ---------- EVENT HANDLERS ----------
+    function setupEvents() {
         document.getElementById("addDegreeBtn").onclick = () => { state.degrees.push({ institute: "", degreeName: "New Degree", startYear: "", endYear: "", cgpa: "" }); renderAll(); };
         document.getElementById("addCertBtn").onclick = () => { state.certifications.push({ name: "New Certification", issuer: "", year: "" }); renderAll(); };
         document.getElementById("addCoreSkillBtn").onclick = () => { const val = document.getElementById("newCoreSkillInput").value.trim(); if(val){ state.coreSkills.push(val); document.getElementById("newCoreSkillInput").value = ""; renderAll(); } };
         document.getElementById("addSupportiveSkillBtn").onclick = () => { const val = document.getElementById("newSupportiveSkillInput").value.trim(); if(val){ state.supportiveSkills.push(val); document.getElementById("newSupportiveSkillInput").value = ""; renderAll(); } };
         document.getElementById("addToolBtn").onclick = () => { const val = document.getElementById("newToolInput").value.trim(); if(val){ state.toolsExpertise.push(val); document.getElementById("newToolInput").value = ""; renderAll(); } };
         document.getElementById("addProjectBtn").onclick = () => { state.projects.push({ title: "New Case Study", description: "Describe problem, analysis, solution." }); renderAll(); };
-        document.getElementById("addExperienceBtn").onclick = () => { state.experiences.push({ title: "Product Manager", company: "Company", period: "2025–Present", description: "Key achievements and responsibilities." }); renderAll(); };
-        
-        document.getElementById("resetDemoBtn").onclick = () => {
-            const code = prompt("Enter code 5578 to load demo data (this will overwrite your current data):", "");
-            if (code === "5578") {
-                state = JSON.parse(JSON.stringify(defaultState));
+        document.getElementById("addExperienceBtn").onclick = () => { state.experiences.push({ title: "Product Manager", company: "Company", period: "2025–Present", description: "Key achievements." }); renderAll(); };
+        document.getElementById("resetDemoBtn").onclick = () => { const code = prompt("Enter code 5578:"); if(code === "5578") { state = JSON.parse(JSON.stringify(defaultState)); renderAll(); alert("Demo loaded."); } else if(code) alert("Wrong code."); };
+        document.getElementById("downloadPDFBtn").onclick = () => generatePDF();
+        document.getElementById("nameInput").addEventListener("input", () => { state.name = document.getElementById("nameInput").value; renderPreview(); saveToLocal(); });
+        document.getElementById("profileInput").addEventListener("input", () => { state.profile = document.getElementById("profileInput").value; renderPreview(); saveToLocal(); });
+        ["contactEmail","contactMobile","contactAddress","contactWebsite","contactLinkedin"].forEach(id => { document.getElementById(id).addEventListener("input", () => { state.contact[id.replace("contact","").toLowerCase()] = document.getElementById(id).value; renderPreview(); saveToLocal(); }); });
+        document.querySelector(".editor-panel").addEventListener("click", (e) => {
+            const btn = e.target.closest(".remove-btn");
+            if(btn){
+                const action = btn.getAttribute("data-action");
+                const idx = parseInt(btn.getAttribute("data-idx"));
+                if(action === "removeDegree") state.degrees.splice(idx,1);
+                else if(action === "removeCert") state.certifications.splice(idx,1);
+                else if(action === "removeProject") state.projects.splice(idx,1);
+                else if(action === "removeExp") state.experiences.splice(idx,1);
                 renderAll();
-                alert("Demo data loaded. Your previous data has been replaced.");
-            } else if (code !== null) {
-                alert("Incorrect code. Your data remains unchanged.");
+                return;
             }
-        };
-        
-        // IMPROVED PDF: capture full content, auto multi-page, no truncation
-        document.getElementById("downloadPDFBtn").onclick = () => {
-            const element = document.getElementById("resumePreview");
-            // Clone to avoid any interference
-            const clone = element.cloneNode(true);
-            // Ensure clone has proper styles
-            const style = document.createElement('style');
-            style.textContent = `
-                .resume-preview { font-family: 'Inter', sans-serif; width: 100%; padding: 0.2in; }
-                .preview-contact, .preview-profile, .degree-card, .cert-card, .project-item, .exp-item { break-inside: avoid; page-break-inside: avoid; }
-                .preview-section { break-inside: avoid; }
-            `;
-            clone.prepend(style);
-            const opt = {
-                margin:        [0.3, 0.5, 0.5, 0.5], // top, right, bottom, left (inches)
-                filename:     'Ghulam_Farid_Resume.pdf',
-                image:        { type: 'jpeg', quality: 0.98 },
-                html2canvas:  { scale: 2, letterRendering: true, useCORS: true, logging: false, windowWidth: 800 },
-                jsPDF:        { unit: 'in', format: 'a4', orientation: 'portrait' },
-                pagebreak:    { mode: 'avoid-all' }  // avoid breaking mid-element
-            };
-            html2pdf().set(opt).from(clone).save();
-        };
-        
-        document.getElementById("nameInput").addEventListener("input", syncNameProfile);
-        document.getElementById("profileInput").addEventListener("input", syncNameProfile);
-        document.getElementById("contactEmail").addEventListener("input", syncContactFromInputs);
-        document.getElementById("contactMobile").addEventListener("input", syncContactFromInputs);
-        document.getElementById("contactAddress").addEventListener("input", syncContactFromInputs);
-        document.getElementById("contactWebsite").addEventListener("input", syncContactFromInputs);
-        document.getElementById("contactLinkedin").addEventListener("input", syncContactFromInputs);
+            const icon = e.target.closest(".fa-times-circle");
+            if(icon && icon.parentElement.classList.contains("skill-tag")){
+                const type = icon.getAttribute("data-type");
+                const idx = parseInt(icon.getAttribute("data-index"));
+                if(type === "coreSkill") state.coreSkills.splice(idx,1);
+                else if(type === "supportiveSkill") state.supportiveSkills.splice(idx,1);
+                else if(type === "tool") state.toolsExpertise.splice(idx,1);
+                renderAll();
+            }
+        });
     }
 
-    function init() {
-        loadStateFromLocalStorage();
-        setupGlobalDelegation();
-        bindAddButtons();
-    }
-    init();
+    loadFromLocal();
+    setupEvents();
 </script>
 </body>
 </html>
