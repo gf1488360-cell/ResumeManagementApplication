@@ -184,6 +184,11 @@
             width: 18px;
             color: #2b7a62;
         }
+        .preview-contact-item a {
+            color: #2b7a62;
+            text-decoration: none;
+        }
+        .preview-contact-item a:hover { text-decoration: underline; }
         .preview-profile {
             background: #f0f6fa;
             padding: 14px 18px;
@@ -228,9 +233,9 @@
     <div class="editor-panel">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
             <h2 style="font-weight: 700; color: #1c5a6e;"><i class="fas fa-user-edit"></i> Resume Manager</h2>
-           <button id="resetDemoBtn" class="small-btn"><i class="fas fa-undo-alt"></i> Load Demo</button>
+            <button id="resetDemoBtn" class="small-btn"><i class="fas fa-undo-alt"></i> Load Demo (code protected)</button>
         </div>
-        <p style="font-size: 0.8rem; margin-bottom: 20px;">All sections editable — live preview + PDF export (data never vanishes)</p>
+        <p style="font-size: 0.8rem; margin-bottom: 20px;">All sections editable — live preview + PDF export. Data persists until you clear.</p>
 
         <!-- Name -->
         <div class="section-card">
@@ -238,7 +243,7 @@
             <input type="text" id="nameInput" placeholder="Full name">
         </div>
 
-        <!-- Contact Info (new section) -->
+        <!-- Contact Info -->
         <div class="section-card">
             <div class="section-title"><i class="fas fa-address-book"></i> Contact Information</div>
             <div class="field-group"><label>Email (Gmail)</label><input type="email" id="contactEmail" placeholder="yourname@gmail.com"></div>
@@ -325,7 +330,7 @@
 </div>
 
 <script>
-    // -------------------- STATE WITH CONTACT INFO --------------------
+    // -------------------- STATE --------------------
     let state = {
         name: "Jordan M. Chen",
         contact: {
@@ -360,7 +365,6 @@
 
     function escapeHtml(str) { if(!str) return ''; return str.replace(/[&<>]/g, function(m){if(m==='&') return '&amp;'; if(m==='<') return '&lt;'; if(m==='>') return '&gt;'; return m;}); }
 
-    // Sync contact inputs to state
     function syncContactFromInputs() {
         state.contact.email = document.getElementById("contactEmail").value;
         state.contact.mobile = document.getElementById("contactMobile").value;
@@ -376,14 +380,12 @@
         renderPreview();
     }
 
-    // Render all dynamic editors
     function renderAll() {
         renderDegreesEditor();
         renderCertsEditor();
         renderSkillsAndTools();
         renderProjectsEditor();
         renderExperienceEditor();
-        // contact fields sync from state to inputs
         document.getElementById("contactEmail").value = state.contact.email || "";
         document.getElementById("contactMobile").value = state.contact.mobile || "";
         document.getElementById("contactAddress").value = state.contact.address || "";
@@ -462,7 +464,6 @@
         if (field && state.certifications[idx]) { state.certifications[idx][field] = e.target.value; renderPreview(); }
     }
 
-    // Skills & tools (chips)
     function renderSkillsAndTools() {
         renderChipList("coreSkillsContainer", state.coreSkills, "coreSkill");
         renderChipList("supportiveSkillsContainer", state.supportiveSkills, "supportiveSkill");
@@ -474,7 +475,6 @@
         container.innerHTML = arr.map((item, idx) => `<span class="skill-tag">${escapeHtml(item)} <i class="fas fa-times-circle" data-type="${type}" data-index="${idx}"></i></span>`).join('');
     }
 
-    // Projects editor
     function renderProjectsEditor() {
         const container = document.getElementById("projectsListEditor");
         if (!container) return;
@@ -496,7 +496,6 @@
         document.querySelectorAll(".project-desc-field").forEach(ta => ta.addEventListener("input", e => { let i = parseInt(e.target.dataset.idx); if(state.projects[i]) state.projects[i].description = e.target.value; renderPreview(); }));
     }
 
-    // Experience editor
     function renderExperienceEditor() {
         const container = document.getElementById("experienceListEditor");
         if (!container) return;
@@ -522,7 +521,6 @@
         document.querySelectorAll(".exp-desc-field").forEach(ta => ta.addEventListener("input", e => { let i = parseInt(e.target.dataset.idx); if(state.experiences[i]) state.experiences[i].description = e.target.value; renderPreview(); }));
     }
 
-    // Preview with contact section right above Education
     function renderPreview() {
         const previewDiv = document.getElementById("resumePreview");
         const c = state.contact;
@@ -531,8 +529,8 @@
                 ${c.email ? `<div class="preview-contact-item"><i class="fas fa-envelope"></i> ${escapeHtml(c.email)}</div>` : ''}
                 ${c.mobile ? `<div class="preview-contact-item"><i class="fas fa-phone-alt"></i> ${escapeHtml(c.mobile)}</div>` : ''}
                 ${c.address ? `<div class="preview-contact-item"><i class="fas fa-map-marker-alt"></i> ${escapeHtml(c.address)}</div>` : ''}
-                ${c.website ? `<div class="preview-contact-item"><i class="fas fa-globe"></i> <a href="${escapeHtml(c.website)}" target="_blank" style="color:#2b7a62; text-decoration:none;">${escapeHtml(c.website)}</a></div>` : ''}
-                ${c.linkedin ? `<div class="preview-contact-item"><i class="fab fa-linkedin"></i> <a href="${escapeHtml(c.linkedin)}" target="_blank" style="color:#2b7a62; text-decoration:none;">${escapeHtml(c.linkedin)}</a></div>` : ''}
+                ${c.website ? `<div class="preview-contact-item"><i class="fas fa-globe"></i> <a href="${escapeHtml(c.website)}" target="_blank">${escapeHtml(c.website)}</a></div>` : ''}
+                ${c.linkedin ? `<div class="preview-contact-item"><i class="fab fa-linkedin"></i> <a href="${escapeHtml(c.linkedin)}" target="_blank">${escapeHtml(c.linkedin)}</a></div>` : ''}
             </div>
         `;
         const degreesHtml = state.degrees.map(d => `<div class="degree-card"><div class="degree-title">${escapeHtml(d.degreeName)}</div><div class="degree-meta">${escapeHtml(d.institute)} | ${escapeHtml(d.startYear)} – ${escapeHtml(d.endYear)} | CGPA: ${escapeHtml(d.cgpa)}</div></div>`).join('');
@@ -556,7 +554,6 @@
         `;
     }
 
-    // Global delegation for remove buttons and chip removal
     function setupGlobalDelegation() {
         document.querySelector(".editor-panel").addEventListener("click", (e) => {
             const btn = e.target.closest(".remove-btn");
@@ -583,7 +580,6 @@
         });
     }
 
-    // Bind add buttons, contact sync, name/profile, reset, download
     function bindAddButtons() {
         document.getElementById("addDegreeBtn").onclick = () => { state.degrees.push({ institute: "", degreeName: "New Degree", startYear: "", endYear: "", cgpa: "" }); renderAll(); };
         document.getElementById("addCertBtn").onclick = () => { state.certifications.push({ name: "New Certification", issuer: "", year: "" }); renderAll(); };
@@ -592,34 +588,43 @@
         document.getElementById("addToolBtn").onclick = () => { const val = document.getElementById("newToolInput").value.trim(); if(val){ state.toolsExpertise.push(val); document.getElementById("newToolInput").value = ""; renderAll(); } };
         document.getElementById("addProjectBtn").onclick = () => { state.projects.push({ title: "New Product Case", description: "Describe problem, solution, outcome." }); renderAll(); };
         document.getElementById("addExperienceBtn").onclick = () => { state.experiences.push({ title: "Product Manager", company: "Company Name", period: "2024 – Present", description: "Key accomplishments." }); renderAll(); };
+
+        // Reset with password protection
         document.getElementById("resetDemoBtn").onclick = () => {
-            state = {
-                name: "Jordan M. Chen",
-                contact: { email: "jordan.chen@example.com", mobile: "+1 (555) 789-1234", address: "San Francisco, CA", website: "https://jordanpmportfolio.com", linkedin: "https://linkedin.com/in/jordan-chen-pm" },
-                profile: "Strategic Product Manager with proven track record in data-driven roadmap execution...",
-                degrees: [
-                    { institute: "UC Berkeley, Haas", degreeName: "MBA, Product Leadership", startYear: "2021", endYear: "2023", cgpa: "3.9/4.0" },
-                    { institute: "University of Washington", degreeName: "B.S. Information Systems", startYear: "2015", endYear: "2019", cgpa: "3.7/4.0" }
-                ],
-                certifications: [
-                    { name: "Certified Scrum Product Owner (CSPO)", issuer: "Scrum Alliance", year: "2022" },
-                    { name: "PMP Certification", issuer: "PMI", year: "2023" },
-                    { name: "AI Product Management", issuer: "Stanford Online", year: "2024" }
-                ],
-                coreSkills: ["Product Roadmapping", "User Research", "Data Analytics", "Go-to-Market Strategy"],
-                supportiveSkills: ["Agile Leadership", "Cross-functional Collaboration", "Storytelling", "Negotiation"],
-                toolsExpertise: ["Jira", "Figma", "Amplitude", "Notion", "SQL"],
-                projects: [
-                    { title: "AI-driven Analytics Platform", description: "Led product discovery & MVP launch resulting in 35% increase in user engagement." },
-                    { title: "Omni-channel CRM Redesign", description: "Case study: Revamped legacy CRM, improved retention by 28%." }
-                ],
-                experiences: [
-                    { title: "Senior Product Manager", company: "Nexify Tech", period: "2022 – Present", description: "Own product lifecycle for AI analytics suite; increased ARR by $2.4M." },
-                    { title: "Associate Product Manager", company: "GrowthLabs", period: "2020 – 2022", description: "Managed cross-functional teams and sprint planning." }
-                ]
-            };
-            renderAll();
+            const code = prompt("Enter demo load code to reset all fields to demo data:", "");
+            if (code === "5578") {
+                state = {
+                    name: "Jordan M. Chen",
+                    contact: { email: "jordan.chen@example.com", mobile: "+1 (555) 789-1234", address: "San Francisco, CA", website: "https://jordanpmportfolio.com", linkedin: "https://linkedin.com/in/jordan-chen-pm" },
+                    profile: "Strategic Product Manager with proven track record in data-driven roadmap execution, cross-functional leadership, and launching 0→1 products. Passionate about AI-driven solutions and user-centric design.",
+                    degrees: [
+                        { institute: "UC Berkeley, Haas School of Business", degreeName: "MBA, Product Leadership", startYear: "2021", endYear: "2023", cgpa: "3.9/4.0" },
+                        { institute: "University of Washington", degreeName: "B.S. Information Systems", startYear: "2015", endYear: "2019", cgpa: "3.7/4.0" }
+                    ],
+                    certifications: [
+                        { name: "Certified Scrum Product Owner (CSPO)", issuer: "Scrum Alliance", year: "2022" },
+                        { name: "PMP Certification", issuer: "PMI", year: "2023" },
+                        { name: "AI Product Management", issuer: "Stanford Online", year: "2024" }
+                    ],
+                    coreSkills: ["Product Roadmapping", "User Research", "Data Analytics", "Go-to-Market Strategy"],
+                    supportiveSkills: ["Agile Leadership", "Cross-functional Collaboration", "Storytelling", "Negotiation"],
+                    toolsExpertise: ["Jira", "Figma", "Amplitude", "Notion", "SQL"],
+                    projects: [
+                        { title: "AI-driven Analytics Platform", description: "Led product discovery & MVP launch resulting in 35% increase in user engagement. Conducted 20+ customer interviews." },
+                        { title: "Omni-channel CRM Redesign", description: "Case study: Revamped legacy CRM, improved retention by 28% within 6 months. Prioritized features via RICE scoring." }
+                    ],
+                    experiences: [
+                        { title: "Senior Product Manager", company: "Nexify Tech", period: "2022 – Present", description: "Own product lifecycle for AI analytics suite; increased ARR by $2.4M." },
+                        { title: "Associate Product Manager", company: "GrowthLabs", period: "2020 – 2022", description: "Managed cross-functional teams, led user story mapping and sprint planning." }
+                    ]
+                };
+                renderAll();
+                alert("Demo data loaded successfully.");
+            } else if (code !== null) {
+                alert("Incorrect code. Demo data not loaded. Your current data remains unchanged.");
+            }
         };
+
         document.getElementById("downloadPDFBtn").onclick = () => {
             const element = document.getElementById("resumePreview");
             html2pdf().set({ margin: [0.5,0.5,0.5,0.5], filename: 'Product_Resume.pdf', image: { type: 'jpeg', quality: 0.98 }, html2canvas: { scale: 2 }, jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' } }).from(element).save();
