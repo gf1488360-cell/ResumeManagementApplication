@@ -3,10 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>ResumeForge | Product Manager Resume Builder</title>
-    <!-- html2pdf library for PDF generation -->
+    <title>ResumeForge Pro | Product Manager Resume Builder</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <!-- Font Awesome 6 (free icons) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         * {
@@ -14,63 +12,45 @@
             padding: 0;
             box-sizing: border-box;
         }
-
         body {
             background: #eef2f5;
             font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, sans-serif;
             padding: 30px 24px;
             color: #1a2c3e;
         }
-
-        /* Import Google Fonts */
-        @import url('https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap');
-
+        @import url('https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700&display=swap');
         .app-container {
             max-width: 1500px;
             margin: 0 auto;
             display: grid;
             grid-template-columns: 1fr 1.1fr;
             gap: 28px;
-            background: transparent;
         }
-
-        /* Left Panel (Editor) */
         .editor-panel {
             background: white;
             border-radius: 28px;
-            box-shadow: 0 20px 35px -12px rgba(0, 0, 0, 0.08);
+            box-shadow: 0 20px 35px -12px rgba(0,0,0,0.08);
             overflow-y: auto;
             max-height: 90vh;
             padding: 24px 26px;
-            scrollbar-width: thin;
         }
-
-        .editor-panel::-webkit-scrollbar {
-            width: 6px;
-        }
-
-        /* Right Panel (Preview) */
         .preview-panel {
             background: #fefefe;
             border-radius: 28px;
-            box-shadow: 0 20px 35px -10px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 20px 35px -10px rgba(0,0,0,0.1);
             padding: 28px 30px;
             position: sticky;
             top: 20px;
             max-height: 90vh;
             overflow-y: auto;
         }
-
-        /* form styling */
         .section-card {
             background: #f9fafc;
             border-radius: 20px;
             padding: 18px 20px;
             margin-bottom: 24px;
             border: 1px solid #e6edf2;
-            transition: all 0.2s;
         }
-
         .section-title {
             font-size: 1.2rem;
             font-weight: 700;
@@ -82,25 +62,17 @@
             border-left: 4px solid #2b7a62;
             padding-left: 12px;
         }
-
-        .section-title i {
-            color: #2b7a62;
-            font-size: 1.2rem;
-        }
-
         .field-group {
-            margin-bottom: 16px;
+            margin-bottom: 14px;
         }
-
         label {
             font-weight: 600;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             display: block;
-            margin-bottom: 6px;
+            margin-bottom: 5px;
             color: #2c4e6e;
         }
-
-        input, textarea {
+        input, textarea, select {
             width: 100%;
             padding: 10px 14px;
             border-radius: 14px;
@@ -108,103 +80,35 @@
             background: white;
             font-family: inherit;
             font-size: 0.9rem;
-            transition: 0.2s;
         }
-
         input:focus, textarea:focus {
             outline: none;
             border-color: #2b7a62;
-            box-shadow: 0 0 0 3px rgba(43, 122, 98, 0.2);
+            box-shadow: 0 0 0 3px rgba(43,122,98,0.2);
         }
-
-        textarea {
-            min-height: 80px;
-            resize: vertical;
-        }
-
-        .chip-list {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin: 12px 0 8px;
-        }
-
-        .chip {
-            background: #e9f0f3;
-            padding: 6px 14px;
-            border-radius: 40px;
-            font-size: 0.8rem;
-            font-weight: 500;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            color: #1e415e;
-        }
-
-        .chip i {
-            cursor: pointer;
-            font-size: 0.75rem;
-            opacity: 0.7;
-            transition: 0.2s;
-        }
-
-        .chip i:hover {
-            opacity: 1;
-            color: #c23b22;
-        }
-
-        .add-input-group {
-            display: flex;
-            gap: 10px;
-            margin-top: 8px;
-        }
-
-        .add-input-group input {
-            flex: 1;
-        }
-
-        button.small-btn {
-            background: #eef3f7;
-            border: 1px solid #cbdde6;
-            border-radius: 40px;
-            padding: 0 16px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: 0.2s;
-        }
-
-        button.small-btn:hover {
-            background: #e1e9ef;
-        }
-
         .dynamic-item {
             background: white;
             border-radius: 18px;
-            padding: 14px;
-            margin-bottom: 16px;
+            padding: 16px;
+            margin-bottom: 18px;
             border: 1px solid #e2eaf0;
         }
-
         .dynamic-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 12px;
+            margin-bottom: 14px;
+            flex-wrap: wrap;
         }
-
         .remove-btn {
             background: none;
             border: none;
             color: #bc6f5c;
             cursor: pointer;
-            font-size: 1rem;
-            transition: 0.2s;
+            font-size: 0.9rem;
+            font-weight: 500;
         }
-
-        .remove-btn:hover {
-            color: #b23c1c;
-        }
-
+        .remove-btn:hover { color: #b23c1c; }
         .btn-primary {
             background: #2b7a62;
             color: white;
@@ -216,62 +120,26 @@
             transition: 0.2s;
             margin-top: 8px;
         }
-
-        .btn-primary:hover {
-            background: #1f5e4b;
-        }
-
+        .btn-primary:hover { background: #1f5e4b; }
         .btn-download {
             background: #1f4e6e;
             width: 100%;
-            margin-top: 12px;
             padding: 12px;
             font-size: 1rem;
         }
-
-        hr {
-            margin: 20px 0;
-            border-color: #e2edf2;
+        .small-btn {
+            background: #eef3f7;
+            border: 1px solid #cbdde6;
+            border-radius: 40px;
+            padding: 8px 16px;
+            font-weight: 500;
+            cursor: pointer;
         }
-
-        /* Preview styles - professional resume look */
-        .resume-preview {
-            font-family: 'Inter', sans-serif;
-            color: #1c2e3a;
+        .add-input-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 12px;
         }
-
-        .preview-name {
-            font-size: 2.1rem;
-            font-weight: 700;
-            letter-spacing: -0.5px;
-            margin-bottom: 8px;
-            color: #143b4b;
-        }
-
-        .preview-profile {
-            background: #f0f6fa;
-            padding: 14px 18px;
-            border-radius: 18px;
-            margin: 16px 0;
-            font-size: 0.9rem;
-            line-height: 1.45;
-            border-left: 4px solid #2b7a62;
-        }
-
-        .preview-section {
-            margin-top: 24px;
-        }
-
-        .preview-section h3 {
-            font-size: 1.2rem;
-            font-weight: 700;
-            border-bottom: 3px solid #dce9f0;
-            padding-bottom: 6px;
-            margin-bottom: 14px;
-            display: inline-block;
-            color: #1c5a6e;
-        }
-
         .skill-tag {
             background: #eef2f5;
             display: inline-block;
@@ -282,476 +150,457 @@
             margin-right: 6px;
             margin-bottom: 8px;
         }
-
-        .grid-2col {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 28px;
-            justify-content: space-between;
+        .skill-tag i {
+            margin-left: 6px;
+            cursor: pointer;
+            opacity: 0.7;
         }
-
-        .project-item, .exp-item {
-            margin-bottom: 18px;
-        }
-
-        .project-title, .exp-title {
+        .skill-tag i:hover { opacity: 1; color: #c23b22; }
+        .preview-name {
+            font-size: 2.1rem;
             font-weight: 700;
-            font-size: 1rem;
-            color: #0f4b5c;
+            letter-spacing: -0.5px;
+            margin-bottom: 8px;
+            color: #143b4b;
         }
-
-        .project-desc, .exp-desc {
-            font-size: 0.85rem;
-            margin-top: 5px;
-            line-height: 1.4;
-            color: #2c485e;
-        }
-
-        .exp-meta {
-            font-size: 0.75rem;
-            font-weight: 500;
-            color: #5f7f95;
-            margin-top: 4px;
-        }
-
-        .degree-item, .cert-item {
+        .preview-profile {
+            background: #f0f6fa;
+            padding: 14px 18px;
+            border-radius: 18px;
+            margin: 16px 0;
             font-size: 0.9rem;
-            margin-bottom: 6px;
+            line-height: 1.45;
+            border-left: 4px solid #2b7a62;
         }
-
+        .preview-section {
+            margin-top: 24px;
+        }
+        .preview-section h3 {
+            font-size: 1.2rem;
+            font-weight: 700;
+            border-bottom: 3px solid #dce9f0;
+            padding-bottom: 6px;
+            margin-bottom: 14px;
+            display: inline-block;
+            color: #1c5a6e;
+        }
+        .degree-card, .cert-card {
+            background: #f9fdfe;
+            padding: 12px 14px;
+            border-radius: 16px;
+            margin-bottom: 12px;
+            border-left: 3px solid #2b7a62;
+        }
+        .degree-title, .cert-title { font-weight: 700; font-size: 0.95rem; }
+        .degree-meta, .cert-meta { font-size: 0.75rem; color: #4f6f8a; margin-top: 5px; }
+        .project-item, .exp-item { margin-bottom: 18px; }
+        .project-title, .exp-title { font-weight: 700; font-size: 1rem; color: #0f4b5c; }
         @media (max-width: 900px) {
-            .app-container {
-                grid-template-columns: 1fr;
-                gap: 24px;
-            }
-            .preview-panel {
-                position: relative;
-                top: 0;
-            }
-            body {
-                padding: 16px;
-            }
+            .app-container { grid-template-columns: 1fr; gap: 24px; }
+            .preview-panel { position: relative; top: 0; }
+            body { padding: 16px; }
         }
     </style>
 </head>
 <body>
 <div class="app-container">
-    <!-- LEFT: EDITOR PANEL - Manage all sections -->
     <div class="editor-panel">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
             <h2 style="font-weight: 700; color: #1c5a6e;"><i class="fas fa-user-edit"></i> Resume Manager</h2>
-            <button id="resetDemoBtn" class="small-btn" style="background:#eef2f5;"><i class="fas fa-undo-alt"></i> Load Demo</button>
+            <button id="resetDemoBtn" class="small-btn"><i class="fas fa-undo-alt"></i> Load Demo</button>
         </div>
-        <p style="font-size: 0.8rem; margin-bottom: 20px; color: #5f7f95;">Fill or edit sections — live preview + PDF download</p>
+        <p style="font-size: 0.8rem; margin-bottom: 20px;">All sections editable — live preview + PDF export (data never vanishes)</p>
 
-        <!-- Name -->
         <div class="section-card">
             <div class="section-title"><i class="fas fa-user"></i> Full Name</div>
-            <input type="text" id="nameInput" placeholder="e.g., Jordan Chen" value="Jordan M. Chen">
+            <input type="text" id="nameInput" placeholder="Full name">
         </div>
-
-        <!-- Profile -->
         <div class="section-card">
             <div class="section-title"><i class="fas fa-address-card"></i> Professional Profile</div>
-            <textarea id="profileInput" placeholder="Strategic product leader with 6+ years in B2B SaaS...">Strategic Product Manager with proven track record in data-driven roadmap execution, cross-functional leadership, and launching 0→1 products. Passionate about AI-driven solutions and user-centric design.</textarea>
+            <textarea id="profileInput" rows="3" placeholder="Short bio / summary"></textarea>
         </div>
 
-        <!-- Degree (dynamic list) -->
+        <!-- Degrees -->
         <div class="section-card">
             <div class="section-title"><i class="fas fa-graduation-cap"></i> Degrees</div>
-            <div id="degreeListContainer" class="chip-list"></div>
-            <div class="add-input-group">
-                <input type="text" id="newDegreeInput" placeholder="e.g., MBA, Product Management">
-                <button id="addDegreeBtn" class="small-btn">+ Add</button>
-            </div>
+            <div id="degreesListEditor"></div>
+            <button id="addDegreeBtn" class="btn-primary" style="width:100%;"><i class="fas fa-plus-circle"></i> Add Degree</button>
         </div>
 
-        <!-- Certifications (dynamic) -->
+        <!-- Certifications -->
         <div class="section-card">
             <div class="section-title"><i class="fas fa-certificate"></i> Certifications</div>
-            <div id="certListContainer" class="chip-list"></div>
-            <div class="add-input-group">
-                <input type="text" id="newCertInput" placeholder="e.g., CSPO, PMP">
-                <button id="addCertBtn" class="small-btn">+ Add</button>
-            </div>
+            <div id="certsListEditor"></div>
+            <button id="addCertBtn" class="btn-primary" style="width:100%;"><i class="fas fa-plus-circle"></i> Add Certification</button>
         </div>
 
-        <!-- Skills: Core & Supportive (separate) -->
+        <!-- Core Skills -->
         <div class="section-card">
             <div class="section-title"><i class="fas fa-code-branch"></i> Core Skills</div>
-            <div id="coreSkillsContainer" class="chip-list"></div>
+            <div id="coreSkillsContainer" style="margin-bottom: 10px;"></div>
             <div class="add-input-group">
                 <input type="text" id="newCoreSkillInput" placeholder="e.g., Product Strategy">
                 <button id="addCoreSkillBtn" class="small-btn">+ Add</button>
             </div>
         </div>
 
+        <!-- Supportive Skills -->
         <div class="section-card">
             <div class="section-title"><i class="fas fa-hand-sparkles"></i> Supportive Skills</div>
-            <div id="supportiveSkillsContainer" class="chip-list"></div>
+            <div id="supportiveSkillsContainer" style="margin-bottom: 10px;"></div>
             <div class="add-input-group">
                 <input type="text" id="newSupportiveSkillInput" placeholder="e.g., Stakeholder management">
                 <button id="addSupportiveSkillBtn" class="small-btn">+ Add</button>
             </div>
         </div>
 
-        <!-- Tools Expertise -->
+        <!-- Tools -->
         <div class="section-card">
             <div class="section-title"><i class="fas fa-tools"></i> Tools Expertise</div>
-            <div id="toolsContainer" class="chip-list"></div>
+            <div id="toolsContainer" style="margin-bottom: 10px;"></div>
             <div class="add-input-group">
-                <input type="text" id="newToolInput" placeholder="e.g., Jira, Figma, Mixpanel">
+                <input type="text" id="newToolInput" placeholder="e.g., Jira, Figma">
                 <button id="addToolBtn" class="small-btn">+ Add</button>
             </div>
         </div>
 
-        <!-- Projects -> Product & Case Studies (strong name) -->
+        <!-- Projects -->
         <div class="section-card">
             <div class="section-title"><i class="fas fa-project-diagram"></i> Product & Case Studies</div>
             <div id="projectsListEditor"></div>
-            <button id="addProjectBtn" class="btn-primary" style="margin-top: 6px; width: 100%;"><i class="fas fa-plus-circle"></i> Add Project / Case Study</button>
+            <button id="addProjectBtn" class="btn-primary" style="width:100%;"><i class="fas fa-plus-circle"></i> Add Project / Case Study</button>
         </div>
 
         <!-- Experience -->
         <div class="section-card">
             <div class="section-title"><i class="fas fa-briefcase"></i> Professional Experience</div>
             <div id="experienceListEditor"></div>
-            <button id="addExperienceBtn" class="btn-primary" style="margin-top: 6px; width: 100%;"><i class="fas fa-plus-circle"></i> Add Experience</button>
+            <button id="addExperienceBtn" class="btn-primary" style="width:100%;"><i class="fas fa-plus-circle"></i> Add Experience</button>
         </div>
 
         <button id="downloadPDFBtn" class="btn-primary btn-download"><i class="fas fa-file-pdf"></i> Download as Professional PDF</button>
     </div>
 
-    <!-- RIGHT: PREVIEW - Live resume display -->
     <div class="preview-panel">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-            <h3 style="font-weight: 600;"><i class="fas fa-eye"></i> Live Resume Preview</h3>
-            <span style="font-size: 0.7rem; background:#eef2f5; padding: 4px 10px; border-radius: 20px;">ready to export</span>
+            <h3><i class="fas fa-eye"></i> Live Resume Preview</h3>
+            <span style="font-size: 0.7rem; background:#eef2f5; padding: 4px 10px; border-radius: 20px;">export ready</span>
         </div>
-        <div id="resumePreview" class="resume-preview">
-            <!-- dynamic content injected -->
-        </div>
+        <div id="resumePreview" class="resume-preview"></div>
     </div>
 </div>
 
 <script>
-    // --------------------------- STATE MANAGEMENT ---------------------------------
+    // -------------------- INITIAL STATE --------------------
     let state = {
         name: "Jordan M. Chen",
         profile: "Strategic Product Manager with proven track record in data-driven roadmap execution, cross-functional leadership, and launching 0→1 products. Passionate about AI-driven solutions and user-centric design.",
-        degrees: ["MBA, Product Leadership - UC Berkeley", "B.S. Information Systems"],
-        certifications: ["Certified Scrum Product Owner (CSPO)", "PMP Certification", "AI Product Management (Stanford)"],
+        degrees: [
+            { institute: "UC Berkeley, Haas School of Business", degreeName: "MBA, Product Leadership", startYear: "2021", endYear: "2023", cgpa: "3.9/4.0" },
+            { institute: "University of Washington", degreeName: "B.S. Information Systems", startYear: "2015", endYear: "2019", cgpa: "3.7/4.0" }
+        ],
+        certifications: [
+            { name: "Certified Scrum Product Owner (CSPO)", issuer: "Scrum Alliance", year: "2022" },
+            { name: "PMP Certification", issuer: "PMI", year: "2023" },
+            { name: "AI Product Management", issuer: "Stanford Online", year: "2024" }
+        ],
         coreSkills: ["Product Roadmapping", "User Research", "Data Analytics", "Go-to-Market Strategy"],
         supportiveSkills: ["Agile Leadership", "Cross-functional Collaboration", "Storytelling", "Negotiation"],
         toolsExpertise: ["Jira", "Figma", "Amplitude", "Notion", "SQL"],
         projects: [
-            { title: "AI-driven Analytics Platform", description: "Led product discovery & MVP launch resulting in 35% increase in user engagement. Conducted 20+ customer interviews, defined KPIs, collaborated with ML engineers." },
-            { title: "Omni-channel CRM Redesign", description: "Case study: Revamped legacy CRM, improved retention by 28% within 6 months. Prioritized features via RICE scoring and A/B testing." }
+            { title: "AI-driven Analytics Platform", description: "Led product discovery & MVP launch resulting in 35% increase in user engagement. Conducted 20+ customer interviews." },
+            { title: "Omni-channel CRM Redesign", description: "Case study: Revamped legacy CRM, improved retention by 28% within 6 months. Prioritized features via RICE scoring." }
         ],
         experiences: [
-            { title: "Senior Product Manager", company: "Nexify Tech", period: "2022 – Present", description: "Own product lifecycle for AI analytics suite; increased ARR by $2.4M. Launched 3 major features based on user insights." },
-            { title: "Associate Product Manager", company: "GrowthLabs", period: "2020 – 2022", description: "Managed cross-functional teams, led user story mapping and sprint planning. Drove UX research initiatives that boosted NPS by 22 pts." }
+            { title: "Senior Product Manager", company: "Nexify Tech", period: "2022 – Present", description: "Own product lifecycle for AI analytics suite; increased ARR by $2.4M." },
+            { title: "Associate Product Manager", company: "GrowthLabs", period: "2020 – 2022", description: "Managed cross-functional teams, led user story mapping and sprint planning." }
         ]
     };
 
-    // Helper: reRenderAll() updates preview + dynamic editor lists (degrees, certs, skills, tools, projects editor, experience editor)
-    function updatePreviewAndEditors() {
-        renderPreview();
-        renderDegreeChips();
-        renderCertChips();
-        renderCoreSkillChips();
-        renderSupportiveSkillChips();
-        renderToolsChips();
-        renderProjectsEditor();
-        renderExperienceEditor();
-    }
-
-    // preview render (professional)
-    function renderPreview() {
-        const previewDiv = document.getElementById("resumePreview");
-        if (!previewDiv) return;
-        // format skills core + supportive
-        const coreSkillHtml = state.coreSkills.map(skill => `<span class="skill-tag">${escapeHtml(skill)}</span>`).join('');
-        const supportiveSkillHtml = state.supportiveSkills.map(skill => `<span class="skill-tag">${escapeHtml(skill)}</span>`).join('');
-        const toolsHtml = state.toolsExpertise.map(tool => `<span class="skill-tag">${escapeHtml(tool)}</span>`).join('');
-        
-        const degreesHtml = state.degrees.map(d => `<div class="degree-item">🎓 ${escapeHtml(d)}</div>`).join('');
-        const certsHtml = state.certifications.map(c => `<div class="cert-item">📜 ${escapeHtml(c)}</div>`).join('');
-        
-        const projectsHtml = state.projects.map(proj => `
-            <div class="project-item">
-                <div class="project-title">📌 ${escapeHtml(proj.title)}</div>
-                <div class="project-desc">${escapeHtml(proj.description)}</div>
-            </div>
-        `).join('');
-        
-        const experiencesHtml = state.experiences.map(exp => `
-            <div class="exp-item">
-                <div class="exp-title">💼 ${escapeHtml(exp.title)} · ${escapeHtml(exp.company)}</div>
-                <div class="exp-meta">${escapeHtml(exp.period)}</div>
-                <div class="exp-desc">${escapeHtml(exp.description)}</div>
-            </div>
-        `).join('');
-        
-        const html = `
-            <div class="preview-name">${escapeHtml(state.name)}</div>
-            <div class="preview-profile">${escapeHtml(state.profile)}</div>
-            
-            <div class="preview-section">
-                <h3>🎓 Education</h3>
-                ${degreesHtml || '<div class="degree-item">—</div>'}
-            </div>
-            
-            <div class="preview-section">
-                <h3>📜 Certifications</h3>
-                ${certsHtml || '<div>—</div>'}
-            </div>
-            
-            <div class="preview-section">
-                <h3>⚙️ Core Skills</h3>
-                <div>${coreSkillHtml || '<span>—</span>'}</div>
-            </div>
-            
-            <div class="preview-section">
-                <h3>🤝 Supportive Skills</h3>
-                <div>${supportiveSkillHtml || '<span>—</span>'}</div>
-            </div>
-            
-            <div class="preview-section">
-                <h3>🛠️ Tools Expertise</h3>
-                <div>${toolsHtml || '<span>—</span>'}</div>
-            </div>
-            
-            <div class="preview-section">
-                <h3>📘 Product & Case Studies</h3>
-                ${projectsHtml || '<div>No projects added</div>'}
-            </div>
-            
-            <div class="preview-section">
-                <h3>💼 Experience</h3>
-                ${experiencesHtml || '<div>—</div>'}
-            </div>
-        `;
-        previewDiv.innerHTML = html;
-    }
-
-    // Escape HTML
+    // Helper: escape HTML
     function escapeHtml(str) { if(!str) return ''; return str.replace(/[&<>]/g, function(m){if(m==='&') return '&amp;'; if(m==='<') return '&lt;'; if(m==='>') return '&gt;'; return m;}); }
 
-    // degree chips
-    function renderDegreeChips() {
-        const container = document.getElementById("degreeListContainer");
-        if(!container) return;
-        container.innerHTML = state.degrees.map((deg, idx) => `<div class="chip">${escapeHtml(deg)} <i class="fas fa-times-circle" data-type="degree" data-index="${idx}"></i></div>`).join('');
-        attachChipRemoveEvents();
-    }
-    function renderCertChips() {
-        const container = document.getElementById("certListContainer");
-        if(!container) return;
-        container.innerHTML = state.certifications.map((cert, idx) => `<div class="chip">${escapeHtml(cert)} <i class="fas fa-times-circle" data-type="cert" data-index="${idx}"></i></div>`).join('');
-        attachChipRemoveEvents();
-    }
-    function renderCoreSkillChips() {
-        const container = document.getElementById("coreSkillsContainer");
-        if(!container) return;
-        container.innerHTML = state.coreSkills.map((skill, idx) => `<div class="chip">${escapeHtml(skill)} <i class="fas fa-times-circle" data-type="coreSkill" data-index="${idx}"></i></div>`).join('');
-        attachChipRemoveEvents();
-    }
-    function renderSupportiveSkillChips() {
-        const container = document.getElementById("supportiveSkillsContainer");
-        if(!container) return;
-        container.innerHTML = state.supportiveSkills.map((skill, idx) => `<div class="chip">${escapeHtml(skill)} <i class="fas fa-times-circle" data-type="supportiveSkill" data-index="${idx}"></i></div>`).join('');
-        attachChipRemoveEvents();
-    }
-    function renderToolsChips() {
-        const container = document.getElementById("toolsContainer");
-        if(!container) return;
-        container.innerHTML = state.toolsExpertise.map((tool, idx) => `<div class="chip">${escapeHtml(tool)} <i class="fas fa-times-circle" data-type="tool" data-index="${idx}"></i></div>`).join('');
-        attachChipRemoveEvents();
-    }
-
-    function attachChipRemoveEvents() {
-        document.querySelectorAll('.chip i').forEach(icon => {
-            icon.removeEventListener('click', handleChipRemove);
-            icon.addEventListener('click', handleChipRemove);
-        });
-    }
-    function handleChipRemove(e) {
-        e.stopPropagation();
-        const target = e.currentTarget;
-        const type = target.getAttribute('data-type');
-        const index = parseInt(target.getAttribute('data-index'));
-        if (isNaN(index)) return;
-        switch(type) {
-            case 'degree': state.degrees.splice(index,1); break;
-            case 'cert': state.certifications.splice(index,1); break;
-            case 'coreSkill': state.coreSkills.splice(index,1); break;
-            case 'supportiveSkill': state.supportiveSkills.splice(index,1); break;
-            case 'tool': state.toolsExpertise.splice(index,1); break;
-            default: return;
-        }
-        updatePreviewAndEditors();
-    }
-
-    // ---------- Projects Editor (dynamic forms with live update) ----------
-    function renderProjectsEditor() {
-        const container = document.getElementById("projectsListEditor");
-        if(!container) return;
-        container.innerHTML = '';
-        state.projects.forEach((proj, idx) => {
-            const projectDiv = document.createElement('div');
-            projectDiv.className = 'dynamic-item';
-            projectDiv.innerHTML = `
-                <div class="dynamic-header">
-                    <strong style="font-size:0.85rem;">📌 Project ${idx+1}</strong>
-                    <button class="remove-btn" data-project-index="${idx}"><i class="fas fa-trash-alt"></i> Remove</button>
-                </div>
-                <div class="field-group" style="margin-bottom:8px;">
-                    <label>Project / Case Study Title</label>
-                    <input type="text" class="project-title-input" data-project-index="${idx}" value="${escapeHtml(proj.title)}" placeholder="e.g., AI Product Launch">
-                </div>
-                <div class="field-group">
-                    <label>Description (Impact / Case insights)</label>
-                    <textarea class="project-desc-input" data-project-index="${idx}" rows="2" placeholder="Describe your role, outcome, metrics...">${escapeHtml(proj.description)}</textarea>
-                </div>
-            `;
-            container.appendChild(projectDiv);
-        });
-        // attach input events
-        document.querySelectorAll('.project-title-input').forEach(inp => {
-            inp.addEventListener('input', (e) => {
-                const idx = parseInt(inp.dataset.projectIndex);
-                if (!isNaN(idx) && state.projects[idx]) state.projects[idx].title = inp.value;
-                renderPreview();
-            });
-        });
-        document.querySelectorAll('.project-desc-input').forEach(ta => {
-            ta.addEventListener('input', (e) => {
-                const idx = parseInt(ta.dataset.projectIndex);
-                if (!isNaN(idx) && state.projects[idx]) state.projects[idx].description = ta.value;
-                renderPreview();
-            });
-        });
-        document.querySelectorAll('.remove-btn[data-project-index]').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                const idx = parseInt(btn.dataset.projectIndex);
-                if (!isNaN(idx)) {
-                    state.projects.splice(idx,1);
-                    updatePreviewAndEditors();
-                }
-            });
-        });
-    }
-
-    function renderExperienceEditor() {
-        const container = document.getElementById("experienceListEditor");
-        if(!container) return;
-        container.innerHTML = '';
-        state.experiences.forEach((exp, idx) => {
-            const expDiv = document.createElement('div');
-            expDiv.className = 'dynamic-item';
-            expDiv.innerHTML = `
-                <div class="dynamic-header">
-                    <strong>💼 ${escapeHtml(exp.title) || 'Experience'}</strong>
-                    <button class="remove-btn" data-exp-index="${idx}"><i class="fas fa-trash-alt"></i> Remove</button>
-                </div>
-                <div class="field-group"><label>Job Title</label><input type="text" class="exp-title-input" data-exp-index="${idx}" value="${escapeHtml(exp.title)}"></div>
-                <div class="field-group"><label>Company</label><input type="text" class="exp-company-input" data-exp-index="${idx}" value="${escapeHtml(exp.company)}"></div>
-                <div class="field-group"><label>Period (e.g., 2021–Present)</label><input type="text" class="exp-period-input" data-exp-index="${idx}" value="${escapeHtml(exp.period)}"></div>
-                <div class="field-group"><label>Description / Achievements</label><textarea class="exp-desc-input" data-exp-index="${idx}" rows="2">${escapeHtml(exp.description)}</textarea></div>
-            `;
-            container.appendChild(expDiv);
-        });
-        // bind events
-        document.querySelectorAll('.exp-title-input').forEach(inp => {
-            inp.addEventListener('input', (e) => { let i = parseInt(inp.dataset.expIndex); if(state.experiences[i]) state.experiences[i].title = inp.value; renderPreview(); });
-        });
-        document.querySelectorAll('.exp-company-input').forEach(inp => {
-            inp.addEventListener('input', (e) => { let i = parseInt(inp.dataset.expIndex); if(state.experiences[i]) state.experiences[i].company = inp.value; renderPreview(); });
-        });
-        document.querySelectorAll('.exp-period-input').forEach(inp => {
-            inp.addEventListener('input', (e) => { let i = parseInt(inp.dataset.expIndex); if(state.experiences[i]) state.experiences[i].period = inp.value; renderPreview(); });
-        });
-        document.querySelectorAll('.exp-desc-input').forEach(ta => {
-            ta.addEventListener('input', (e) => { let i = parseInt(ta.dataset.expIndex); if(state.experiences[i]) state.experiences[i].description = ta.value; renderPreview(); });
-        });
-        document.querySelectorAll('.remove-btn[data-exp-index]').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                const idx = parseInt(btn.dataset.expIndex);
-                if (!isNaN(idx)) { state.experiences.splice(idx,1); updatePreviewAndEditors(); }
-            });
-        });
-    }
-
-    // add helpers
-    function addDegree() { const val = document.getElementById('newDegreeInput').value.trim(); if(val) { state.degrees.push(val); document.getElementById('newDegreeInput').value = ''; updatePreviewAndEditors(); } }
-    function addCert() { const val = document.getElementById('newCertInput').value.trim(); if(val) { state.certifications.push(val); document.getElementById('newCertInput').value = ''; updatePreviewAndEditors(); } }
-    function addCoreSkill() { const val = document.getElementById('newCoreSkillInput').value.trim(); if(val) { state.coreSkills.push(val); document.getElementById('newCoreSkillInput').value = ''; updatePreviewAndEditors(); } }
-    function addSupportiveSkill() { const val = document.getElementById('newSupportiveSkillInput').value.trim(); if(val) { state.supportiveSkills.push(val); document.getElementById('newSupportiveSkillInput').value = ''; updatePreviewAndEditors(); } }
-    function addTool() { const val = document.getElementById('newToolInput').value.trim(); if(val) { state.toolsExpertise.push(val); document.getElementById('newToolInput').value = ''; updatePreviewAndEditors(); } }
-    function addProject() { state.projects.push({ title: "New Product Case", description: "Describe product challenge, solution, results." }); updatePreviewAndEditors(); }
-    function addExperience() { state.experiences.push({ title: "Product Manager", company: "Company Name", period: "2024 – Present", description: "Key accomplishments and responsibilities." }); updatePreviewAndEditors(); }
-
-    function resetDemoData() {
-        state = {
-            name: "Jordan M. Chen",
-            profile: "Strategic Product Manager with proven track record in data-driven roadmap execution, cross-functional leadership, and launching 0→1 products. Passionate about AI-driven solutions and user-centric design.",
-            degrees: ["MBA, Product Leadership - UC Berkeley", "B.S. Information Systems"],
-            certifications: ["Certified Scrum Product Owner (CSPO)", "PMP Certification", "AI Product Management (Stanford)"],
-            coreSkills: ["Product Roadmapping", "User Research", "Data Analytics", "Go-to-Market Strategy"],
-            supportiveSkills: ["Agile Leadership", "Cross-functional Collaboration", "Storytelling", "Negotiation"],
-            toolsExpertise: ["Jira", "Figma", "Amplitude", "Notion", "SQL"],
-            projects: [
-                { title: "AI-driven Analytics Platform", description: "Led product discovery & MVP launch resulting in 35% increase in user engagement. Conducted 20+ customer interviews, defined KPIs, collaborated with ML engineers." },
-                { title: "Omni-channel CRM Redesign", description: "Case study: Revamped legacy CRM, improved retention by 28% within 6 months. Prioritized features via RICE scoring and A/B testing." }
-            ],
-            experiences: [
-                { title: "Senior Product Manager", company: "Nexify Tech", period: "2022 – Present", description: "Own product lifecycle for AI analytics suite; increased ARR by $2.4M. Launched 3 major features based on user insights." },
-                { title: "Associate Product Manager", company: "GrowthLabs", period: "2020 – 2022", description: "Managed cross-functional teams, led user story mapping and sprint planning. Drove UX research initiatives that boosted NPS by 22 pts." }
-            ]
-        };
-        // update name and profile field values
+    // ---------- RENDER ALL ----------
+    function renderAll() {
+        renderDegreesEditor();
+        renderCertsEditor();
+        renderSkillsAndTools();
+        renderProjectsEditor();
+        renderExperienceEditor();
+        renderPreview();
+        // sync input fields
         document.getElementById("nameInput").value = state.name;
         document.getElementById("profileInput").value = state.profile;
-        updatePreviewAndEditors();
     }
 
-    // sync from inputs & download
-    function syncFromInputs() {
-        state.name = document.getElementById("nameInput").value;
-        state.profile = document.getElementById("profileInput").value;
-        updatePreviewAndEditors();
+    // Degrees editor with inline inputs
+    function renderDegreesEditor() {
+        const container = document.getElementById("degreesListEditor");
+        if (!container) return;
+        container.innerHTML = "";
+        state.degrees.forEach((deg, idx) => {
+            const div = document.createElement("div");
+            div.className = "dynamic-item";
+            div.setAttribute("data-degree-idx", idx);
+            div.innerHTML = `
+                <div class="dynamic-header">
+                    <strong>🎓 ${escapeHtml(deg.degreeName || 'Degree')}</strong>
+                    <button class="remove-btn" data-action="removeDegree" data-idx="${idx}"><i class="fas fa-trash-alt"></i> Remove</button>
+                </div>
+                <div class="field-group"><label>Degree / Program Name</label><input type="text" class="deg-name-field" data-idx="${idx}" value="${escapeHtml(deg.degreeName)}" placeholder="e.g., MBA, Product Management"></div>
+                <div class="field-group"><label>Institute / University</label><input type="text" class="deg-institute-field" data-idx="${idx}" value="${escapeHtml(deg.institute)}" placeholder="University name"></div>
+                <div style="display:flex; gap:10px; flex-wrap:wrap;">
+                    <div style="flex:1"><label>Start Year</label><input type="text" class="deg-start-field" data-idx="${idx}" value="${escapeHtml(deg.startYear)}" placeholder="2020"></div>
+                    <div style="flex:1"><label>End Year / Present</label><input type="text" class="deg-end-field" data-idx="${idx}" value="${escapeHtml(deg.endYear)}" placeholder="2024 or Present"></div>
+                    <div style="flex:1"><label>CGPA / Grade</label><input type="text" class="deg-cgpa-field" data-idx="${idx}" value="${escapeHtml(deg.cgpa)}" placeholder="3.8/4.0"></div>
+                </div>
+            `;
+            container.appendChild(div);
+        });
+        // attach input events
+        document.querySelectorAll(".deg-name-field, .deg-institute-field, .deg-start-field, .deg-end-field, .deg-cgpa-field").forEach(inp => {
+            inp.removeEventListener("input", handleDegreeInput);
+            inp.addEventListener("input", handleDegreeInput);
+        });
     }
 
-    // PDF download
-    function downloadPDF() {
-        const element = document.getElementById("resumePreview");
-        const opt = {
-            margin:        [0.5, 0.5, 0.5, 0.5],
-            filename:     'Product_Resume.pdf',
-            image:        { type: 'jpeg', quality: 0.98 },
-            html2canvas:  { scale: 2, letterRendering: true },
-            jsPDF:        { unit: 'in', format: 'a4', orientation: 'portrait' }
+    function handleDegreeInput(e) {
+        const idx = parseInt(e.target.dataset.idx);
+        if (isNaN(idx)) return;
+        const fieldMap = {
+            "deg-name-field": "degreeName",
+            "deg-institute-field": "institute",
+            "deg-start-field": "startYear",
+            "deg-end-field": "endYear",
+            "deg-cgpa-field": "cgpa"
         };
-        html2pdf().set(opt).from(element).save();
+        const field = fieldMap[e.target.className];
+        if (field && state.degrees[idx]) {
+            state.degrees[idx][field] = e.target.value;
+            renderPreview();
+        }
     }
 
-    // Event listeners
-    document.getElementById("nameInput").addEventListener("input", syncFromInputs);
-    document.getElementById("profileInput").addEventListener("input", syncFromInputs);
-    document.getElementById("addDegreeBtn").addEventListener("click", addDegree);
-    document.getElementById("addCertBtn").addEventListener("click", addCert);
-    document.getElementById("addCoreSkillBtn").addEventListener("click", addCoreSkill);
-    document.getElementById("addSupportiveSkillBtn").addEventListener("click", addSupportiveSkill);
-    document.getElementById("addToolBtn").addEventListener("click", addTool);
-    document.getElementById("addProjectBtn").addEventListener("click", addProject);
-    document.getElementById("addExperienceBtn").addEventListener("click", addExperience);
-    document.getElementById("downloadPDFBtn").addEventListener("click", downloadPDF);
-    document.getElementById("resetDemoBtn").addEventListener("click", resetDemoData);
+    // Certifications editor
+    function renderCertsEditor() {
+        const container = document.getElementById("certsListEditor");
+        if (!container) return;
+        container.innerHTML = "";
+        state.certifications.forEach((cert, idx) => {
+            const div = document.createElement("div");
+            div.className = "dynamic-item";
+            div.innerHTML = `
+                <div class="dynamic-header">
+                    <strong>📜 ${escapeHtml(cert.name || 'Certification')}</strong>
+                    <button class="remove-btn" data-action="removeCert" data-idx="${idx}"><i class="fas fa-trash-alt"></i> Remove</button>
+                </div>
+                <div class="field-group"><label>Certification Name</label><input type="text" class="cert-name-field" data-idx="${idx}" value="${escapeHtml(cert.name)}" placeholder="e.g., CSPO"></div>
+                <div class="field-group"><label>Issuing Institute / Platform</label><input type="text" class="cert-issuer-field" data-idx="${idx}" value="${escapeHtml(cert.issuer)}" placeholder="Scrum Alliance, Coursera"></div>
+                <div class="field-group"><label>Year Earned</label><input type="text" class="cert-year-field" data-idx="${idx}" value="${escapeHtml(cert.year)}" placeholder="2023"></div>
+            `;
+            container.appendChild(div);
+        });
+        document.querySelectorAll(".cert-name-field, .cert-issuer-field, .cert-year-field").forEach(inp => {
+            inp.removeEventListener("input", handleCertInput);
+            inp.addEventListener("input", handleCertInput);
+        });
+    }
+    function handleCertInput(e) {
+        const idx = parseInt(e.target.dataset.idx);
+        if (isNaN(idx)) return;
+        const fieldMap = { "cert-name-field": "name", "cert-issuer-field": "issuer", "cert-year-field": "year" };
+        const field = fieldMap[e.target.className];
+        if (field && state.certifications[idx]) {
+            state.certifications[idx][field] = e.target.value;
+            renderPreview();
+        }
+    }
 
-    // initial render
-    syncFromInputs();
-    updatePreviewAndEditors();
+    // Skills (chips)
+    function renderSkillsAndTools() {
+        renderChipList("coreSkillsContainer", state.coreSkills, "coreSkill");
+        renderChipList("supportiveSkillsContainer", state.supportiveSkills, "supportiveSkill");
+        renderChipList("toolsContainer", state.toolsExpertise, "tool");
+    }
+    function renderChipList(containerId, arr, type) {
+        const container = document.getElementById(containerId);
+        if (!container) return;
+        container.innerHTML = arr.map((item, idx) => `<span class="skill-tag">${escapeHtml(item)} <i class="fas fa-times-circle" data-type="${type}" data-index="${idx}"></i></span>`).join('');
+        // remove event delegation handled globally
+    }
+
+    // Projects editor
+    function renderProjectsEditor() {
+        const container = document.getElementById("projectsListEditor");
+        if (!container) return;
+        container.innerHTML = "";
+        state.projects.forEach((proj, idx) => {
+            const div = document.createElement("div");
+            div.className = "dynamic-item";
+            div.innerHTML = `
+                <div class="dynamic-header">
+                    <strong>📌 ${escapeHtml(proj.title)}</strong>
+                    <button class="remove-btn" data-action="removeProject" data-idx="${idx}"><i class="fas fa-trash-alt"></i> Remove</button>
+                </div>
+                <div class="field-group"><label>Project / Case Study Title</label><input type="text" class="project-title-field" data-idx="${idx}" value="${escapeHtml(proj.title)}"></div>
+                <div class="field-group"><label>Description (Impact / Case insights)</label><textarea class="project-desc-field" data-idx="${idx}" rows="2">${escapeHtml(proj.description)}</textarea></div>
+            `;
+            container.appendChild(div);
+        });
+        document.querySelectorAll(".project-title-field").forEach(inp => inp.addEventListener("input", e => { let i = parseInt(e.target.dataset.idx); if(state.projects[i]) state.projects[i].title = e.target.value; renderPreview(); }));
+        document.querySelectorAll(".project-desc-field").forEach(ta => ta.addEventListener("input", e => { let i = parseInt(e.target.dataset.idx); if(state.projects[i]) state.projects[i].description = e.target.value; renderPreview(); }));
+    }
+
+    // Experience editor
+    function renderExperienceEditor() {
+        const container = document.getElementById("experienceListEditor");
+        if (!container) return;
+        container.innerHTML = "";
+        state.experiences.forEach((exp, idx) => {
+            const div = document.createElement("div");
+            div.className = "dynamic-item";
+            div.innerHTML = `
+                <div class="dynamic-header">
+                    <strong>💼 ${escapeHtml(exp.title)}</strong>
+                    <button class="remove-btn" data-action="removeExp" data-idx="${idx}"><i class="fas fa-trash-alt"></i> Remove</button>
+                </div>
+                <div class="field-group"><label>Job Title</label><input type="text" class="exp-title-field" data-idx="${idx}" value="${escapeHtml(exp.title)}"></div>
+                <div class="field-group"><label>Company</label><input type="text" class="exp-company-field" data-idx="${idx}" value="${escapeHtml(exp.company)}"></div>
+                <div class="field-group"><label>Period</label><input type="text" class="exp-period-field" data-idx="${idx}" value="${escapeHtml(exp.period)}"></div>
+                <div class="field-group"><label>Description</label><textarea class="exp-desc-field" data-idx="${idx}" rows="2">${escapeHtml(exp.description)}</textarea></div>
+            `;
+            container.appendChild(div);
+        });
+        document.querySelectorAll(".exp-title-field").forEach(inp => inp.addEventListener("input", e => { let i = parseInt(e.target.dataset.idx); if(state.experiences[i]) state.experiences[i].title = e.target.value; renderPreview(); }));
+        document.querySelectorAll(".exp-company-field").forEach(inp => inp.addEventListener("input", e => { let i = parseInt(e.target.dataset.idx); if(state.experiences[i]) state.experiences[i].company = e.target.value; renderPreview(); }));
+        document.querySelectorAll(".exp-period-field").forEach(inp => inp.addEventListener("input", e => { let i = parseInt(e.target.dataset.idx); if(state.experiences[i]) state.experiences[i].period = e.target.value; renderPreview(); }));
+        document.querySelectorAll(".exp-desc-field").forEach(ta => ta.addEventListener("input", e => { let i = parseInt(e.target.dataset.idx); if(state.experiences[i]) state.experiences[i].description = e.target.value; renderPreview(); }));
+    }
+
+    // Preview render
+    function renderPreview() {
+        const previewDiv = document.getElementById("resumePreview");
+        const degreesHtml = state.degrees.map(d => `<div class="degree-card"><div class="degree-title">${escapeHtml(d.degreeName)}</div><div class="degree-meta">${escapeHtml(d.institute)} | ${escapeHtml(d.startYear)} – ${escapeHtml(d.endYear)} | CGPA: ${escapeHtml(d.cgpa)}</div></div>`).join('');
+        const certsHtml = state.certifications.map(c => `<div class="cert-card"><div class="cert-title">${escapeHtml(c.name)}</div><div class="cert-meta">${escapeHtml(c.issuer)}${c.year ? ` · ${c.year}` : ''}</div></div>`).join('');
+        const coreHtml = state.coreSkills.map(s => `<span class="skill-tag">${escapeHtml(s)}</span>`).join('');
+        const supportiveHtml = state.supportiveSkills.map(s => `<span class="skill-tag">${escapeHtml(s)}</span>`).join('');
+        const toolsHtml = state.toolsExpertise.map(t => `<span class="skill-tag">${escapeHtml(t)}</span>`).join('');
+        const projectsHtml = state.projects.map(p => `<div class="project-item"><div class="project-title">📌 ${escapeHtml(p.title)}</div><div class="project-desc" style="font-size:0.85rem;">${escapeHtml(p.description)}</div></div>`).join('');
+        const expHtml = state.experiences.map(e => `<div class="exp-item"><div class="exp-title">💼 ${escapeHtml(e.title)} · ${escapeHtml(e.company)}</div><div class="exp-meta" style="font-size:0.75rem; color:#5f7f95;">${escapeHtml(e.period)}</div><div class="exp-desc" style="font-size:0.85rem;">${escapeHtml(e.description)}</div></div>`).join('');
+        previewDiv.innerHTML = `
+            <div class="preview-name">${escapeHtml(state.name)}</div>
+            <div class="preview-profile">${escapeHtml(state.profile)}</div>
+            <div class="preview-section"><h3>🎓 Education</h3>${degreesHtml || '<div>—</div>'}</div>
+            <div class="preview-section"><h3>📜 Certifications</h3>${certsHtml || '<div>—</div>'}</div>
+            <div class="preview-section"><h3>⚙️ Core Skills</h3><div>${coreHtml || '—'}</div></div>
+            <div class="preview-section"><h3>🤝 Supportive Skills</h3><div>${supportiveHtml || '—'}</div></div>
+            <div class="preview-section"><h3>🛠️ Tools Expertise</h3><div>${toolsHtml || '—'}</div></div>
+            <div class="preview-section"><h3>📘 Product & Case Studies</h3>${projectsHtml || '<div>—</div>'}</div>
+            <div class="preview-section"><h3>💼 Experience</h3>${expHtml || '<div>—</div>'}</div>
+        `;
+    }
+
+    // ------ GLOBAL EVENT DELEGATION (for remove buttons & chip removal) ------
+    function setupGlobalDelegation() {
+        // Remove buttons (degrees, certs, projects, experience)
+        document.querySelector(".editor-panel").addEventListener("click", (e) => {
+            const btn = e.target.closest(".remove-btn");
+            if (!btn) return;
+            const action = btn.getAttribute("data-action");
+            const idx = parseInt(btn.getAttribute("data-idx"));
+            if (isNaN(idx)) return;
+            if (action === "removeDegree") { state.degrees.splice(idx,1); renderAll(); }
+            else if (action === "removeCert") { state.certifications.splice(idx,1); renderAll(); }
+            else if (action === "removeProject") { state.projects.splice(idx,1); renderAll(); }
+            else if (action === "removeExp") { state.experiences.splice(idx,1); renderAll(); }
+        });
+        // Chip removal for skills/tools
+        document.querySelector(".editor-panel").addEventListener("click", (e) => {
+            const icon = e.target.closest(".fa-times-circle");
+            if (!icon) return;
+            const type = icon.getAttribute("data-type");
+            const index = parseInt(icon.getAttribute("data-index"));
+            if (isNaN(index)) return;
+            if (type === "coreSkill") state.coreSkills.splice(index,1);
+            else if (type === "supportiveSkill") state.supportiveSkills.splice(index,1);
+            else if (type === "tool") state.toolsExpertise.splice(index,1);
+            renderAll();
+        });
+    }
+
+    // ----- ADD BUTTONS -----
+    function bindAddButtons() {
+        document.getElementById("addDegreeBtn").onclick = () => {
+            state.degrees.push({ institute: "", degreeName: "New Degree", startYear: "", endYear: "", cgpa: "" });
+            renderAll();
+        };
+        document.getElementById("addCertBtn").onclick = () => {
+            state.certifications.push({ name: "New Certification", issuer: "", year: "" });
+            renderAll();
+        };
+        document.getElementById("addCoreSkillBtn").onclick = () => {
+            const val = document.getElementById("newCoreSkillInput").value.trim();
+            if (val) { state.coreSkills.push(val); document.getElementById("newCoreSkillInput").value = ""; renderAll(); }
+        };
+        document.getElementById("addSupportiveSkillBtn").onclick = () => {
+            const val = document.getElementById("newSupportiveSkillInput").value.trim();
+            if (val) { state.supportiveSkills.push(val); document.getElementById("newSupportiveSkillInput").value = ""; renderAll(); }
+        };
+        document.getElementById("addToolBtn").onclick = () => {
+            const val = document.getElementById("newToolInput").value.trim();
+            if (val) { state.toolsExpertise.push(val); document.getElementById("newToolInput").value = ""; renderAll(); }
+        };
+        document.getElementById("addProjectBtn").onclick = () => {
+            state.projects.push({ title: "New Product Case", description: "Describe problem, solution, outcome." });
+            renderAll();
+        };
+        document.getElementById("addExperienceBtn").onclick = () => {
+            state.experiences.push({ title: "Product Manager", company: "Company Name", period: "2024 – Present", description: "Key accomplishments." });
+            renderAll();
+        };
+        document.getElementById("resetDemoBtn").onclick = () => {
+            state = {
+                name: "Jordan M. Chen",
+                profile: "Strategic Product Manager with proven track record in data-driven roadmap execution, cross-functional leadership, and launching 0→1 products. Passionate about AI-driven solutions.",
+                degrees: [
+                    { institute: "UC Berkeley, Haas School of Business", degreeName: "MBA, Product Leadership", startYear: "2021", endYear: "2023", cgpa: "3.9/4.0" },
+                    { institute: "University of Washington", degreeName: "B.S. Information Systems", startYear: "2015", endYear: "2019", cgpa: "3.7/4.0" }
+                ],
+                certifications: [
+                    { name: "Certified Scrum Product Owner (CSPO)", issuer: "Scrum Alliance", year: "2022" },
+                    { name: "PMP Certification", issuer: "PMI", year: "2023" },
+                    { name: "AI Product Management", issuer: "Stanford Online", year: "2024" }
+                ],
+                coreSkills: ["Product Roadmapping", "User Research", "Data Analytics", "Go-to-Market Strategy"],
+                supportiveSkills: ["Agile Leadership", "Cross-functional Collaboration", "Storytelling", "Negotiation"],
+                toolsExpertise: ["Jira", "Figma", "Amplitude", "Notion", "SQL"],
+                projects: [
+                    { title: "AI-driven Analytics Platform", description: "Led product discovery & MVP launch resulting in 35% increase in user engagement." },
+                    { title: "Omni-channel CRM Redesign", description: "Case study: Revamped legacy CRM, improved retention by 28%." }
+                ],
+                experiences: [
+                    { title: "Senior Product Manager", company: "Nexify Tech", period: "2022 – Present", description: "Own product lifecycle for AI analytics suite; increased ARR by $2.4M." },
+                    { title: "Associate Product Manager", company: "GrowthLabs", period: "2020 – 2022", description: "Led user story mapping and sprint planning." }
+                ]
+            };
+            renderAll();
+        };
+        document.getElementById("downloadPDFBtn").onclick = () => {
+            const element = document.getElementById("resumePreview");
+            html2pdf().set({ margin: [0.5,0.5,0.5,0.5], filename: 'Product_Resume.pdf', image: { type: 'jpeg', quality: 0.98 }, html2canvas: { scale: 2 }, jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' } }).from(element).save();
+        };
+        // Name & profile live sync
+        document.getElementById("nameInput").addEventListener("input", (e) => { state.name = e.target.value; renderPreview(); });
+        document.getElementById("profileInput").addEventListener("input", (e) => { state.profile = e.target.value; renderPreview(); });
+    }
+
+    // initialization
+    function init() {
+        setupGlobalDelegation();
+        bindAddButtons();
+        renderAll();
+    }
+    init();
 </script>
 </body>
 </html>
