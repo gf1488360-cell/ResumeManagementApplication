@@ -3,241 +3,48 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>ResumeForge Pro | Print to PDF</title>
+    <title>ResumeForge | Reliable PDF Export</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            background: #eef2f5;
-            font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-            padding: 30px 24px;
-            color: #1a2c3e;
-        }
+        body { background: #eef2f5; font-family: 'Inter', sans-serif; padding: 30px 24px; color: #1a2c3e; }
         @import url('https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700&display=swap');
-        .app-container {
-            max-width: 1500px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: 1fr 1.1fr;
-            gap: 28px;
-        }
-        .editor-panel, .preview-panel {
-            background: white;
-            border-radius: 28px;
-            overflow-y: auto;
-            max-height: 90vh;
-            padding: 24px 28px;
-        }
-        .preview-panel {
-            position: sticky;
-            top: 20px;
-            box-shadow: 0 20px 35px -10px rgba(0,0,0,0.1);
-        }
-        .section-card {
-            background: #f9fafc;
-            border-radius: 20px;
-            padding: 18px 20px;
-            margin-bottom: 24px;
-            border: 1px solid #e6edf2;
-        }
-        .section-title {
-            font-size: 1.2rem;
-            font-weight: 700;
-            margin-bottom: 16px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            color: #0f3b5c;
-            border-left: 4px solid #2b7a62;
-            padding-left: 12px;
-        }
+        .app-container { max-width: 1500px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1.1fr; gap: 28px; }
+        .editor-panel, .preview-panel { background: white; border-radius: 28px; overflow-y: auto; max-height: 90vh; padding: 24px 28px; }
+        .preview-panel { position: sticky; top: 20px; box-shadow: 0 20px 35px -10px rgba(0,0,0,0.1); }
+        .section-card { background: #f9fafc; border-radius: 20px; padding: 18px 20px; margin-bottom: 24px; border: 1px solid #e6edf2; }
+        .section-title { font-size: 1.2rem; font-weight: 700; margin-bottom: 16px; display: flex; align-items: center; gap: 10px; color: #0f3b5c; border-left: 4px solid #2b7a62; padding-left: 12px; }
         .field-group { margin-bottom: 14px; }
         label { font-weight: 600; font-size: 0.8rem; display: block; margin-bottom: 5px; color: #2c4e6e; }
-        input, textarea {
-            width: 100%;
-            padding: 10px 14px;
-            border-radius: 14px;
-            border: 1px solid #cfdfe8;
-            background: white;
-            font-family: inherit;
-            font-size: 0.9rem;
-        }
-        .dynamic-item {
-            background: white;
-            border-radius: 18px;
-            padding: 16px;
-            margin-bottom: 18px;
-            border: 1px solid #e2eaf0;
-        }
-        .dynamic-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 14px;
-            flex-wrap: wrap;
-        }
-        .remove-btn {
-            background: none;
-            border: none;
-            color: #bc6f5c;
-            cursor: pointer;
-            font-size: 0.9rem;
-        }
-        .btn-primary {
-            background: #2b7a62;
-            color: white;
-            border: none;
-            border-radius: 40px;
-            padding: 8px 18px;
-            font-weight: 600;
-            cursor: pointer;
-            margin-top: 8px;
-        }
-        .btn-download {
-            background: #1f4e6e;
-            width: 100%;
-            padding: 12px;
-            font-size: 1rem;
-        }
-        .small-btn {
-            background: #eef3f7;
-            border: 1px solid #cbdde6;
-            border-radius: 40px;
-            padding: 8px 16px;
-            font-weight: 500;
-            cursor: pointer;
-        }
-        .add-input-group {
-            display: flex;
-            gap: 10px;
-            margin-top: 12px;
-        }
-        .skill-tag {
-            background: #eef2f5;
-            display: inline-block;
-            padding: 5px 14px;
-            border-radius: 30px;
-            font-size: 0.75rem;
-            font-weight: 500;
-            margin-right: 8px;
-            margin-bottom: 10px;
-        }
-        .skill-tag i {
-            margin-left: 8px;
-            cursor: pointer;
-            opacity: 0.7;
-        }
-        /* Preview styles */
-        .resume-preview {
-            font-family: 'Inter', sans-serif;
-            color: #1c2e3a;
-        }
-        .preview-name {
-            font-size: 2.1rem;
-            font-weight: 700;
-            margin-bottom: 8px;
-            color: #143b4b;
-        }
-        .preview-contact {
-            background: #f8fafc;
-            padding: 12px 16px;
-            border-radius: 20px;
-            margin: 12px 0 16px;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 12px 20px;
-            border: 1px solid #e2edf2;
-        }
-        .preview-contact-item {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 0.8rem;
-            color: #2c5a74;
-        }
+        input, textarea { width: 100%; padding: 10px 14px; border-radius: 14px; border: 1px solid #cfdfe8; background: white; font-family: inherit; font-size: 0.9rem; }
+        .dynamic-item { background: white; border-radius: 18px; padding: 16px; margin-bottom: 18px; border: 1px solid #e2eaf0; }
+        .dynamic-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; flex-wrap: wrap; }
+        .remove-btn { background: none; border: none; color: #bc6f5c; cursor: pointer; font-size: 0.9rem; }
+        .btn-primary { background: #2b7a62; color: white; border: none; border-radius: 40px; padding: 8px 18px; font-weight: 600; cursor: pointer; margin-top: 8px; }
+        .btn-download { background: #1f4e6e; width: 100%; padding: 12px; font-size: 1rem; }
+        .small-btn { background: #eef3f7; border: 1px solid #cbdde6; border-radius: 40px; padding: 8px 16px; cursor: pointer; }
+        .add-input-group { display: flex; gap: 10px; margin-top: 12px; }
+        .skill-tag { background: #eef2f5; display: inline-block; padding: 5px 14px; border-radius: 30px; font-size: 0.75rem; font-weight: 500; margin-right: 8px; margin-bottom: 10px; }
+        .skill-tag i { margin-left: 8px; cursor: pointer; opacity: 0.7; }
+        .resume-preview { font-family: 'Inter', sans-serif; color: #1c2e3a; }
+        .preview-name { font-size: 2.1rem; font-weight: 700; margin-bottom: 8px; color: #143b4b; }
+        .preview-contact { background: #f8fafc; padding: 12px 16px; border-radius: 20px; margin: 12px 0 16px; display: flex; flex-wrap: wrap; gap: 12px 20px; border: 1px solid #e2edf2; }
+        .preview-contact-item { display: inline-flex; align-items: center; gap: 8px; font-size: 0.8rem; color: #2c5a74; }
         .preview-contact-item i { width: 18px; color: #2b7a62; }
-        .preview-profile {
-            background: #f0f6fa;
-            padding: 14px 18px;
-            border-radius: 18px;
-            margin: 16px 0;
-            border-left: 4px solid #2b7a62;
-        }
+        .preview-profile { background: #f0f6fa; padding: 14px 18px; border-radius: 18px; margin: 16px 0; border-left: 4px solid #2b7a62; }
         .preview-section { margin-top: 26px; }
-        .preview-section h3 {
-            font-size: 1.2rem;
-            font-weight: 700;
-            border-bottom: 3px solid #dce9f0;
-            padding-bottom: 6px;
-            margin-bottom: 14px;
-            display: inline-block;
-            color: #1c5a6e;
-        }
-        .degree-card, .cert-card {
-            background: #f9fdfe;
-            padding: 12px 14px;
-            border-radius: 16px;
-            margin-bottom: 12px;
-            border-left: 3px solid #2b7a62;
-        }
+        .preview-section h3 { font-size: 1.2rem; font-weight: 700; border-bottom: 3px solid #dce9f0; padding-bottom: 6px; margin-bottom: 14px; display: inline-block; color: #1c5a6e; }
+        .degree-card, .cert-card { background: #f9fdfe; padding: 12px 14px; border-radius: 16px; margin-bottom: 12px; border-left: 3px solid #2b7a62; }
         .degree-title, .cert-title { font-weight: 700; font-size: 0.95rem; }
         .degree-meta, .cert-meta { font-size: 0.75rem; color: #4f6f8a; margin-top: 5px; }
         .project-item, .exp-item { margin-bottom: 20px; }
-        .project-title, .exp-title {
-            font-weight: 700;
-            font-size: 1rem;
-            color: #0f4b5c;
-            margin-bottom: 5px;
-        }
-        .project-desc, .exp-desc {
-            font-size: 0.85rem;
-            line-height: 1.4;
-            margin-top: 4px;
-            color: #2c485e;
-        }
-        .exp-meta {
-            font-size: 0.75rem;
-            font-weight: 500;
-            color: #5f7f95;
-            margin-top: 2px;
-            margin-bottom: 6px;
-        }
-        @media (max-width: 900px) {
-            .app-container { grid-template-columns: 1fr; }
-            .preview-panel { position: relative; top: 0; }
-            body { padding: 16px; }
-        }
-        /* PRINT STYLES for PDF export */
-        @media print {
-            body {
-                background: white;
-                padding: 0;
-                margin: 0;
-            }
-            .editor-panel {
-                display: none !important;
-            }
-            .preview-panel {
-                display: block !important;
-                position: static !important;
-                box-shadow: none !important;
-                padding: 0 !important;
-                margin: 0 auto !important;
-                max-width: 100% !important;
-            }
-            .resume-preview {
-                margin: 0 auto;
-                padding: 0.4in 0.5in !important;
-                width: 100%;
-            }
-            .preview-contact, .preview-profile, .degree-card, .cert-card, .project-item, .exp-item {
-                break-inside: avoid;
-                page-break-inside: avoid;
-            }
-            .preview-section {
-                break-inside: avoid;
-            }
-        }
+        .project-title, .exp-title { font-weight: 700; font-size: 1rem; color: #0f4b5c; margin-bottom: 5px; }
+        .project-desc, .exp-desc { font-size: 0.85rem; line-height: 1.4; margin-top: 4px; color: #2c485e; }
+        .exp-meta { font-size: 0.75rem; font-weight: 500; color: #5f7f95; margin-top: 2px; margin-bottom: 6px; }
+        @media (max-width: 900px) { .app-container { grid-template-columns: 1fr; } .preview-panel { position: relative; top: 0; } body { padding: 16px; } }
+        /* Hidden div for PDF generation */
+        .pdf-export-container { position: absolute; top: -9999px; left: -9999px; width: 800px; background: white; padding: 0.4in; font-family: 'Inter', sans-serif; }
     </style>
 </head>
 <body>
@@ -247,7 +54,7 @@
             <h2 style="font-weight: 700; color: #1c5a6e;"><i class="fas fa-save"></i> Resume Manager</h2>
             <button id="resetDemoBtn" class="small-btn"><i class="fas fa-undo-alt"></i> Load Demo (code 5578)</button>
         </div>
-        <p style="font-size: 0.8rem; margin-bottom: 20px;">All changes auto‑save. Click "Download PDF" → Print → Save as PDF.</p>
+        <p style="font-size: 0.8rem; margin-bottom: 20px;">All changes auto‑save. Click PDF button → downloads instantly.</p>
 
         <!-- Name -->
         <div class="section-card"><div class="section-title"><i class="fas fa-user"></i> Full Name</div><input type="text" id="nameInput"></div>
@@ -275,7 +82,7 @@
         <div class="section-card"><div class="section-title"><i class="fas fa-project-diagram"></i> Product & Case Studies</div><div id="projectsListEditor"></div><button id="addProjectBtn" class="btn-primary"><i class="fas fa-plus-circle"></i> Add Project</button></div>
         <!-- Experience -->
         <div class="section-card"><div class="section-title"><i class="fas fa-briefcase"></i> Professional Experience</div><div id="experienceListEditor"></div><button id="addExperienceBtn" class="btn-primary"><i class="fas fa-plus-circle"></i> Add Experience</button></div>
-        <button id="downloadPDFBtn" class="btn-primary btn-download"><i class="fas fa-print"></i> Download PDF (Print to PDF)</button>
+        <button id="downloadPDFBtn" class="btn-primary btn-download"><i class="fas fa-file-pdf"></i> Download PDF (Direct)</button>
     </div>
     <div class="preview-panel">
         <h3><i class="fas fa-eye"></i> Live Resume Preview</h3>
@@ -284,7 +91,7 @@
 </div>
 
 <script>
-    // ---------- DEFAULT STATE (all your case studies included) ----------
+    // ---------- DEFAULT STATE (all your case studies) ----------
     const defaultState = {
         name: "Ghulam Farid",
         contact: {
@@ -305,14 +112,14 @@
         supportiveSkills: ["Agile Leadership", "Cross-functional Collaboration", "Storytelling", "Risk Mitigation", "Python (Pandas, NumPy, Matplotlib)", "SQL", "Strong PRD, BRD Development", "Data Synthesis & Insight Communication"],
         toolsExpertise: ["Jira", "Figma", "Notion", "Google Analytics", "Miro", "PowerBI"],
         projects: [
-            { title: "Daraz vs Amazon: E-commerce Battle for Pakistan", description: "Conducted a data-driven comparative analysis of Daraz's local dominance vs Amazon's global reach in Pakistan's growing e-commerce market. Delivered strategic insights on consumer behavior, platform positioning, and competitive dynamics." },
-            { title: "Pakistani SaaS Export Growth Strategy: $500M to $2B Roadmap", description: "Built a strategic roadmap to scale SaaS exports from $500M to $2B using market intelligence and phased execution. Identified high-value export segments and defined measurable KPIs." },
-            { title: "Strategic Market Entry Framework for Emerging Economies (TechGlobal)", description: "Designed a joint-venture entry framework to navigate local regulations and data localization, targeting $60M ARR. Aligned cross-functional stakeholders on risk assessment." },
-            { title: "Scaling a Startup from Regional to National Presence (Bykea)", description: "Led multi-city expansion strategy to transform a Karachi-focused startup into a national leader. Applied evidence-based prioritization and competitive analysis." },
-            { title: "Pakistan's Hyperlocal Information Gap: A Structured Utility Platform", description: "Diagnosed systemic lack of real‑time urban intelligence (water, gas, fuel, medicine). Designed geofenced, crowd‑verified platform with three‑layer revenue model, projecting 15‑25 min daily time savings." }
+            { title: "Daraz vs Amazon: E-commerce Battle for Pakistan", description: "Conducted a data-driven comparative analysis of Daraz's local dominance vs Amazon's global reach in Pakistan's growing e-commerce market. Delivered strategic insights on consumer behavior, platform positioning, and competitive dynamics for businesses and investors." },
+            { title: "Pakistani SaaS Export Growth Strategy: $500M to $2B Roadmap", description: "Built a strategic roadmap to scale SaaS exports from $500M to $2B using market intelligence and phased execution. Identified high-value export segments and defined measurable KPIs for continuous performance tracking." },
+            { title: "Strategic Market Entry Framework for Emerging Economies (TechGlobal)", description: "Designed a joint-venture entry framework to navigate local regulations and data localization, targeting $60M ARR. Aligned cross-functional stakeholders on risk assessment and operational roadmap for emerging markets." },
+            { title: "Scaling a Startup from Regional to National Presence (Bykea)", description: "Led multi-city expansion strategy to transform a Karachi-focused startup into a national leader. Applied evidence-based prioritization and competitive analysis to sequence market entry and maximize growth." },
+            { title: "Pakistan's Hyperlocal Information Gap: A Structured Utility Platform", description: "Diagnosed the systemic lack of real‑time urban intelligence (water, gas, fuel, medicine) affecting millions. Designed a geofenced, crowd‑verified community platform with a three‑layer revenue model (ads, subscriptions, B2B APIs). Projected household time savings of 15‑25 minutes per day via daily verified answers. Built a phased go‑to‑market strategy targeting the root cause: incentive misalignment." }
         ],
         experiences: [
-            { title: "Business Strategy & Product Analyst", company: "Self-Employed", period: "2025 – Present", description: "Analyze digital products, marketplaces and platforms to identify strategic gaps. Deliver feature-rich solution blueprints, market entry strategies, and product optimization roadmaps for clients across e‑commerce and SaaS sectors." }
+            { title: "Business Strategy & Product Analyst", company: "Self-Employed", period: "2025 – Present", description: "Analyze digital products, marketplaces and platforms to identify strategic gaps. Deliver feature-rich solution blueprints, market entry strategies, and product optimization roadmaps for clients across e‑commerce and SaaS sectors. Lead end-to-end product strategy, competitive benchmarking, and data-driven decision frameworks." }
         ]
     };
 
@@ -427,15 +234,82 @@
         const toolsHtml = state.toolsExpertise.map(t => `<span class="skill-tag">${escapeHtml(t)}</span>`).join('');
         const projectsHtml = state.projects.map(p => `<div class="project-item"><div class="project-title">📌 ${escapeHtml(p.title)}</div><div class="project-desc">${escapeHtml(p.description)}</div></div>`).join('');
         const expHtml = state.experiences.map(e => `<div class="exp-item"><div class="exp-title">💼 ${escapeHtml(e.title)} · ${escapeHtml(e.company)}</div><div class="exp-meta">${escapeHtml(e.period)}</div><div class="exp-desc">${escapeHtml(e.description)}</div></div>`).join('');
-        preview.innerHTML = `<div class="preview-name">${escapeHtml(state.name)}</div>${contactHtml}<div class="preview-profile">${escapeHtml(state.profile)}</div><div class="preview-section"><h3> Education</h3>${degreesHtml}</div><div class="preview-section"><h3> Certifications</h3>${certsHtml}</div><div class="preview-section"><h3> Core Skills</h3><div>${coreHtml}</div></div><div class="preview-section"><h3> Supportive Skills</h3><div>${supportiveHtml}</div></div><div class="preview-section"><h3> Tools Expertise</h3><div>${toolsHtml}</div></div><div class="preview-section"><h3> Product & Case Studies</h3>${projectsHtml}</div><div class="preview-section"><h3> Professional Experience</h3>${expHtml}</div>`;
+        preview.innerHTML = `<div class="preview-name">${escapeHtml(state.name)}</div>${contactHtml}<div class="preview-profile">${escapeHtml(state.profile)}</div><div class="preview-section"><h3>🎓 Education</h3>${degreesHtml}</div><div class="preview-section"><h3>📜 Certifications</h3>${certsHtml}</div><div class="preview-section"><h3>⚙️ Core Skills</h3><div>${coreHtml}</div></div><div class="preview-section"><h3>🤝 Supportive Skills</h3><div>${supportiveHtml}</div></div><div class="preview-section"><h3>🛠️ Tools Expertise</h3><div>${toolsHtml}</div></div><div class="preview-section"><h3>📘 Product & Case Studies</h3>${projectsHtml}</div><div class="preview-section"><h3>💼 Professional Experience</h3>${expHtml}</div>`;
     }
 
-    // PDF via Print (100% reliable)
-    function downloadPDF() {
-        window.print();
+    // ---------- RELIABLE PDF GENERATION ----------
+    function generatePDF() {
+        // Build a hidden div with the exact same content as preview, but with print-friendly inline styles
+        const pdfDiv = document.createElement('div');
+        pdfDiv.className = 'pdf-export-container';
+        
+        const c = state.contact;
+        const contactHtml = `<div style="background:#f8fafc; padding:12px 16px; border-radius:20px; margin:12px 0 20px; display:flex; flex-wrap:wrap; gap:12px 24px; border:1px solid #e2edf2;">
+            ${c.email ? `<div><i class="fas fa-envelope"></i> ${escapeHtml(c.email)}</div>` : ''}
+            ${c.mobile ? `<div><i class="fas fa-phone-alt"></i> ${escapeHtml(c.mobile)}</div>` : ''}
+            ${c.address ? `<div><i class="fas fa-map-marker-alt"></i> ${escapeHtml(c.address)}</div>` : ''}
+            ${c.website ? `<div><i class="fas fa-globe"></i> ${escapeHtml(c.website)}</div>` : ''}
+            ${c.linkedin ? `<div><i class="fab fa-linkedin"></i> ${escapeHtml(c.linkedin)}</div>` : ''}
+        </div>`;
+        
+        const degreesHtml = state.degrees.map(d => `<div style="background:#f9fdfe; padding:12px 14px; border-radius:16px; margin-bottom:12px; border-left:3px solid #2b7a62;">
+            <div><strong>${escapeHtml(d.degreeName)}</strong></div>
+            <div style="font-size:0.75rem; color:#4f6f8a;">${escapeHtml(d.institute)} | ${escapeHtml(d.startYear)}–${escapeHtml(d.endYear)} | CGPA: ${escapeHtml(d.cgpa)}</div>
+        </div>`).join('');
+        
+        const certsHtml = state.certifications.map(cert => `<div style="background:#f9fdfe; padding:12px 14px; border-radius:16px; margin-bottom:12px; border-left:3px solid #2b7a62;">
+            <div><strong>${escapeHtml(cert.name)}</strong></div>
+            <div style="font-size:0.75rem; color:#4f6f8a;">${escapeHtml(cert.issuer)}${cert.year ? ` · ${cert.year}` : ''}</div>
+        </div>`).join('');
+        
+        const coreHtml = state.coreSkills.map(s => `<span style="background:#eef2f5; display:inline-block; padding:5px 12px; border-radius:30px; font-size:0.75rem; margin:0 6px 8px 0;">${escapeHtml(s)}</span>`).join('');
+        const supportiveHtml = state.supportiveSkills.map(s => `<span style="background:#eef2f5; display:inline-block; padding:5px 12px; border-radius:30px; font-size:0.75rem; margin:0 6px 8px 0;">${escapeHtml(s)}</span>`).join('');
+        const toolsHtml = state.toolsExpertise.map(t => `<span style="background:#eef2f5; display:inline-block; padding:5px 12px; border-radius:30px; font-size:0.75rem; margin:0 6px 8px 0;">${escapeHtml(t)}</span>`).join('');
+        
+        const projectsHtml = state.projects.map(p => `<div style="margin-bottom:18px;">
+            <div style="font-weight:700; color:#0f4b5c; font-size:0.95rem;">📌 ${escapeHtml(p.title)}</div>
+            <div style="font-size:0.85rem; margin-top:4px; line-height:1.4;">${escapeHtml(p.description)}</div>
+        </div>`).join('');
+        
+        const expHtml = state.experiences.map(e => `<div style="margin-bottom:18px;">
+            <div style="font-weight:700; color:#0f4b5c; font-size:0.95rem;">💼 ${escapeHtml(e.title)} · ${escapeHtml(e.company)}</div>
+            <div style="font-size:0.75rem; color:#5f7f95;">${escapeHtml(e.period)}</div>
+            <div style="font-size:0.85rem; margin-top:4px; line-height:1.4;">${escapeHtml(e.description)}</div>
+        </div>`).join('');
+        
+        pdfDiv.innerHTML = `
+            <div style="font-size:2rem; font-weight:700; margin-bottom:8px;">${escapeHtml(state.name)}</div>
+            ${contactHtml}
+            <div style="background:#f0f6fa; padding:14px 18px; border-radius:18px; margin:20px 0; border-left:4px solid #2b7a62;">${escapeHtml(state.profile)}</div>
+            <div style="margin-top:20px;"><h3 style="font-size:1.2rem; border-bottom:2px solid #dce9f0; display:inline-block; margin-bottom:12px;"> Education</h3>${degreesHtml}</div>
+            <div style="margin-top:20px;"><h3 style="font-size:1.2rem; border-bottom:2px solid #dce9f0; display:inline-block; margin-bottom:12px;"> Certifications</h3>${certsHtml}</div>
+            <div style="margin-top:20px;"><h3 style="font-size:1.2rem; border-bottom:2px solid #dce9f0; display:inline-block; margin-bottom:12px;"> Core Skills</h3><div>${coreHtml}</div></div>
+            <div style="margin-top:20px;"><h3 style="font-size:1.2rem; border-bottom:2px solid #dce9f0; display:inline-block; margin-bottom:12px;"> Supportive Skills</h3><div>${supportiveHtml}</div></div>
+            <div style="margin-top:20px;"><h3 style="font-size:1.2rem; border-bottom:2px solid #dce9f0; display:inline-block; margin-bottom:12px;"> Tools Expertise</h3><div>${toolsHtml}</div></div>
+            <div style="margin-top:20px;"><h3 style="font-size:1.2rem; border-bottom:2px solid #dce9f0; display:inline-block; margin-bottom:12px;"> Product & Case Studies</h3>${projectsHtml}</div>
+            <div style="margin-top:20px;"><h3 style="font-size:1.2rem; border-bottom:2px solid #dce9f0; display:inline-block; margin-bottom:12px;"> Professional Experience</h3>${expHtml}</div>
+        `;
+        
+        document.body.appendChild(pdfDiv);
+        
+        const opt = {
+            margin: [0.4, 0.4, 0.4, 0.4],
+            filename: 'Ghulam_Farid_Resume.pdf',
+            image: { type: 'jpeg', quality: 0.98 },
+            html2canvas: { scale: 2, logging: false, useCORS: false },
+            jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
+        };
+        
+        html2pdf().set(opt).from(pdfDiv).save().then(() => {
+            document.body.removeChild(pdfDiv);
+        }).catch(err => {
+            console.error(err);
+            document.body.removeChild(pdfDiv);
+            alert('PDF generation failed. Please try refreshing the page.');
+        });
     }
 
-    // Event handlers
+    // Setup events
     function setupEvents() {
         document.getElementById("addDegreeBtn").onclick = () => { state.degrees.push({ institute: "", degreeName: "New Degree", startYear: "", endYear: "", cgpa: "" }); renderAll(); };
         document.getElementById("addCertBtn").onclick = () => { state.certifications.push({ name: "New Certification", issuer: "", year: "" }); renderAll(); };
@@ -445,7 +319,7 @@
         document.getElementById("addProjectBtn").onclick = () => { state.projects.push({ title: "New Case Study", description: "Describe problem, analysis, solution." }); renderAll(); };
         document.getElementById("addExperienceBtn").onclick = () => { state.experiences.push({ title: "Product Manager", company: "Company", period: "2025–Present", description: "Key achievements." }); renderAll(); };
         document.getElementById("resetDemoBtn").onclick = () => { const code = prompt("Enter code 5578:"); if(code === "5578") { state = JSON.parse(JSON.stringify(defaultState)); renderAll(); alert("Demo loaded."); } else if(code) alert("Wrong code."); };
-        document.getElementById("downloadPDFBtn").onclick = () => downloadPDF();
+        document.getElementById("downloadPDFBtn").onclick = () => generatePDF();
         document.getElementById("nameInput").addEventListener("input", () => { state.name = document.getElementById("nameInput").value; renderPreview(); saveToLocal(); });
         document.getElementById("profileInput").addEventListener("input", () => { state.profile = document.getElementById("profileInput").value; renderPreview(); saveToLocal(); });
         ["contactEmail","contactMobile","contactAddress","contactWebsite","contactLinkedin"].forEach(id => { document.getElementById(id).addEventListener("input", () => { state.contact[id.replace("contact","").toLowerCase()] = document.getElementById(id).value; renderPreview(); saveToLocal(); }); });
