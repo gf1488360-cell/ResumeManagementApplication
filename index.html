@@ -136,7 +136,6 @@
             gap: 10px;
             margin-top: 12px;
         }
-        /* Skill chips */
         .skill-tag {
             background: #eef2f5;
             display: inline-block;
@@ -153,7 +152,6 @@
             opacity: 0.7;
         }
         .skill-tag i:hover { opacity: 1; color: #c23b22; }
-        /* Preview styles */
         .resume-preview {
             font-family: 'Inter', sans-serif;
             color: #1c2e3a;
@@ -220,7 +218,6 @@
         }
         .degree-title, .cert-title { font-weight: 700; font-size: 0.95rem; }
         .degree-meta, .cert-meta { font-size: 0.75rem; color: #4f6f8a; margin-top: 5px; }
-        /* Extra spacing between title and description in projects & experience */
         .project-item, .exp-item {
             margin-bottom: 20px;
         }
@@ -252,7 +249,6 @@
 </head>
 <body>
 <div class="app-container">
-    <!-- LEFT: EDITOR -->
     <div class="editor-panel">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
             <h2 style="font-weight: 700; color: #1c5a6e;"><i class="fas fa-save"></i> Resume Manager (Auto‑Save)</h2>
@@ -343,7 +339,6 @@
         <button id="downloadPDFBtn" class="btn-primary btn-download"><i class="fas fa-file-pdf"></i> Download as Professional PDF</button>
     </div>
 
-    <!-- RIGHT: PREVIEW -->
     <div class="preview-panel">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
             <h3><i class="fas fa-eye"></i> Live Resume Preview</h3>
@@ -354,44 +349,63 @@
 </div>
 
 <script>
-    // ---------- DEFAULT STATE (used if no saved data) - tailored to user profile ----------
+    // ---------- DEFAULT STATE (tailored to user's resume - Ghulam Farid) ----------
     const defaultState = {
-        name: "Farid Ahmed",
+        name: "Ghulam Farid",
         contact: {
-            email: "farid@example.com",
-            mobile: "+92 300 1234567",
-            address: "Karachi, Pakistan",
+            email: "gf1488360@gmail.com",
+            mobile: "+923086007904",
+            address: "Lahore, Pakistan",
             website: "https://faridsview.netlify.app",
-            linkedin: "https://linkedin.com/in/farid"
+            linkedin: "https://www.linkedin.com/in/ghulam-farid-29514a336"
         },
-        profile: "Strategic Product Manager & Consultant with expertise in digital product analysis, market entry strategies, and feature-driven solutions. Self-employed since 2025, helping businesses identify product gaps and deliver actionable roadmaps. Passionate about e‑commerce, SaaS, and emerging tech ecosystems.",
+        profile: "Business Strategy & Product Analyst operating at the intersection of business strategy and technology. Passionate about product management, I drive value through Vision, Logic, and Implementation — my three-pillar learning strategy as an active learner. Data Science × Business Knowledge = Intelligent Growth — this is the equation I live by to build products that scale. Data science knowledge allows me to see patterns in data and interpret them to make effective, data-backed decisions.",
         degrees: [
-            { institute: "University of Karachi", degreeName: "MBA Marketing", startYear: "2018", endYear: "2020", cgpa: "3.8/4.0" },
-            { institute: "NED University", degreeName: "B.E. Computer Systems", startYear: "2013", endYear: "2017", cgpa: "3.6/4.0" }
+            { institute: "University of Central Punjab, Lahore", degreeName: "BS Data Science", startYear: "2024", endYear: "Present", cgpa: "3.8/4.0" }
         ],
         certifications: [
-            { name: "PMP", issuer: "PMI", year: "2023" },
-            { name: "Certified Scrum Product Owner (CSPO)", issuer: "Scrum Alliance", year: "2022" },
-            { name: "AI Product Management", issuer: "Stanford Online", year: "2024" }
+            { name: "Product Prioritization Certificate", issuer: "Product School", year: "2025" },
+            { name: "Data for Decision Making Job Simulation", issuer: "Forage under BCG", year: "2025" },
+            { name: "Business Strategy Consulting Job Simulation", issuer: "Forage under BCG", year: "2025" }
         ],
-        coreSkills: ["Product Roadmapping", "User Research", "Data Analytics", "Go-to-Market Strategy", "Competitive Analysis", "Feature Prioritization (RICE)"],
-        supportiveSkills: ["Agile Leadership", "Cross-functional Collaboration", "Storytelling", "Stakeholder Alignment", "Risk Mitigation"],
-        toolsExpertise: ["Jira", "Figma", "SQL", "Python (Pandas, NumPy)", "Amplitude", "Notion"],
+        coreSkills: [
+            "Product Roadmapping",
+            "Data Analytics",
+            "Go-to-Market Strategy",
+            "Feature Prioritization (RICE)",
+            "Business Strategy & Competitive Analysis",
+            "A/B Testing & Experimentation Design",
+            "OKRs Definition & KPI Tracking",
+            "Product Lifecycle Management"
+        ],
+        supportiveSkills: [
+            "Stakeholder Alignment",
+            "Cross-functional Collaboration",
+            "Agile Leadership",
+            "Storytelling & Presentation",
+            "Conflict Resolution"
+        ],
+        toolsExpertise: [
+            "Jira",
+            "Figma",
+            "SQL",
+            "Python (Pandas, NumPy)",
+            "Amplitude",
+            "Notion"
+        ],
         projects: [
             { title: "Pakistani SaaS Export Growth Strategy", description: "Built roadmap to scale SaaS exports from $500M to $2B using market intelligence and phased execution." },
             { title: "Strategic Market Entry Framework (TechGlobal)", description: "Designed joint-venture entry framework targeting $60M ARR while navigating local regulations." },
             { title: "Daraz vs Amazon: E-commerce Battle for Pakistan", description: "Data-driven comparative analysis delivering strategic positioning insights for local vs global players." }
         ],
         experiences: [
-            { title: "Self-Employed Product Strategy Consultant", company: "Self-employed", period: "2025 – Present", description: "Analyze digital products, marketplaces and platforms to identify strategic gaps. Deliver feature-rich solution blueprints, market entry strategies, and product optimization roadmaps for clients across e‑commerce and SaaS sectors." },
-            { title: "Senior Product Manager", company: "Nexify Tech", period: "2022 – 2024", description: "Owned product lifecycle for AI analytics suite; increased ARR by $2.4M. Led cross-functional teams to launch 3 major features." },
-            { title: "Associate Product Manager", company: "GrowthLabs", period: "2020 – 2022", description: "Led user story mapping, sprint planning, and UX research initiatives that boosted NPS by 22 points." }
+            { title: "Self-Employed Product Strategy Consultant", company: "Self-employed", period: "2025 – Present", description: "Analyze digital products, marketplaces and platforms to identify strategic gaps. Deliver feature-rich solution blueprints, market entry strategies, and product optimization roadmaps for clients across e‑commerce and SaaS sectors." }
         ]
     };
 
     let state = JSON.parse(JSON.stringify(defaultState));
 
-    // ---------- localStorage Helpers ----------
+    // localStorage persistence
     function saveStateToLocalStorage() {
         localStorage.setItem("resumeBuilderState", JSON.stringify(state));
     }
@@ -401,7 +415,6 @@
         if (saved) {
             try {
                 state = JSON.parse(saved);
-                console.log("Loaded saved data");
             } catch(e) { console.warn("Failed to parse saved state"); }
         } else {
             state = JSON.parse(JSON.stringify(defaultState));
@@ -411,7 +424,6 @@
 
     function escapeHtml(str) { if(!str) return ''; return str.replace(/[&<>]/g, function(m){if(m==='&') return '&amp;'; if(m==='<') return '&lt;'; if(m==='>') return '&gt;'; return m;}); }
 
-    // Sync form inputs -> state and auto-save
     function syncContactFromInputs() {
         state.contact.email = document.getElementById("contactEmail").value;
         state.contact.mobile = document.getElementById("contactMobile").value;
@@ -434,7 +446,6 @@
         renderSkillsAndTools();
         renderProjectsEditor();
         renderExperienceEditor();
-        // populate input fields
         document.getElementById("contactEmail").value = state.contact.email || "";
         document.getElementById("contactMobile").value = state.contact.mobile || "";
         document.getElementById("contactAddress").value = state.contact.address || "";
@@ -475,7 +486,6 @@
         if (field && state.degrees[idx]) { state.degrees[idx][field] = e.target.value; renderPreview(); saveStateToLocalStorage(); }
     }
 
-    // Certifications editor
     function renderCertsEditor() {
         const container = document.getElementById("certsListEditor");
         if (!container) return;
@@ -551,23 +561,20 @@
         document.querySelectorAll(".exp-desc-field").forEach(ta => ta.addEventListener("input", e => { let i = parseInt(e.target.dataset.idx); if(state.experiences[i]) state.experiences[i].description = e.target.value; renderPreview(); saveStateToLocalStorage(); }));
     }
 
-    // Preview with proper spacing (title and description have margin)
     function renderPreview() {
         const previewDiv = document.getElementById("resumePreview");
         const c = state.contact;
         const contactHtml = `<div class="preview-contact">${c.email?`<div class="preview-contact-item"><i class="fas fa-envelope"></i> ${escapeHtml(c.email)}</div>`:''}${c.mobile?`<div class="preview-contact-item"><i class="fas fa-phone-alt"></i> ${escapeHtml(c.mobile)}</div>`:''}${c.address?`<div class="preview-contact-item"><i class="fas fa-map-marker-alt"></i> ${escapeHtml(c.address)}</div>`:''}${c.website?`<div class="preview-contact-item"><i class="fas fa-globe"></i> <a href="${escapeHtml(c.website)}" target="_blank">${escapeHtml(c.website)}</a></div>`:''}${c.linkedin?`<div class="preview-contact-item"><i class="fab fa-linkedin"></i> <a href="${escapeHtml(c.linkedin)}" target="_blank">${escapeHtml(c.linkedin)}</a></div>`:''}</div>`;
-        const degreesHtml = state.degrees.map(d => `<div class="degree-card"><div class="degree-title">${escapeHtml(d.degreeName)}</div><div class="degree-meta">${escapeHtml(d.institute)} | ${escapeHtml(d.startYear)}–${escapeHtml(d.endYear)} | CGPA: ${escapeHtml(d.cgpa)}</div></div>`).join('');
+        const degreesHtml = state.degrees.map(d => `<div class="degree-card"><div class="degree-title">${escapeHtml(d.degreeName)}</div><div class="degree-meta">${escapeHtml(d.institute)} | ${escapeHtml(d.startYear)} – ${escapeHtml(d.endYear)} | CGPA: ${escapeHtml(d.cgpa)}</div></div>`).join('');
         const certsHtml = state.certifications.map(cert => `<div class="cert-card"><div class="cert-title">${escapeHtml(cert.name)}</div><div class="cert-meta">${escapeHtml(cert.issuer)}${cert.year?` · ${cert.year}`:''}</div></div>`).join('');
         const coreHtml = state.coreSkills.map(s => `<span class="skill-tag">${escapeHtml(s)}</span>`).join('');
         const supportiveHtml = state.supportiveSkills.map(s => `<span class="skill-tag">${escapeHtml(s)}</span>`).join('');
         const toolsHtml = state.toolsExpertise.map(t => `<span class="skill-tag">${escapeHtml(t)}</span>`).join('');
-        // Projects with extra spacing (margin-bottom on item, plus title margin)
         const projectsHtml = state.projects.map(p => `<div class="project-item"><div class="project-title">📌 ${escapeHtml(p.title)}</div><div class="project-desc">${escapeHtml(p.description)}</div></div>`).join('');
         const expHtml = state.experiences.map(e => `<div class="exp-item"><div class="exp-title">💼 ${escapeHtml(e.title)} · ${escapeHtml(e.company)}</div><div class="exp-meta">${escapeHtml(e.period)}</div><div class="exp-desc">${escapeHtml(e.description)}</div></div>`).join('');
         previewDiv.innerHTML = `<div class="preview-name">${escapeHtml(state.name)}</div>${contactHtml}<div class="preview-profile">${escapeHtml(state.profile)}</div><div class="preview-section"><h3> Education</h3>${degreesHtml}</div><div class="preview-section"><h3> Certifications</h3>${certsHtml}</div><div class="preview-section"><h3> Core Skills</h3><div>${coreHtml}</div></div><div class="preview-section"><h3> Supportive Skills</h3><div>${supportiveHtml}</div></div><div class="preview-section"><h3> Tools Expertise</h3><div>${toolsHtml}</div></div><div class="preview-section"><h3> Product & Case Studies</h3>${projectsHtml}</div><div class="preview-section"><h3> Professional Experience</h3>${expHtml}</div>`;
     }
 
-    // Global event delegation (remove buttons + chip icons)
     function setupGlobalDelegation() {
         document.querySelector(".editor-panel").addEventListener("click", (e) => {
             const btn = e.target.closest(".remove-btn");
@@ -603,7 +610,6 @@
         document.getElementById("addProjectBtn").onclick = () => { state.projects.push({ title: "New Case Study", description: "Describe problem, analysis, solution." }); renderAll(); };
         document.getElementById("addExperienceBtn").onclick = () => { state.experiences.push({ title: "Product Manager", company: "Company", period: "2025–Present", description: "Key achievements." }); renderAll(); };
         
-        // Demo reset with password protection
         document.getElementById("resetDemoBtn").onclick = () => {
             const code = prompt("Enter code 5578 to load demo data (this will overwrite your current data):", "");
             if (code === "5578") {
@@ -615,10 +621,21 @@
             }
         };
         
+        // ---------- FIXED PDF GENERATION ----------
         document.getElementById("downloadPDFBtn").onclick = () => {
             const element = document.getElementById("resumePreview");
-            html2pdf().set({ margin: [0.5,0.5,0.5,0.5], filename: 'Farid_Resume.pdf', image: { type: 'jpeg', quality: 0.98 }, html2canvas: { scale: 2 }, jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' } }).from(element).save();
+            // Configure for better page breaking and avoid blank pages
+            const opt = {
+                margin:        [0.5, 0.5, 0.5, 0.5], // top, right, bottom, left (in)
+                filename:     'Ghulam_Farid_Resume.pdf',
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { scale: 2, letterRendering: true, useCORS: true, logging: false },
+                jsPDF:        { unit: 'in', format: 'a4', orientation: 'portrait' },
+                pagebreak:    { mode: ['css', 'legacy'], before: '.preview-section', after: '.preview-section' }
+            };
+            html2pdf().set(opt).from(element).save();
         };
+        
         document.getElementById("nameInput").addEventListener("input", syncNameProfile);
         document.getElementById("profileInput").addEventListener("input", syncNameProfile);
         document.getElementById("contactEmail").addEventListener("input", syncContactFromInputs);
@@ -629,7 +646,7 @@
     }
 
     function init() {
-        loadStateFromLocalStorage();   // loads saved or default, then renders
+        loadStateFromLocalStorage();
         setupGlobalDelegation();
         bindAddButtons();
     }
