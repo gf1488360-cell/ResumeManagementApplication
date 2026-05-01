@@ -3,368 +3,152 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>ResumeForge Pro | Product Manager Resume Builder</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <title>ResumeForge Pro | Persistent Resume Builder</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        body {
-            background: #eef2f5;
-            font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, sans-serif;
-            padding: 30px 24px;
-            color: #1a2c3e;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: #eef2f5; font-family: 'Inter', sans-serif; padding: 30px 24px; color: #1a2c3e; }
         @import url('https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700&display=swap');
-        .app-container {
-            max-width: 1500px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: 1fr 1.1fr;
-            gap: 28px;
-        }
-        .editor-panel {
-            background: white;
-            border-radius: 28px;
-            box-shadow: 0 20px 35px -12px rgba(0,0,0,0.08);
-            overflow-y: auto;
-            max-height: 90vh;
-            padding: 24px 26px;
-        }
-        .preview-panel {
-            background: #fefefe;
-            border-radius: 28px;
-            box-shadow: 0 20px 35px -10px rgba(0,0,0,0.1);
-            padding: 28px 30px;
-            position: sticky;
-            top: 20px;
-            max-height: 90vh;
-            overflow-y: auto;
-        }
-        .section-card {
-            background: #f9fafc;
-            border-radius: 20px;
-            padding: 18px 20px;
-            margin-bottom: 24px;
-            border: 1px solid #e6edf2;
-        }
-        .section-title {
-            font-size: 1.2rem;
-            font-weight: 700;
-            margin-bottom: 16px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            color: #0f3b5c;
-            border-left: 4px solid #2b7a62;
-            padding-left: 12px;
-        }
-        .field-group {
-            margin-bottom: 14px;
-        }
-        label {
-            font-weight: 600;
-            font-size: 0.8rem;
-            display: block;
-            margin-bottom: 5px;
-            color: #2c4e6e;
-        }
-        input, textarea {
-            width: 100%;
-            padding: 10px 14px;
-            border-radius: 14px;
-            border: 1px solid #cfdfe8;
-            background: white;
-            font-family: inherit;
-            font-size: 0.9rem;
-        }
-        input:focus, textarea:focus {
-            outline: none;
-            border-color: #2b7a62;
-            box-shadow: 0 0 0 3px rgba(43,122,98,0.2);
-        }
-        .dynamic-item {
-            background: white;
-            border-radius: 18px;
-            padding: 16px;
-            margin-bottom: 18px;
-            border: 1px solid #e2eaf0;
-        }
-        .dynamic-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 14px;
-            flex-wrap: wrap;
-        }
-        .remove-btn {
-            background: none;
-            border: none;
-            color: #bc6f5c;
-            cursor: pointer;
-            font-size: 0.9rem;
-            font-weight: 500;
-        }
+        .app-container { max-width: 1500px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1.1fr; gap: 28px; }
+        .editor-panel, .preview-panel { background: white; border-radius: 28px; padding: 24px 28px; overflow-y: auto; max-height: 90vh; }
+        .editor-panel { box-shadow: 0 20px 35px -12px rgba(0,0,0,0.08); }
+        .preview-panel { box-shadow: 0 20px 35px -10px rgba(0,0,0,0.1); position: sticky; top: 20px; }
+        .section-card { background: #f9fafc; border-radius: 20px; padding: 18px 20px; margin-bottom: 24px; border: 1px solid #e6edf2; }
+        .section-title { font-size: 1.2rem; font-weight: 700; margin-bottom: 16px; display: flex; align-items: center; gap: 10px; color: #0f3b5c; border-left: 4px solid #2b7a62; padding-left: 12px; }
+        .field-group { margin-bottom: 14px; }
+        label { font-weight: 600; font-size: 0.8rem; display: block; margin-bottom: 5px; color: #2c4e6e; }
+        input, textarea { width: 100%; padding: 10px 14px; border-radius: 14px; border: 1px solid #cfdfe8; background: white; font-family: inherit; font-size: 0.9rem; }
+        input:focus, textarea:focus { outline: none; border-color: #2b7a62; box-shadow: 0 0 0 3px rgba(43,122,98,0.2); }
+        .dynamic-item { background: white; border-radius: 18px; padding: 16px; margin-bottom: 18px; border: 1px solid #e2eaf0; }
+        .dynamic-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; flex-wrap: wrap; }
+        .remove-btn { background: none; border: none; color: #bc6f5c; cursor: pointer; font-size: 0.9rem; font-weight: 500; }
         .remove-btn:hover { color: #b23c1c; }
-        .btn-primary {
-            background: #2b7a62;
-            color: white;
-            border: none;
-            border-radius: 40px;
-            padding: 8px 18px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: 0.2s;
-            margin-top: 8px;
-        }
+        .btn-primary { background: #2b7a62; color: white; border: none; border-radius: 40px; padding: 8px 18px; font-weight: 600; cursor: pointer; transition: 0.2s; margin-top: 8px; }
         .btn-primary:hover { background: #1f5e4b; }
-        .btn-download {
-            background: #1f4e6e;
-            width: 100%;
-            padding: 12px;
-            font-size: 1rem;
-        }
-        .small-btn {
-            background: #eef3f7;
-            border: 1px solid #cbdde6;
-            border-radius: 40px;
-            padding: 8px 16px;
-            font-weight: 500;
-            cursor: pointer;
-        }
-        .add-input-group {
-            display: flex;
-            gap: 10px;
-            margin-top: 12px;
-        }
-        .skill-tag {
-            background: #eef2f5;
-            display: inline-block;
-            padding: 4px 12px;
-            border-radius: 30px;
-            font-size: 0.75rem;
-            font-weight: 500;
-            margin-right: 6px;
-            margin-bottom: 8px;
-        }
-        .skill-tag i {
-            margin-left: 6px;
-            cursor: pointer;
-            opacity: 0.7;
-        }
+        .btn-download { background: #1f4e6e; width: 100%; padding: 12px; font-size: 1rem; }
+        .small-btn { background: #eef3f7; border: 1px solid #cbdde6; border-radius: 40px; padding: 8px 16px; font-weight: 500; cursor: pointer; }
+        .add-input-group { display: flex; gap: 10px; margin-top: 12px; }
+        .skill-tag { background: #eef2f5; display: inline-block; padding: 4px 12px; border-radius: 30px; font-size: 0.75rem; font-weight: 500; margin-right: 6px; margin-bottom: 8px; }
+        .skill-tag i { margin-left: 6px; cursor: pointer; opacity: 0.7; }
         .skill-tag i:hover { opacity: 1; color: #c23b22; }
-        .preview-name {
-            font-size: 2.1rem;
-            font-weight: 700;
-            letter-spacing: -0.5px;
-            margin-bottom: 8px;
-            color: #143b4b;
-        }
-        .preview-contact {
-            background: #f8fafc;
-            padding: 12px 16px;
-            border-radius: 20px;
-            margin: 12px 0 16px 0;
-            font-size: 0.8rem;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 12px 20px;
-            border: 1px solid #e2edf2;
-        }
-        .preview-contact-item {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            color: #2c5a74;
-        }
-        .preview-contact-item i {
-            width: 18px;
-            color: #2b7a62;
-        }
-        .preview-contact-item a {
-            color: #2b7a62;
-            text-decoration: none;
-        }
-        .preview-contact-item a:hover { text-decoration: underline; }
-        .preview-profile {
-            background: #f0f6fa;
-            padding: 14px 18px;
-            border-radius: 18px;
-            margin: 16px 0;
-            font-size: 0.9rem;
-            line-height: 1.45;
-            border-left: 4px solid #2b7a62;
-        }
-        .preview-section {
-            margin-top: 24px;
-        }
-        .preview-section h3 {
-            font-size: 1.2rem;
-            font-weight: 700;
-            border-bottom: 3px solid #dce9f0;
-            padding-bottom: 6px;
-            margin-bottom: 14px;
-            display: inline-block;
-            color: #1c5a6e;
-        }
-        .degree-card, .cert-card {
-            background: #f9fdfe;
-            padding: 12px 14px;
-            border-radius: 16px;
-            margin-bottom: 12px;
-            border-left: 3px solid #2b7a62;
-        }
+        .preview-name { font-size: 2.1rem; font-weight: 700; margin-bottom: 8px; color: #143b4b; }
+        .preview-contact { background: #f8fafc; padding: 12px 16px; border-radius: 20px; margin: 12px 0 16px; display: flex; flex-wrap: wrap; gap: 12px 20px; border: 1px solid #e2edf2; }
+        .preview-contact-item { display: inline-flex; align-items: center; gap: 8px; color: #2c5a74; font-size: 0.8rem; }
+        .preview-contact-item i { width: 18px; color: #2b7a62; }
+        .preview-contact-item a { color: #2b7a62; text-decoration: none; }
+        .preview-profile { background: #f0f6fa; padding: 14px 18px; border-radius: 18px; margin: 16px 0; border-left: 4px solid #2b7a62; }
+        .preview-section { margin-top: 24px; }
+        .preview-section h3 { font-size: 1.2rem; font-weight: 700; border-bottom: 3px solid #dce9f0; padding-bottom: 6px; margin-bottom: 14px; display: inline-block; color: #1c5a6e; }
+        .degree-card, .cert-card { background: #f9fdfe; padding: 12px 14px; border-radius: 16px; margin-bottom: 12px; border-left: 3px solid #2b7a62; }
         .degree-title, .cert-title { font-weight: 700; font-size: 0.95rem; }
         .degree-meta, .cert-meta { font-size: 0.75rem; color: #4f6f8a; margin-top: 5px; }
         .project-item, .exp-item { margin-bottom: 18px; }
         .project-title, .exp-title { font-weight: 700; font-size: 1rem; color: #0f4b5c; }
-        @media (max-width: 900px) {
-            .app-container { grid-template-columns: 1fr; gap: 24px; }
-            .preview-panel { position: relative; top: 0; }
-            body { padding: 16px; }
-        }
+        @media (max-width: 900px) { .app-container { grid-template-columns: 1fr; } .preview-panel { position: relative; top: 0; } body { padding: 16px; } }
     </style>
 </head>
 <body>
 <div class="app-container">
     <div class="editor-panel">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-            <h2 style="font-weight: 700; color: #1c5a6e;"><i class="fas fa-user-edit"></i> Resume Manager</h2>
-            <button id="resetDemoBtn" class="small-btn"><i class="fas fa-undo-alt"></i> Load Demo (code protected)</button>
+            <h2><i class="fas fa-save"></i> Persistent Resume Manager</h2>
+            <button id="resetDemoBtn" class="small-btn"><i class="fas fa-undo-alt"></i> Load Demo (code 5578)</button>
         </div>
-        <p style="font-size: 0.8rem; margin-bottom: 20px;">All sections editable — live preview + PDF export. Data persists until you clear.</p>
+        <p style="font-size: 0.8rem;">All data <strong>auto-saves</strong> in your browser. Reopen the app → your data is still there.</p>
 
         <!-- Name -->
-        <div class="section-card">
-            <div class="section-title"><i class="fas fa-user"></i> Full Name</div>
-            <input type="text" id="nameInput" placeholder="Full name">
-        </div>
+        <div class="section-card"><div class="section-title"><i class="fas fa-user"></i> Full Name</div><input type="text" id="nameInput"></div>
 
         <!-- Contact Info -->
         <div class="section-card">
             <div class="section-title"><i class="fas fa-address-book"></i> Contact Information</div>
-            <div class="field-group"><label>Email (Gmail)</label><input type="email" id="contactEmail" placeholder="yourname@gmail.com"></div>
-            <div class="field-group"><label>Mobile Number</label><input type="text" id="contactMobile" placeholder="+1 234 567 8900"></div>
-            <div class="field-group"><label>Address</label><input type="text" id="contactAddress" placeholder="City, State, Country"></div>
-            <div class="field-group"><label>Profile Website</label><input type="text" id="contactWebsite" placeholder="https://yourportfolio.com"></div>
-            <div class="field-group"><label>LinkedIn Link</label><input type="text" id="contactLinkedin" placeholder="https://linkedin.com/in/yourprofile"></div>
+            <div class="field-group"><label>Email</label><input type="email" id="contactEmail"></div>
+            <div class="field-group"><label>Mobile</label><input type="text" id="contactMobile"></div>
+            <div class="field-group"><label>Address</label><input type="text" id="contactAddress"></div>
+            <div class="field-group"><label>Website</label><input type="text" id="contactWebsite"></div>
+            <div class="field-group"><label>LinkedIn</label><input type="text" id="contactLinkedin"></div>
         </div>
 
         <!-- Profile -->
-        <div class="section-card">
-            <div class="section-title"><i class="fas fa-address-card"></i> Professional Profile</div>
-            <textarea id="profileInput" rows="3" placeholder="Short bio / summary"></textarea>
-        </div>
+        <div class="section-card"><div class="section-title"><i class="fas fa-address-card"></i> Professional Profile</div><textarea id="profileInput" rows="3"></textarea></div>
 
         <!-- Degrees -->
-        <div class="section-card">
-            <div class="section-title"><i class="fas fa-graduation-cap"></i> Degrees</div>
-            <div id="degreesListEditor"></div>
-            <button id="addDegreeBtn" class="btn-primary" style="width:100%;"><i class="fas fa-plus-circle"></i> Add Degree</button>
-        </div>
+        <div class="section-card"><div class="section-title"><i class="fas fa-graduation-cap"></i> Degrees</div><div id="degreesListEditor"></div><button id="addDegreeBtn" class="btn-primary" style="width:100%;">+ Add Degree</button></div>
 
         <!-- Certifications -->
-        <div class="section-card">
-            <div class="section-title"><i class="fas fa-certificate"></i> Certifications</div>
-            <div id="certsListEditor"></div>
-            <button id="addCertBtn" class="btn-primary" style="width:100%;"><i class="fas fa-plus-circle"></i> Add Certification</button>
-        </div>
+        <div class="section-card"><div class="section-title"><i class="fas fa-certificate"></i> Certifications</div><div id="certsListEditor"></div><button id="addCertBtn" class="btn-primary" style="width:100%;">+ Add Certification</button></div>
 
         <!-- Core Skills -->
-        <div class="section-card">
-            <div class="section-title"><i class="fas fa-code-branch"></i> Core Skills</div>
-            <div id="coreSkillsContainer" style="margin-bottom: 10px;"></div>
-            <div class="add-input-group">
-                <input type="text" id="newCoreSkillInput" placeholder="e.g., Product Strategy">
-                <button id="addCoreSkillBtn" class="small-btn">+ Add</button>
-            </div>
-        </div>
+        <div class="section-card"><div class="section-title"><i class="fas fa-code-branch"></i> Core Skills</div><div id="coreSkillsContainer" style="margin-bottom:10px;"></div><div class="add-input-group"><input type="text" id="newCoreSkillInput" placeholder="e.g., Product Roadmapping"><button id="addCoreSkillBtn" class="small-btn">+ Add</button></div></div>
 
         <!-- Supportive Skills -->
-        <div class="section-card">
-            <div class="section-title"><i class="fas fa-hand-sparkles"></i> Supportive Skills</div>
-            <div id="supportiveSkillsContainer" style="margin-bottom: 10px;"></div>
-            <div class="add-input-group">
-                <input type="text" id="newSupportiveSkillInput" placeholder="e.g., Stakeholder management">
-                <button id="addSupportiveSkillBtn" class="small-btn">+ Add</button>
-            </div>
-        </div>
+        <div class="section-card"><div class="section-title"><i class="fas fa-hand-sparkles"></i> Supportive Skills</div><div id="supportiveSkillsContainer" style="margin-bottom:10px;"></div><div class="add-input-group"><input type="text" id="newSupportiveSkillInput" placeholder="e.g., Stakeholder alignment"><button id="addSupportiveSkillBtn" class="small-btn">+ Add</button></div></div>
 
         <!-- Tools -->
-        <div class="section-card">
-            <div class="section-title"><i class="fas fa-tools"></i> Tools Expertise</div>
-            <div id="toolsContainer" style="margin-bottom: 10px;"></div>
-            <div class="add-input-group">
-                <input type="text" id="newToolInput" placeholder="e.g., Jira, Figma">
-                <button id="addToolBtn" class="small-btn">+ Add</button>
-            </div>
-        </div>
+        <div class="section-card"><div class="section-title"><i class="fas fa-tools"></i> Tools Expertise</div><div id="toolsContainer" style="margin-bottom:10px;"></div><div class="add-input-group"><input type="text" id="newToolInput" placeholder="e.g., Jira, SQL"><button id="addToolBtn" class="small-btn">+ Add</button></div></div>
 
         <!-- Projects -->
-        <div class="section-card">
-            <div class="section-title"><i class="fas fa-project-diagram"></i> Product & Case Studies</div>
-            <div id="projectsListEditor"></div>
-            <button id="addProjectBtn" class="btn-primary" style="width:100%;"><i class="fas fa-plus-circle"></i> Add Project / Case Study</button>
-        </div>
+        <div class="section-card"><div class="section-title"><i class="fas fa-project-diagram"></i> Product & Case Studies</div><div id="projectsListEditor"></div><button id="addProjectBtn" class="btn-primary" style="width:100%;">+ Add Project</button></div>
 
         <!-- Experience -->
-        <div class="section-card">
-            <div class="section-title"><i class="fas fa-briefcase"></i> Professional Experience</div>
-            <div id="experienceListEditor"></div>
-            <button id="addExperienceBtn" class="btn-primary" style="width:100%;"><i class="fas fa-plus-circle"></i> Add Experience</button>
-        </div>
+        <div class="section-card"><div class="section-title"><i class="fas fa-briefcase"></i> Professional Experience</div><div id="experienceListEditor"></div><button id="addExperienceBtn" class="btn-primary" style="width:100%;">+ Add Experience</button></div>
 
-        <button id="downloadPDFBtn" class="btn-primary btn-download"><i class="fas fa-file-pdf"></i> Download as Professional PDF</button>
+        <button id="downloadPDFBtn" class="btn-primary btn-download"><i class="fas fa-file-pdf"></i> Download PDF</button>
     </div>
-
-    <div class="preview-panel">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-            <h3><i class="fas fa-eye"></i> Live Resume Preview</h3>
-            <span style="font-size: 0.7rem; background:#eef2f5; padding: 4px 10px; border-radius: 20px;">export ready</span>
-        </div>
-        <div id="resumePreview" class="resume-preview"></div>
-    </div>
+    <div class="preview-panel"><h3><i class="fas fa-eye"></i> Live Preview</h3><div id="resumePreview" class="resume-preview"></div></div>
 </div>
 
 <script>
-    // -------------------- STATE --------------------
-    let state = {
+    // ---------- DEFAULT STATE (used if no saved data) ----------
+    const defaultState = {
         name: "Jordan M. Chen",
-        contact: {
-            email: "jordan.chen@example.com",
-            mobile: "+1 (555) 789-1234",
-            address: "San Francisco, CA",
-            website: "https://jordanpmportfolio.com",
-            linkedin: "https://linkedin.com/in/jordan-chen-pm"
-        },
-        profile: "Strategic Product Manager with proven track record in data-driven roadmap execution, cross-functional leadership, and launching 0→1 products. Passionate about AI-driven solutions and user-centric design.",
+        contact: { email: "jordan.chen@example.com", mobile: "+1 (555) 789-1234", address: "San Francisco, CA", website: "https://jordanpmportfolio.com", linkedin: "https://linkedin.com/in/jordan-chen-pm" },
+        profile: "Strategic Product Manager with proven track record in data-driven roadmap execution, cross-functional leadership, and launching 0→1 products.",
         degrees: [
-            { institute: "UC Berkeley, Haas School of Business", degreeName: "MBA, Product Leadership", startYear: "2021", endYear: "2023", cgpa: "3.9/4.0" },
+            { institute: "UC Berkeley, Haas", degreeName: "MBA, Product Leadership", startYear: "2021", endYear: "2023", cgpa: "3.9/4.0" },
             { institute: "University of Washington", degreeName: "B.S. Information Systems", startYear: "2015", endYear: "2019", cgpa: "3.7/4.0" }
         ],
         certifications: [
-            { name: "Certified Scrum Product Owner (CSPO)", issuer: "Scrum Alliance", year: "2022" },
-            { name: "PMP Certification", issuer: "PMI", year: "2023" },
-            { name: "AI Product Management", issuer: "Stanford Online", year: "2024" }
+            { name: "CSPO", issuer: "Scrum Alliance", year: "2022" },
+            { name: "PMP", issuer: "PMI", year: "2023" }
         ],
         coreSkills: ["Product Roadmapping", "User Research", "Data Analytics", "Go-to-Market Strategy"],
-        supportiveSkills: ["Agile Leadership", "Cross-functional Collaboration", "Storytelling", "Negotiation"],
-        toolsExpertise: ["Jira", "Figma", "Amplitude", "Notion", "SQL"],
+        supportiveSkills: ["Agile Leadership", "Cross-functional Collaboration", "Storytelling"],
+        toolsExpertise: ["Jira", "Figma", "SQL", "Python"],
         projects: [
-            { title: "AI-driven Analytics Platform", description: "Led product discovery & MVP launch resulting in 35% increase in user engagement. Conducted 20+ customer interviews." },
-            { title: "Omni-channel CRM Redesign", description: "Case study: Revamped legacy CRM, improved retention by 28% within 6 months. Prioritized features via RICE scoring." }
+            { title: "AI-driven Analytics Platform", description: "Led MVP launch resulting in 35% engagement increase." },
+            { title: "Omni-channel CRM Redesign", description: "Improved retention by 28% via RICE prioritization." }
         ],
         experiences: [
-            { title: "Senior Product Manager", company: "Nexify Tech", period: "2022 – Present", description: "Own product lifecycle for AI analytics suite; increased ARR by $2.4M." },
-            { title: "Associate Product Manager", company: "GrowthLabs", period: "2020 – 2022", description: "Managed cross-functional teams, led user story mapping and sprint planning." }
+            { title: "Senior Product Manager", company: "Nexify Tech", period: "2022–Present", description: "Own product lifecycle; increased ARR by $2.4M." }
         ]
     };
 
+    let state = JSON.parse(JSON.stringify(defaultState));
+
+    // ---------- localStorage Helpers ----------
+    function saveStateToLocalStorage() {
+        localStorage.setItem("resumeBuilderState", JSON.stringify(state));
+    }
+
+    function loadStateFromLocalStorage() {
+        const saved = localStorage.getItem("resumeBuilderState");
+        if (saved) {
+            try {
+                state = JSON.parse(saved);
+                console.log("Loaded saved data");
+            } catch(e) { console.warn("Failed to parse saved state"); }
+        } else {
+            state = JSON.parse(JSON.stringify(defaultState));
+        }
+        renderAll();
+    }
+
+    // ---------- Helper: escapeHtml ----------
     function escapeHtml(str) { if(!str) return ''; return str.replace(/[&<>]/g, function(m){if(m==='&') return '&amp;'; if(m==='<') return '&lt;'; if(m==='>') return '&gt;'; return m;}); }
 
+    // ---------- Sync inputs to state and auto-save ----------
     function syncContactFromInputs() {
         state.contact.email = document.getElementById("contactEmail").value;
         state.contact.mobile = document.getElementById("contactMobile").value;
@@ -372,14 +156,16 @@
         state.contact.website = document.getElementById("contactWebsite").value;
         state.contact.linkedin = document.getElementById("contactLinkedin").value;
         renderPreview();
+        saveStateToLocalStorage();
     }
-
     function syncNameProfile() {
         state.name = document.getElementById("nameInput").value;
         state.profile = document.getElementById("profileInput").value;
         renderPreview();
+        saveStateToLocalStorage();
     }
 
+    // ---------- Render all editors + preview, then save ----------
     function renderAll() {
         renderDegreesEditor();
         renderCertsEditor();
@@ -394,6 +180,7 @@
         document.getElementById("nameInput").value = state.name;
         document.getElementById("profileInput").value = state.profile;
         renderPreview();
+        saveStateToLocalStorage();
     }
 
     // Degrees editor
@@ -405,17 +192,10 @@
             const div = document.createElement("div");
             div.className = "dynamic-item";
             div.innerHTML = `
-                <div class="dynamic-header">
-                    <strong>🎓 ${escapeHtml(deg.degreeName || 'Degree')}</strong>
-                    <button class="remove-btn" data-action="removeDegree" data-idx="${idx}"><i class="fas fa-trash-alt"></i> Remove</button>
-                </div>
-                <div class="field-group"><label>Degree / Program Name</label><input type="text" class="deg-name-field" data-idx="${idx}" value="${escapeHtml(deg.degreeName)}" placeholder="e.g., MBA"></div>
-                <div class="field-group"><label>Institute / University</label><input type="text" class="deg-institute-field" data-idx="${idx}" value="${escapeHtml(deg.institute)}" placeholder="University name"></div>
-                <div style="display:flex; gap:10px; flex-wrap:wrap;">
-                    <div style="flex:1"><label>Start Year</label><input type="text" class="deg-start-field" data-idx="${idx}" value="${escapeHtml(deg.startYear)}" placeholder="2020"></div>
-                    <div style="flex:1"><label>End Year / Present</label><input type="text" class="deg-end-field" data-idx="${idx}" value="${escapeHtml(deg.endYear)}" placeholder="2024 or Present"></div>
-                    <div style="flex:1"><label>CGPA / Grade</label><input type="text" class="deg-cgpa-field" data-idx="${idx}" value="${escapeHtml(deg.cgpa)}" placeholder="3.8/4.0"></div>
-                </div>
+                <div class="dynamic-header"><strong>🎓 ${escapeHtml(deg.degreeName || 'Degree')}</strong><button class="remove-btn" data-action="removeDegree" data-idx="${idx}"><i class="fas fa-trash-alt"></i> Remove</button></div>
+                <div class="field-group"><label>Degree Name</label><input type="text" class="deg-name-field" data-idx="${idx}" value="${escapeHtml(deg.degreeName)}"></div>
+                <div class="field-group"><label>Institute</label><input type="text" class="deg-institute-field" data-idx="${idx}" value="${escapeHtml(deg.institute)}"></div>
+                <div style="display:flex; gap:10px; flex-wrap:wrap;"><div style="flex:1"><label>Start Year</label><input type="text" class="deg-start-field" data-idx="${idx}" value="${escapeHtml(deg.startYear)}"></div><div style="flex:1"><label>End Year</label><input type="text" class="deg-end-field" data-idx="${idx}" value="${escapeHtml(deg.endYear)}"></div><div style="flex:1"><label>CGPA</label><input type="text" class="deg-cgpa-field" data-idx="${idx}" value="${escapeHtml(deg.cgpa)}"></div></div>
             `;
             container.appendChild(div);
         });
@@ -427,12 +207,12 @@
     function handleDegreeInput(e) {
         const idx = parseInt(e.target.dataset.idx);
         if (isNaN(idx)) return;
-        const map = { "deg-name-field":"degreeName", "deg-institute-field":"institute", "deg-start-field":"startYear", "deg-end-field":"endYear", "deg-cgpa-field":"cgpa" };
+        const map = { "deg-name-field":"degreeName","deg-institute-field":"institute","deg-start-field":"startYear","deg-end-field":"endYear","deg-cgpa-field":"cgpa"};
         const field = map[e.target.className];
-        if (field && state.degrees[idx]) { state.degrees[idx][field] = e.target.value; renderPreview(); }
+        if (field && state.degrees[idx]) { state.degrees[idx][field] = e.target.value; renderPreview(); saveStateToLocalStorage(); }
     }
 
-    // Certs editor
+    // Certifications editor
     function renderCertsEditor() {
         const container = document.getElementById("certsListEditor");
         if (!container) return;
@@ -441,13 +221,10 @@
             const div = document.createElement("div");
             div.className = "dynamic-item";
             div.innerHTML = `
-                <div class="dynamic-header">
-                    <strong>📜 ${escapeHtml(cert.name || 'Certification')}</strong>
-                    <button class="remove-btn" data-action="removeCert" data-idx="${idx}"><i class="fas fa-trash-alt"></i> Remove</button>
-                </div>
-                <div class="field-group"><label>Certification Name</label><input type="text" class="cert-name-field" data-idx="${idx}" value="${escapeHtml(cert.name)}" placeholder="e.g., CSPO"></div>
-                <div class="field-group"><label>Issuing Institute / Platform</label><input type="text" class="cert-issuer-field" data-idx="${idx}" value="${escapeHtml(cert.issuer)}" placeholder="Scrum Alliance"></div>
-                <div class="field-group"><label>Year Earned</label><input type="text" class="cert-year-field" data-idx="${idx}" value="${escapeHtml(cert.year)}" placeholder="2023"></div>
+                <div class="dynamic-header"><strong>📜 ${escapeHtml(cert.name || 'Cert')}</strong><button class="remove-btn" data-action="removeCert" data-idx="${idx}"><i class="fas fa-trash-alt"></i> Remove</button></div>
+                <div class="field-group"><label>Certification Name</label><input type="text" class="cert-name-field" data-idx="${idx}" value="${escapeHtml(cert.name)}"></div>
+                <div class="field-group"><label>Issuer</label><input type="text" class="cert-issuer-field" data-idx="${idx}" value="${escapeHtml(cert.issuer)}"></div>
+                <div class="field-group"><label>Year</label><input type="text" class="cert-year-field" data-idx="${idx}" value="${escapeHtml(cert.year)}"></div>
             `;
             container.appendChild(div);
         });
@@ -459,9 +236,9 @@
     function handleCertInput(e) {
         const idx = parseInt(e.target.dataset.idx);
         if (isNaN(idx)) return;
-        const map = { "cert-name-field":"name", "cert-issuer-field":"issuer", "cert-year-field":"year" };
+        const map = { "cert-name-field":"name","cert-issuer-field":"issuer","cert-year-field":"year"};
         const field = map[e.target.className];
-        if (field && state.certifications[idx]) { state.certifications[idx][field] = e.target.value; renderPreview(); }
+        if (field && state.certifications[idx]) { state.certifications[idx][field] = e.target.value; renderPreview(); saveStateToLocalStorage(); }
     }
 
     function renderSkillsAndTools() {
@@ -482,18 +259,13 @@
         state.projects.forEach((proj, idx) => {
             const div = document.createElement("div");
             div.className = "dynamic-item";
-            div.innerHTML = `
-                <div class="dynamic-header">
-                    <strong>📌 ${escapeHtml(proj.title)}</strong>
-                    <button class="remove-btn" data-action="removeProject" data-idx="${idx}"><i class="fas fa-trash-alt"></i> Remove</button>
-                </div>
-                <div class="field-group"><label>Project Title</label><input type="text" class="project-title-field" data-idx="${idx}" value="${escapeHtml(proj.title)}"></div>
-                <div class="field-group"><label>Description</label><textarea class="project-desc-field" data-idx="${idx}" rows="2">${escapeHtml(proj.description)}</textarea></div>
-            `;
+            div.innerHTML = `<div class="dynamic-header"><strong>📌 ${escapeHtml(proj.title)}</strong><button class="remove-btn" data-action="removeProject" data-idx="${idx}"><i class="fas fa-trash-alt"></i> Remove</button></div>
+                <div class="field-group"><label>Title</label><input type="text" class="project-title-field" data-idx="${idx}" value="${escapeHtml(proj.title)}"></div>
+                <div class="field-group"><label>Description</label><textarea class="project-desc-field" data-idx="${idx}" rows="2">${escapeHtml(proj.description)}</textarea></div>`;
             container.appendChild(div);
         });
-        document.querySelectorAll(".project-title-field").forEach(inp => inp.addEventListener("input", e => { let i = parseInt(e.target.dataset.idx); if(state.projects[i]) state.projects[i].title = e.target.value; renderPreview(); }));
-        document.querySelectorAll(".project-desc-field").forEach(ta => ta.addEventListener("input", e => { let i = parseInt(e.target.dataset.idx); if(state.projects[i]) state.projects[i].description = e.target.value; renderPreview(); }));
+        document.querySelectorAll(".project-title-field").forEach(inp => inp.addEventListener("input", e => { let i = parseInt(e.target.dataset.idx); if(state.projects[i]) state.projects[i].title = e.target.value; renderPreview(); saveStateToLocalStorage(); }));
+        document.querySelectorAll(".project-desc-field").forEach(ta => ta.addEventListener("input", e => { let i = parseInt(e.target.dataset.idx); if(state.projects[i]) state.projects[i].description = e.target.value; renderPreview(); saveStateToLocalStorage(); }));
     }
 
     function renderExperienceEditor() {
@@ -503,57 +275,34 @@
         state.experiences.forEach((exp, idx) => {
             const div = document.createElement("div");
             div.className = "dynamic-item";
-            div.innerHTML = `
-                <div class="dynamic-header">
-                    <strong>💼 ${escapeHtml(exp.title)}</strong>
-                    <button class="remove-btn" data-action="removeExp" data-idx="${idx}"><i class="fas fa-trash-alt"></i> Remove</button>
-                </div>
-                <div class="field-group"><label>Job Title</label><input type="text" class="exp-title-field" data-idx="${idx}" value="${escapeHtml(exp.title)}"></div>
-                <div class="field-group"><label>Company</label><input type="text" class="exp-company-field" data-idx="${idx}" value="${escapeHtml(exp.company)}"></div>
-                <div class="field-group"><label>Period</label><input type="text" class="exp-period-field" data-idx="${idx}" value="${escapeHtml(exp.period)}"></div>
-                <div class="field-group"><label>Description</label><textarea class="exp-desc-field" data-idx="${idx}" rows="2">${escapeHtml(exp.description)}</textarea></div>
-            `;
+            div.innerHTML = `<div class="dynamic-header"><strong>💼 ${escapeHtml(exp.title)}</strong><button class="remove-btn" data-action="removeExp" data-idx="${idx}"><i class="fas fa-trash-alt"></i> Remove</button></div>
+                <div class="field-group"><label>Title</label><input class="exp-title-field" data-idx="${idx}" value="${escapeHtml(exp.title)}"></div>
+                <div class="field-group"><label>Company</label><input class="exp-company-field" data-idx="${idx}" value="${escapeHtml(exp.company)}"></div>
+                <div class="field-group"><label>Period</label><input class="exp-period-field" data-idx="${idx}" value="${escapeHtml(exp.period)}"></div>
+                <div class="field-group"><label>Description</label><textarea class="exp-desc-field" rows="2" data-idx="${idx}">${escapeHtml(exp.description)}</textarea></div>`;
             container.appendChild(div);
         });
-        document.querySelectorAll(".exp-title-field").forEach(inp => inp.addEventListener("input", e => { let i = parseInt(e.target.dataset.idx); if(state.experiences[i]) state.experiences[i].title = e.target.value; renderPreview(); }));
-        document.querySelectorAll(".exp-company-field").forEach(inp => inp.addEventListener("input", e => { let i = parseInt(e.target.dataset.idx); if(state.experiences[i]) state.experiences[i].company = e.target.value; renderPreview(); }));
-        document.querySelectorAll(".exp-period-field").forEach(inp => inp.addEventListener("input", e => { let i = parseInt(e.target.dataset.idx); if(state.experiences[i]) state.experiences[i].period = e.target.value; renderPreview(); }));
-        document.querySelectorAll(".exp-desc-field").forEach(ta => ta.addEventListener("input", e => { let i = parseInt(e.target.dataset.idx); if(state.experiences[i]) state.experiences[i].description = e.target.value; renderPreview(); }));
+        document.querySelectorAll(".exp-title-field").forEach(inp => inp.addEventListener("input", e => { let i = parseInt(e.target.dataset.idx); if(state.experiences[i]) state.experiences[i].title = e.target.value; renderPreview(); saveStateToLocalStorage(); }));
+        document.querySelectorAll(".exp-company-field").forEach(inp => inp.addEventListener("input", e => { let i = parseInt(e.target.dataset.idx); if(state.experiences[i]) state.experiences[i].company = e.target.value; renderPreview(); saveStateToLocalStorage(); }));
+        document.querySelectorAll(".exp-period-field").forEach(inp => inp.addEventListener("input", e => { let i = parseInt(e.target.dataset.idx); if(state.experiences[i]) state.experiences[i].period = e.target.value; renderPreview(); saveStateToLocalStorage(); }));
+        document.querySelectorAll(".exp-desc-field").forEach(ta => ta.addEventListener("input", e => { let i = parseInt(e.target.dataset.idx); if(state.experiences[i]) state.experiences[i].description = e.target.value; renderPreview(); saveStateToLocalStorage(); }));
     }
 
     function renderPreview() {
         const previewDiv = document.getElementById("resumePreview");
         const c = state.contact;
-        const contactHtml = `
-            <div class="preview-contact">
-                ${c.email ? `<div class="preview-contact-item"><i class="fas fa-envelope"></i> ${escapeHtml(c.email)}</div>` : ''}
-                ${c.mobile ? `<div class="preview-contact-item"><i class="fas fa-phone-alt"></i> ${escapeHtml(c.mobile)}</div>` : ''}
-                ${c.address ? `<div class="preview-contact-item"><i class="fas fa-map-marker-alt"></i> ${escapeHtml(c.address)}</div>` : ''}
-                ${c.website ? `<div class="preview-contact-item"><i class="fas fa-globe"></i> <a href="${escapeHtml(c.website)}" target="_blank">${escapeHtml(c.website)}</a></div>` : ''}
-                ${c.linkedin ? `<div class="preview-contact-item"><i class="fab fa-linkedin"></i> <a href="${escapeHtml(c.linkedin)}" target="_blank">${escapeHtml(c.linkedin)}</a></div>` : ''}
-            </div>
-        `;
-        const degreesHtml = state.degrees.map(d => `<div class="degree-card"><div class="degree-title">${escapeHtml(d.degreeName)}</div><div class="degree-meta">${escapeHtml(d.institute)} | ${escapeHtml(d.startYear)} – ${escapeHtml(d.endYear)} | CGPA: ${escapeHtml(d.cgpa)}</div></div>`).join('');
-        const certsHtml = state.certifications.map(cert => `<div class="cert-card"><div class="cert-title">${escapeHtml(cert.name)}</div><div class="cert-meta">${escapeHtml(cert.issuer)}${cert.year ? ` · ${cert.year}` : ''}</div></div>`).join('');
+        const contactHtml = `<div class="preview-contact">${c.email?`<div class="preview-contact-item"><i class="fas fa-envelope"></i> ${escapeHtml(c.email)}</div>`:''}${c.mobile?`<div class="preview-contact-item"><i class="fas fa-phone-alt"></i> ${escapeHtml(c.mobile)}</div>`:''}${c.address?`<div class="preview-contact-item"><i class="fas fa-map-marker-alt"></i> ${escapeHtml(c.address)}</div>`:''}${c.website?`<div class="preview-contact-item"><i class="fas fa-globe"></i> <a href="${escapeHtml(c.website)}" target="_blank">${escapeHtml(c.website)}</a></div>`:''}${c.linkedin?`<div class="preview-contact-item"><i class="fab fa-linkedin"></i> <a href="${escapeHtml(c.linkedin)}" target="_blank">${escapeHtml(c.linkedin)}</a></div>`:''}</div>`;
+        const degreesHtml = state.degrees.map(d => `<div class="degree-card"><div class="degree-title">${escapeHtml(d.degreeName)}</div><div class="degree-meta">${escapeHtml(d.institute)} | ${escapeHtml(d.startYear)}–${escapeHtml(d.endYear)} | CGPA: ${escapeHtml(d.cgpa)}</div></div>`).join('');
+        const certsHtml = state.certifications.map(cert => `<div class="cert-card"><div class="cert-title">${escapeHtml(cert.name)}</div><div class="cert-meta">${escapeHtml(cert.issuer)}${cert.year?` · ${cert.year}`:''}</div></div>`).join('');
         const coreHtml = state.coreSkills.map(s => `<span class="skill-tag">${escapeHtml(s)}</span>`).join('');
         const supportiveHtml = state.supportiveSkills.map(s => `<span class="skill-tag">${escapeHtml(s)}</span>`).join('');
         const toolsHtml = state.toolsExpertise.map(t => `<span class="skill-tag">${escapeHtml(t)}</span>`).join('');
-        const projectsHtml = state.projects.map(p => `<div class="project-item"><div class="project-title">📌 ${escapeHtml(p.title)}</div><div class="project-desc" style="font-size:0.85rem;">${escapeHtml(p.description)}</div></div>`).join('');
-        const expHtml = state.experiences.map(e => `<div class="exp-item"><div class="exp-title">💼 ${escapeHtml(e.title)} · ${escapeHtml(e.company)}</div><div class="exp-meta" style="font-size:0.75rem; color:#5f7f95;">${escapeHtml(e.period)}</div><div class="exp-desc" style="font-size:0.85rem;">${escapeHtml(e.description)}</div></div>`).join('');
-        previewDiv.innerHTML = `
-            <div class="preview-name">${escapeHtml(state.name)}</div>
-            ${contactHtml}
-            <div class="preview-profile">${escapeHtml(state.profile)}</div>
-            <div class="preview-section"><h3> Education</h3>${degreesHtml || '<div>—</div>'}</div>
-            <div class="preview-section"><h3> Certifications</h3>${certsHtml || '<div>—</div>'}</div>
-            <div class="preview-section"><h3> Core Skills</h3><div>${coreHtml || '—'}</div></div>
-            <div class="preview-section"><h3> Supportive Skills</h3><div>${supportiveHtml || '—'}</div></div>
-            <div class="preview-section"><h3> Tools Expertise</h3><div>${toolsHtml || '—'}</div></div>
-            <div class="preview-section"><h3> Product & Case Studies</h3>${projectsHtml || '<div>—</div>'}</div>
-            <div class="preview-section"><h3> Experience</h3>${expHtml || '<div>—</div>'}</div>
-        `;
+        const projectsHtml = state.projects.map(p => `<div class="project-item"><div class="project-title">📌 ${escapeHtml(p.title)}</div><div class="project-desc">${escapeHtml(p.description)}</div></div>`).join('');
+        const expHtml = state.experiences.map(e => `<div class="exp-item"><div class="exp-title">💼 ${escapeHtml(e.title)} · ${escapeHtml(e.company)}</div><div class="exp-meta" style="font-size:0.75rem;">${escapeHtml(e.period)}</div><div class="exp-desc">${escapeHtml(e.description)}</div></div>`).join('');
+        previewDiv.innerHTML = `<div class="preview-name">${escapeHtml(state.name)}</div>${contactHtml}<div class="preview-profile">${escapeHtml(state.profile)}</div><div class="preview-section"><h3>🎓 Education</h3>${degreesHtml}</div><div class="preview-section"><h3>📜 Certifications</h3>${certsHtml}</div><div class="preview-section"><h3>⚙️ Core Skills</h3>${coreHtml}</div><div class="preview-section"><h3>🤝 Supportive Skills</h3>${supportiveHtml}</div><div class="preview-section"><h3>🛠️ Tools</h3>${toolsHtml}</div><div class="preview-section"><h3>📘 Case Studies</h3>${projectsHtml}</div><div class="preview-section"><h3>💼 Experience</h3>${expHtml}</div>`;
     }
 
+    // Global event delegation for remove buttons and chip removal
     function setupGlobalDelegation() {
         document.querySelector(".editor-panel").addEventListener("click", (e) => {
             const btn = e.target.closest(".remove-btn");
@@ -586,48 +335,24 @@
         document.getElementById("addCoreSkillBtn").onclick = () => { const val = document.getElementById("newCoreSkillInput").value.trim(); if(val){ state.coreSkills.push(val); document.getElementById("newCoreSkillInput").value = ""; renderAll(); } };
         document.getElementById("addSupportiveSkillBtn").onclick = () => { const val = document.getElementById("newSupportiveSkillInput").value.trim(); if(val){ state.supportiveSkills.push(val); document.getElementById("newSupportiveSkillInput").value = ""; renderAll(); } };
         document.getElementById("addToolBtn").onclick = () => { const val = document.getElementById("newToolInput").value.trim(); if(val){ state.toolsExpertise.push(val); document.getElementById("newToolInput").value = ""; renderAll(); } };
-        document.getElementById("addProjectBtn").onclick = () => { state.projects.push({ title: "New Product Case", description: "Describe problem, solution, outcome." }); renderAll(); };
-        document.getElementById("addExperienceBtn").onclick = () => { state.experiences.push({ title: "Product Manager", company: "Company Name", period: "2024 – Present", description: "Key accomplishments." }); renderAll(); };
+        document.getElementById("addProjectBtn").onclick = () => { state.projects.push({ title: "New Case Study", description: "Describe problem & solution." }); renderAll(); };
+        document.getElementById("addExperienceBtn").onclick = () => { state.experiences.push({ title: "Product Manager", company: "Company", period: "2024–Present", description: "Key achievements." }); renderAll(); };
 
-        // Reset with password protection
+        // Password protected demo reset
         document.getElementById("resetDemoBtn").onclick = () => {
-            const code = prompt("Enter demo load code to reset all fields to demo data:", "");
+            const code = prompt("Enter code 5578 to load demo data (this will overwrite your current data):", "");
             if (code === "5578") {
-                state = {
-                    name: "Jordan M. Chen",
-                    contact: { email: "jordan.chen@example.com", mobile: "+1 (555) 789-1234", address: "San Francisco, CA", website: "https://jordanpmportfolio.com", linkedin: "https://linkedin.com/in/jordan-chen-pm" },
-                    profile: "Strategic Product Manager with proven track record in data-driven roadmap execution, cross-functional leadership, and launching 0→1 products. Passionate about AI-driven solutions and user-centric design.",
-                    degrees: [
-                        { institute: "UC Berkeley, Haas School of Business", degreeName: "MBA, Product Leadership", startYear: "2021", endYear: "2023", cgpa: "3.9/4.0" },
-                        { institute: "University of Washington", degreeName: "B.S. Information Systems", startYear: "2015", endYear: "2019", cgpa: "3.7/4.0" }
-                    ],
-                    certifications: [
-                        { name: "Certified Scrum Product Owner (CSPO)", issuer: "Scrum Alliance", year: "2022" },
-                        { name: "PMP Certification", issuer: "PMI", year: "2023" },
-                        { name: "AI Product Management", issuer: "Stanford Online", year: "2024" }
-                    ],
-                    coreSkills: ["Product Roadmapping", "User Research", "Data Analytics", "Go-to-Market Strategy"],
-                    supportiveSkills: ["Agile Leadership", "Cross-functional Collaboration", "Storytelling", "Negotiation"],
-                    toolsExpertise: ["Jira", "Figma", "Amplitude", "Notion", "SQL"],
-                    projects: [
-                        { title: "AI-driven Analytics Platform", description: "Led product discovery & MVP launch resulting in 35% increase in user engagement. Conducted 20+ customer interviews." },
-                        { title: "Omni-channel CRM Redesign", description: "Case study: Revamped legacy CRM, improved retention by 28% within 6 months. Prioritized features via RICE scoring." }
-                    ],
-                    experiences: [
-                        { title: "Senior Product Manager", company: "Nexify Tech", period: "2022 – Present", description: "Own product lifecycle for AI analytics suite; increased ARR by $2.4M." },
-                        { title: "Associate Product Manager", company: "GrowthLabs", period: "2020 – 2022", description: "Managed cross-functional teams, led user story mapping and sprint planning." }
-                    ]
-                };
+                state = JSON.parse(JSON.stringify(defaultState));
                 renderAll();
-                alert("Demo data loaded successfully.");
+                alert("Demo data loaded. Your previous data has been replaced.");
             } else if (code !== null) {
-                alert("Incorrect code. Demo data not loaded. Your current data remains unchanged.");
+                alert("Incorrect code. Your data remains unchanged.");
             }
         };
 
         document.getElementById("downloadPDFBtn").onclick = () => {
             const element = document.getElementById("resumePreview");
-            html2pdf().set({ margin: [0.5,0.5,0.5,0.5], filename: 'Product_Resume.pdf', image: { type: 'jpeg', quality: 0.98 }, html2canvas: { scale: 2 }, jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' } }).from(element).save();
+            html2pdf().set({ margin: [0.5,0.5,0.5,0.5], filename: 'Resume.pdf', image: { type: 'jpeg', quality: 0.98 }, html2canvas: { scale: 2 }, jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' } }).from(element).save();
         };
         document.getElementById("nameInput").addEventListener("input", syncNameProfile);
         document.getElementById("profileInput").addEventListener("input", syncNameProfile);
@@ -638,10 +363,11 @@
         document.getElementById("contactLinkedin").addEventListener("input", syncContactFromInputs);
     }
 
+    // Initialize
     function init() {
+        loadStateFromLocalStorage();  // loads saved data or default
         setupGlobalDelegation();
         bindAddButtons();
-        renderAll();
     }
     init();
 </script>
