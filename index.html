@@ -72,7 +72,7 @@
             margin-bottom: 5px;
             color: #2c4e6e;
         }
-        input, textarea, select {
+        input, textarea {
             width: 100%;
             padding: 10px 14px;
             border-radius: 14px;
@@ -163,6 +163,27 @@
             margin-bottom: 8px;
             color: #143b4b;
         }
+        .preview-contact {
+            background: #f8fafc;
+            padding: 12px 16px;
+            border-radius: 20px;
+            margin: 12px 0 16px 0;
+            font-size: 0.8rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px 20px;
+            border: 1px solid #e2edf2;
+        }
+        .preview-contact-item {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: #2c5a74;
+        }
+        .preview-contact-item i {
+            width: 18px;
+            color: #2b7a62;
+        }
         .preview-profile {
             background: #f0f6fa;
             padding: 14px 18px;
@@ -211,10 +232,23 @@
         </div>
         <p style="font-size: 0.8rem; margin-bottom: 20px;">All sections editable — live preview + PDF export (data never vanishes)</p>
 
+        <!-- Name -->
         <div class="section-card">
             <div class="section-title"><i class="fas fa-user"></i> Full Name</div>
             <input type="text" id="nameInput" placeholder="Full name">
         </div>
+
+        <!-- Contact Info (new section) -->
+        <div class="section-card">
+            <div class="section-title"><i class="fas fa-address-book"></i> Contact Information</div>
+            <div class="field-group"><label>Email (Gmail)</label><input type="email" id="contactEmail" placeholder="yourname@gmail.com"></div>
+            <div class="field-group"><label>Mobile Number</label><input type="text" id="contactMobile" placeholder="+1 234 567 8900"></div>
+            <div class="field-group"><label>Address</label><input type="text" id="contactAddress" placeholder="City, State, Country"></div>
+            <div class="field-group"><label>Profile Website</label><input type="text" id="contactWebsite" placeholder="https://yourportfolio.com"></div>
+            <div class="field-group"><label>LinkedIn Link</label><input type="text" id="contactLinkedin" placeholder="https://linkedin.com/in/yourprofile"></div>
+        </div>
+
+        <!-- Profile -->
         <div class="section-card">
             <div class="section-title"><i class="fas fa-address-card"></i> Professional Profile</div>
             <textarea id="profileInput" rows="3" placeholder="Short bio / summary"></textarea>
@@ -291,9 +325,16 @@
 </div>
 
 <script>
-    // -------------------- INITIAL STATE --------------------
+    // -------------------- STATE WITH CONTACT INFO --------------------
     let state = {
         name: "Jordan M. Chen",
+        contact: {
+            email: "jordan.chen@example.com",
+            mobile: "+1 (555) 789-1234",
+            address: "San Francisco, CA",
+            website: "https://jordanpmportfolio.com",
+            linkedin: "https://linkedin.com/in/jordan-chen-pm"
+        },
         profile: "Strategic Product Manager with proven track record in data-driven roadmap execution, cross-functional leadership, and launching 0→1 products. Passionate about AI-driven solutions and user-centric design.",
         degrees: [
             { institute: "UC Berkeley, Haas School of Business", degreeName: "MBA, Product Leadership", startYear: "2021", endYear: "2023", cgpa: "3.9/4.0" },
@@ -317,23 +358,43 @@
         ]
     };
 
-    // Helper: escape HTML
     function escapeHtml(str) { if(!str) return ''; return str.replace(/[&<>]/g, function(m){if(m==='&') return '&amp;'; if(m==='<') return '&lt;'; if(m==='>') return '&gt;'; return m;}); }
 
-    // ---------- RENDER ALL ----------
+    // Sync contact inputs to state
+    function syncContactFromInputs() {
+        state.contact.email = document.getElementById("contactEmail").value;
+        state.contact.mobile = document.getElementById("contactMobile").value;
+        state.contact.address = document.getElementById("contactAddress").value;
+        state.contact.website = document.getElementById("contactWebsite").value;
+        state.contact.linkedin = document.getElementById("contactLinkedin").value;
+        renderPreview();
+    }
+
+    function syncNameProfile() {
+        state.name = document.getElementById("nameInput").value;
+        state.profile = document.getElementById("profileInput").value;
+        renderPreview();
+    }
+
+    // Render all dynamic editors
     function renderAll() {
         renderDegreesEditor();
         renderCertsEditor();
         renderSkillsAndTools();
         renderProjectsEditor();
         renderExperienceEditor();
-        renderPreview();
-        // sync input fields
+        // contact fields sync from state to inputs
+        document.getElementById("contactEmail").value = state.contact.email || "";
+        document.getElementById("contactMobile").value = state.contact.mobile || "";
+        document.getElementById("contactAddress").value = state.contact.address || "";
+        document.getElementById("contactWebsite").value = state.contact.website || "";
+        document.getElementById("contactLinkedin").value = state.contact.linkedin || "";
         document.getElementById("nameInput").value = state.name;
         document.getElementById("profileInput").value = state.profile;
+        renderPreview();
     }
 
-    // Degrees editor with inline inputs
+    // Degrees editor
     function renderDegreesEditor() {
         const container = document.getElementById("degreesListEditor");
         if (!container) return;
@@ -341,13 +402,12 @@
         state.degrees.forEach((deg, idx) => {
             const div = document.createElement("div");
             div.className = "dynamic-item";
-            div.setAttribute("data-degree-idx", idx);
             div.innerHTML = `
                 <div class="dynamic-header">
                     <strong>🎓 ${escapeHtml(deg.degreeName || 'Degree')}</strong>
                     <button class="remove-btn" data-action="removeDegree" data-idx="${idx}"><i class="fas fa-trash-alt"></i> Remove</button>
                 </div>
-                <div class="field-group"><label>Degree / Program Name</label><input type="text" class="deg-name-field" data-idx="${idx}" value="${escapeHtml(deg.degreeName)}" placeholder="e.g., MBA, Product Management"></div>
+                <div class="field-group"><label>Degree / Program Name</label><input type="text" class="deg-name-field" data-idx="${idx}" value="${escapeHtml(deg.degreeName)}" placeholder="e.g., MBA"></div>
                 <div class="field-group"><label>Institute / University</label><input type="text" class="deg-institute-field" data-idx="${idx}" value="${escapeHtml(deg.institute)}" placeholder="University name"></div>
                 <div style="display:flex; gap:10px; flex-wrap:wrap;">
                     <div style="flex:1"><label>Start Year</label><input type="text" class="deg-start-field" data-idx="${idx}" value="${escapeHtml(deg.startYear)}" placeholder="2020"></div>
@@ -357,31 +417,20 @@
             `;
             container.appendChild(div);
         });
-        // attach input events
         document.querySelectorAll(".deg-name-field, .deg-institute-field, .deg-start-field, .deg-end-field, .deg-cgpa-field").forEach(inp => {
             inp.removeEventListener("input", handleDegreeInput);
             inp.addEventListener("input", handleDegreeInput);
         });
     }
-
     function handleDegreeInput(e) {
         const idx = parseInt(e.target.dataset.idx);
         if (isNaN(idx)) return;
-        const fieldMap = {
-            "deg-name-field": "degreeName",
-            "deg-institute-field": "institute",
-            "deg-start-field": "startYear",
-            "deg-end-field": "endYear",
-            "deg-cgpa-field": "cgpa"
-        };
-        const field = fieldMap[e.target.className];
-        if (field && state.degrees[idx]) {
-            state.degrees[idx][field] = e.target.value;
-            renderPreview();
-        }
+        const map = { "deg-name-field":"degreeName", "deg-institute-field":"institute", "deg-start-field":"startYear", "deg-end-field":"endYear", "deg-cgpa-field":"cgpa" };
+        const field = map[e.target.className];
+        if (field && state.degrees[idx]) { state.degrees[idx][field] = e.target.value; renderPreview(); }
     }
 
-    // Certifications editor
+    // Certs editor
     function renderCertsEditor() {
         const container = document.getElementById("certsListEditor");
         if (!container) return;
@@ -395,7 +444,7 @@
                     <button class="remove-btn" data-action="removeCert" data-idx="${idx}"><i class="fas fa-trash-alt"></i> Remove</button>
                 </div>
                 <div class="field-group"><label>Certification Name</label><input type="text" class="cert-name-field" data-idx="${idx}" value="${escapeHtml(cert.name)}" placeholder="e.g., CSPO"></div>
-                <div class="field-group"><label>Issuing Institute / Platform</label><input type="text" class="cert-issuer-field" data-idx="${idx}" value="${escapeHtml(cert.issuer)}" placeholder="Scrum Alliance, Coursera"></div>
+                <div class="field-group"><label>Issuing Institute / Platform</label><input type="text" class="cert-issuer-field" data-idx="${idx}" value="${escapeHtml(cert.issuer)}" placeholder="Scrum Alliance"></div>
                 <div class="field-group"><label>Year Earned</label><input type="text" class="cert-year-field" data-idx="${idx}" value="${escapeHtml(cert.year)}" placeholder="2023"></div>
             `;
             container.appendChild(div);
@@ -408,15 +457,12 @@
     function handleCertInput(e) {
         const idx = parseInt(e.target.dataset.idx);
         if (isNaN(idx)) return;
-        const fieldMap = { "cert-name-field": "name", "cert-issuer-field": "issuer", "cert-year-field": "year" };
-        const field = fieldMap[e.target.className];
-        if (field && state.certifications[idx]) {
-            state.certifications[idx][field] = e.target.value;
-            renderPreview();
-        }
+        const map = { "cert-name-field":"name", "cert-issuer-field":"issuer", "cert-year-field":"year" };
+        const field = map[e.target.className];
+        if (field && state.certifications[idx]) { state.certifications[idx][field] = e.target.value; renderPreview(); }
     }
 
-    // Skills (chips)
+    // Skills & tools (chips)
     function renderSkillsAndTools() {
         renderChipList("coreSkillsContainer", state.coreSkills, "coreSkill");
         renderChipList("supportiveSkillsContainer", state.supportiveSkills, "supportiveSkill");
@@ -426,7 +472,6 @@
         const container = document.getElementById(containerId);
         if (!container) return;
         container.innerHTML = arr.map((item, idx) => `<span class="skill-tag">${escapeHtml(item)} <i class="fas fa-times-circle" data-type="${type}" data-index="${idx}"></i></span>`).join('');
-        // remove event delegation handled globally
     }
 
     // Projects editor
@@ -442,8 +487,8 @@
                     <strong>📌 ${escapeHtml(proj.title)}</strong>
                     <button class="remove-btn" data-action="removeProject" data-idx="${idx}"><i class="fas fa-trash-alt"></i> Remove</button>
                 </div>
-                <div class="field-group"><label>Project / Case Study Title</label><input type="text" class="project-title-field" data-idx="${idx}" value="${escapeHtml(proj.title)}"></div>
-                <div class="field-group"><label>Description (Impact / Case insights)</label><textarea class="project-desc-field" data-idx="${idx}" rows="2">${escapeHtml(proj.description)}</textarea></div>
+                <div class="field-group"><label>Project Title</label><input type="text" class="project-title-field" data-idx="${idx}" value="${escapeHtml(proj.title)}"></div>
+                <div class="field-group"><label>Description</label><textarea class="project-desc-field" data-idx="${idx}" rows="2">${escapeHtml(proj.description)}</textarea></div>
             `;
             container.appendChild(div);
         });
@@ -477,11 +522,21 @@
         document.querySelectorAll(".exp-desc-field").forEach(ta => ta.addEventListener("input", e => { let i = parseInt(e.target.dataset.idx); if(state.experiences[i]) state.experiences[i].description = e.target.value; renderPreview(); }));
     }
 
-    // Preview render
+    // Preview with contact section right above Education
     function renderPreview() {
         const previewDiv = document.getElementById("resumePreview");
+        const c = state.contact;
+        const contactHtml = `
+            <div class="preview-contact">
+                ${c.email ? `<div class="preview-contact-item"><i class="fas fa-envelope"></i> ${escapeHtml(c.email)}</div>` : ''}
+                ${c.mobile ? `<div class="preview-contact-item"><i class="fas fa-phone-alt"></i> ${escapeHtml(c.mobile)}</div>` : ''}
+                ${c.address ? `<div class="preview-contact-item"><i class="fas fa-map-marker-alt"></i> ${escapeHtml(c.address)}</div>` : ''}
+                ${c.website ? `<div class="preview-contact-item"><i class="fas fa-globe"></i> <a href="${escapeHtml(c.website)}" target="_blank" style="color:#2b7a62; text-decoration:none;">${escapeHtml(c.website)}</a></div>` : ''}
+                ${c.linkedin ? `<div class="preview-contact-item"><i class="fab fa-linkedin"></i> <a href="${escapeHtml(c.linkedin)}" target="_blank" style="color:#2b7a62; text-decoration:none;">${escapeHtml(c.linkedin)}</a></div>` : ''}
+            </div>
+        `;
         const degreesHtml = state.degrees.map(d => `<div class="degree-card"><div class="degree-title">${escapeHtml(d.degreeName)}</div><div class="degree-meta">${escapeHtml(d.institute)} | ${escapeHtml(d.startYear)} – ${escapeHtml(d.endYear)} | CGPA: ${escapeHtml(d.cgpa)}</div></div>`).join('');
-        const certsHtml = state.certifications.map(c => `<div class="cert-card"><div class="cert-title">${escapeHtml(c.name)}</div><div class="cert-meta">${escapeHtml(c.issuer)}${c.year ? ` · ${c.year}` : ''}</div></div>`).join('');
+        const certsHtml = state.certifications.map(cert => `<div class="cert-card"><div class="cert-title">${escapeHtml(cert.name)}</div><div class="cert-meta">${escapeHtml(cert.issuer)}${cert.year ? ` · ${cert.year}` : ''}</div></div>`).join('');
         const coreHtml = state.coreSkills.map(s => `<span class="skill-tag">${escapeHtml(s)}</span>`).join('');
         const supportiveHtml = state.supportiveSkills.map(s => `<span class="skill-tag">${escapeHtml(s)}</span>`).join('');
         const toolsHtml = state.toolsExpertise.map(t => `<span class="skill-tag">${escapeHtml(t)}</span>`).join('');
@@ -489,6 +544,7 @@
         const expHtml = state.experiences.map(e => `<div class="exp-item"><div class="exp-title">💼 ${escapeHtml(e.title)} · ${escapeHtml(e.company)}</div><div class="exp-meta" style="font-size:0.75rem; color:#5f7f95;">${escapeHtml(e.period)}</div><div class="exp-desc" style="font-size:0.85rem;">${escapeHtml(e.description)}</div></div>`).join('');
         previewDiv.innerHTML = `
             <div class="preview-name">${escapeHtml(state.name)}</div>
+            ${contactHtml}
             <div class="preview-profile">${escapeHtml(state.profile)}</div>
             <div class="preview-section"><h3>🎓 Education</h3>${degreesHtml || '<div>—</div>'}</div>
             <div class="preview-section"><h3>📜 Certifications</h3>${certsHtml || '<div>—</div>'}</div>
@@ -500,70 +556,49 @@
         `;
     }
 
-    // ------ GLOBAL EVENT DELEGATION (for remove buttons & chip removal) ------
+    // Global delegation for remove buttons and chip removal
     function setupGlobalDelegation() {
-        // Remove buttons (degrees, certs, projects, experience)
         document.querySelector(".editor-panel").addEventListener("click", (e) => {
             const btn = e.target.closest(".remove-btn");
-            if (!btn) return;
-            const action = btn.getAttribute("data-action");
-            const idx = parseInt(btn.getAttribute("data-idx"));
-            if (isNaN(idx)) return;
-            if (action === "removeDegree") { state.degrees.splice(idx,1); renderAll(); }
-            else if (action === "removeCert") { state.certifications.splice(idx,1); renderAll(); }
-            else if (action === "removeProject") { state.projects.splice(idx,1); renderAll(); }
-            else if (action === "removeExp") { state.experiences.splice(idx,1); renderAll(); }
-        });
-        // Chip removal for skills/tools
-        document.querySelector(".editor-panel").addEventListener("click", (e) => {
+            if (btn) {
+                const action = btn.getAttribute("data-action");
+                const idx = parseInt(btn.getAttribute("data-idx"));
+                if (isNaN(idx)) return;
+                if (action === "removeDegree") { state.degrees.splice(idx,1); renderAll(); }
+                else if (action === "removeCert") { state.certifications.splice(idx,1); renderAll(); }
+                else if (action === "removeProject") { state.projects.splice(idx,1); renderAll(); }
+                else if (action === "removeExp") { state.experiences.splice(idx,1); renderAll(); }
+                return;
+            }
             const icon = e.target.closest(".fa-times-circle");
-            if (!icon) return;
-            const type = icon.getAttribute("data-type");
-            const index = parseInt(icon.getAttribute("data-index"));
-            if (isNaN(index)) return;
-            if (type === "coreSkill") state.coreSkills.splice(index,1);
-            else if (type === "supportiveSkill") state.supportiveSkills.splice(index,1);
-            else if (type === "tool") state.toolsExpertise.splice(index,1);
-            renderAll();
+            if (icon) {
+                const type = icon.getAttribute("data-type");
+                const index = parseInt(icon.getAttribute("data-index"));
+                if (isNaN(index)) return;
+                if (type === "coreSkill") state.coreSkills.splice(index,1);
+                else if (type === "supportiveSkill") state.supportiveSkills.splice(index,1);
+                else if (type === "tool") state.toolsExpertise.splice(index,1);
+                renderAll();
+            }
         });
     }
 
-    // ----- ADD BUTTONS -----
+    // Bind add buttons, contact sync, name/profile, reset, download
     function bindAddButtons() {
-        document.getElementById("addDegreeBtn").onclick = () => {
-            state.degrees.push({ institute: "", degreeName: "New Degree", startYear: "", endYear: "", cgpa: "" });
-            renderAll();
-        };
-        document.getElementById("addCertBtn").onclick = () => {
-            state.certifications.push({ name: "New Certification", issuer: "", year: "" });
-            renderAll();
-        };
-        document.getElementById("addCoreSkillBtn").onclick = () => {
-            const val = document.getElementById("newCoreSkillInput").value.trim();
-            if (val) { state.coreSkills.push(val); document.getElementById("newCoreSkillInput").value = ""; renderAll(); }
-        };
-        document.getElementById("addSupportiveSkillBtn").onclick = () => {
-            const val = document.getElementById("newSupportiveSkillInput").value.trim();
-            if (val) { state.supportiveSkills.push(val); document.getElementById("newSupportiveSkillInput").value = ""; renderAll(); }
-        };
-        document.getElementById("addToolBtn").onclick = () => {
-            const val = document.getElementById("newToolInput").value.trim();
-            if (val) { state.toolsExpertise.push(val); document.getElementById("newToolInput").value = ""; renderAll(); }
-        };
-        document.getElementById("addProjectBtn").onclick = () => {
-            state.projects.push({ title: "New Product Case", description: "Describe problem, solution, outcome." });
-            renderAll();
-        };
-        document.getElementById("addExperienceBtn").onclick = () => {
-            state.experiences.push({ title: "Product Manager", company: "Company Name", period: "2024 – Present", description: "Key accomplishments." });
-            renderAll();
-        };
+        document.getElementById("addDegreeBtn").onclick = () => { state.degrees.push({ institute: "", degreeName: "New Degree", startYear: "", endYear: "", cgpa: "" }); renderAll(); };
+        document.getElementById("addCertBtn").onclick = () => { state.certifications.push({ name: "New Certification", issuer: "", year: "" }); renderAll(); };
+        document.getElementById("addCoreSkillBtn").onclick = () => { const val = document.getElementById("newCoreSkillInput").value.trim(); if(val){ state.coreSkills.push(val); document.getElementById("newCoreSkillInput").value = ""; renderAll(); } };
+        document.getElementById("addSupportiveSkillBtn").onclick = () => { const val = document.getElementById("newSupportiveSkillInput").value.trim(); if(val){ state.supportiveSkills.push(val); document.getElementById("newSupportiveSkillInput").value = ""; renderAll(); } };
+        document.getElementById("addToolBtn").onclick = () => { const val = document.getElementById("newToolInput").value.trim(); if(val){ state.toolsExpertise.push(val); document.getElementById("newToolInput").value = ""; renderAll(); } };
+        document.getElementById("addProjectBtn").onclick = () => { state.projects.push({ title: "New Product Case", description: "Describe problem, solution, outcome." }); renderAll(); };
+        document.getElementById("addExperienceBtn").onclick = () => { state.experiences.push({ title: "Product Manager", company: "Company Name", period: "2024 – Present", description: "Key accomplishments." }); renderAll(); };
         document.getElementById("resetDemoBtn").onclick = () => {
             state = {
                 name: "Jordan M. Chen",
-                profile: "Strategic Product Manager with proven track record in data-driven roadmap execution, cross-functional leadership, and launching 0→1 products. Passionate about AI-driven solutions.",
+                contact: { email: "jordan.chen@example.com", mobile: "+1 (555) 789-1234", address: "San Francisco, CA", website: "https://jordanpmportfolio.com", linkedin: "https://linkedin.com/in/jordan-chen-pm" },
+                profile: "Strategic Product Manager with proven track record in data-driven roadmap execution...",
                 degrees: [
-                    { institute: "UC Berkeley, Haas School of Business", degreeName: "MBA, Product Leadership", startYear: "2021", endYear: "2023", cgpa: "3.9/4.0" },
+                    { institute: "UC Berkeley, Haas", degreeName: "MBA, Product Leadership", startYear: "2021", endYear: "2023", cgpa: "3.9/4.0" },
                     { institute: "University of Washington", degreeName: "B.S. Information Systems", startYear: "2015", endYear: "2019", cgpa: "3.7/4.0" }
                 ],
                 certifications: [
@@ -580,7 +615,7 @@
                 ],
                 experiences: [
                     { title: "Senior Product Manager", company: "Nexify Tech", period: "2022 – Present", description: "Own product lifecycle for AI analytics suite; increased ARR by $2.4M." },
-                    { title: "Associate Product Manager", company: "GrowthLabs", period: "2020 – 2022", description: "Led user story mapping and sprint planning." }
+                    { title: "Associate Product Manager", company: "GrowthLabs", period: "2020 – 2022", description: "Managed cross-functional teams and sprint planning." }
                 ]
             };
             renderAll();
@@ -589,12 +624,15 @@
             const element = document.getElementById("resumePreview");
             html2pdf().set({ margin: [0.5,0.5,0.5,0.5], filename: 'Product_Resume.pdf', image: { type: 'jpeg', quality: 0.98 }, html2canvas: { scale: 2 }, jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' } }).from(element).save();
         };
-        // Name & profile live sync
-        document.getElementById("nameInput").addEventListener("input", (e) => { state.name = e.target.value; renderPreview(); });
-        document.getElementById("profileInput").addEventListener("input", (e) => { state.profile = e.target.value; renderPreview(); });
+        document.getElementById("nameInput").addEventListener("input", syncNameProfile);
+        document.getElementById("profileInput").addEventListener("input", syncNameProfile);
+        document.getElementById("contactEmail").addEventListener("input", syncContactFromInputs);
+        document.getElementById("contactMobile").addEventListener("input", syncContactFromInputs);
+        document.getElementById("contactAddress").addEventListener("input", syncContactFromInputs);
+        document.getElementById("contactWebsite").addEventListener("input", syncContactFromInputs);
+        document.getElementById("contactLinkedin").addEventListener("input", syncContactFromInputs);
     }
 
-    // initialization
     function init() {
         setupGlobalDelegation();
         bindAddButtons();
